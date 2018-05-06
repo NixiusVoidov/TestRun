@@ -88,7 +88,7 @@ namespace TestRun
             LogStartAction("Переход браузера на стартовую страницу");
 
             driver.Navigate().GoToUrl(HomeURL);
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
             LogActionSuccess();
         }
 
@@ -121,6 +121,14 @@ namespace TestRun
             {
                 return null;
             }
+        }
+
+        protected IWebElement GetWebElement(string xPath, string errorIfNotExists)
+        {
+            IWebElement element = FindWebElement(xPath);
+            if (element == null)
+                throw new Exception(errorIfNotExists);
+            return element;
         }
 
         protected void ClickWebElement(string xPath, string elementCaptionInNominative, string elementCaptionInGenitive)

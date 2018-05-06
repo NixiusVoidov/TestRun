@@ -15,6 +15,8 @@ namespace TestRun
             CustomProgram.Register("custom", CustomProgram.FabricateCustomProgram);
             CustomProgram.Register("webbrowser", CustomWebTestProgram.FabricateCustomWebTestProgram);
             CustomProgram.Register("fonbet", FonbetWebProgram.FabricateFonbetWebProgram);
+
+            CustomProgram.Register("fonbet_favtree", fonbet.FavoritesTree.FabricateFavoritesTree);
         }
 
         static void ApplyParams(CustomProgram program, string[] args)

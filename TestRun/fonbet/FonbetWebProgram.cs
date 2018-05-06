@@ -108,6 +108,18 @@ namespace TestRun
                 LogWarning("Информации о балансе клиента на странице не обнаружено.");
         }
 
+        protected void SwitchPageToBets()
+        {
+            LogStage("Переход в линию");
+            ClickWebElement(".//*[@href='/#!/bets']", "Вкладка \"Линия\"", "вкладки \"Линия\"");
+        }
+
+        protected void OpenBetsEventFilter()
+        {
+            LogStage("Открытие фильтра событий");
+            ClickWebElement(".//*[@class='events__filter _type_sport']", "Фильтр событий", "фильтра событий");
+        }
+
         public override void BeforeRun()
         {
             base.BeforeRun();
