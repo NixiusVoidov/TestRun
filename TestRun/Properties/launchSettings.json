@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TestRun": {
+      "commandName": "Project",
+      "commandLineArgs": "fonbet"
+    }
+  }
+}

@@ -1,0 +1,151 @@
+﻿using Newtonsoft.Json;
+using System;
+using System.IO;
+using System.Net;
+using System.Text;
+using System.Threading;
+using System.Xml;
+
+namespace TestRun
+{
+    class Program
+    {
+        static void RegisterPrograms()
+        {
+            CustomProgram.Register("custom", CustomProgram.FabricateCustomProgram);
+            CustomProgram.Register("webbrowser", CustomWebTestProgram.FabricateCustomWebTestProgram);
+            CustomProgram.Register("fonbet", FonbetWebProgram.FabricateFonbetWebProgram);
+        }
+
+        static void ApplyParams(CustomProgram program, string[] args)
+        {
+            // Читаем настройки по-умолчанию из json-файла
+            string jsonText = File.ReadAllText(@"default.settings", System.Text.Encoding.UTF8);
+            program.ReadParamsFromJson(jsonText);
+
+            // Читаем настройки из параметров командной строки
+            for(int paramIndex = 1; paramIndex < args.Length; paramIndex++)
+            {
+                string str = args[paramIndex];
+                string[] values = str.Split('=');
+                if (values.Length == 2)
+                {
+                    string key = values[0];
+                    string value = values[1];
+                    if (value.Length == 0)
+                        value = null;
+                    program.SetFromString(key, value);
+                }
+            }
+
+            // Логируем параметры выполнения
+            Console.WriteLine(new String('_', Console.WindowWidth));
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("Параметры выполнения программы:");
+            Console.ResetColor();
+            program.PrintParameters();
+            Console.Write(new String('_', Console.WindowWidth));
+        }
+
+
+        static void SendResult(string URL, string resultText)
+        {
+            WebRequest request = WebRequest.Create(URL);
+            request.Method = "POST";
+            byte[] postBody = Encoding.UTF8.GetBytes(resultText);
+            request.ContentType = "application/json";
+            request.ContentLength = postBody.Length;
+            Stream dataStream = request.GetRequestStream();
+            dataStream.Write(postBody, 0, postBody.Length);
+            dataStream.Close();
+            WebResponse response = request.GetResponse();
+            response.Close();
+
+        }
+
+        static void Main(string[] args)
+        {
+            RegisterPrograms();
+            try
+            {
+                // Понять какой тест запускать
+                if (args.Length == 0)
+                    throw new Exception("Неуказана программа первым параметром командной строки.");
+
+                string programName = args[0];
+                Console.Write("\nИнициализация программы {0}...", programName);
+
+                FabricateProgram programFabric = CustomProgram.FindProgram(programName);
+                if (programFabric == null)
+                    throw new Exception(String.Format("Программа {0} неопределена.", programName));
+                // Создаем тест
+                CustomProgram program = programFabric();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("[OK]");
+                Console.ResetColor();
+                // Передать параметры
+                ApplyParams(program, args);
+
+                program.VerifyParameters();
+                program.WriteParametersToReport();
+
+                // Запустить тест
+                try
+                {
+                    program.Report.ProgramName = programName;
+                    program.Report.StartTime = DateTime.UtcNow;
+
+                    Console.WriteLine(" - Предпусковая подготовка...");
+                    program.BeforeRun();
+                    Console.WriteLine(" - Выполнение...");
+                    program.Run();
+                    program.Report.Success = true;
+                    // Передать результат
+                    
+                }
+                catch (Exception exception)
+                {
+                    program.Report.Success = false;
+                    program.Report.ErrorText = exception.Message;
+                    program.OnError(exception);
+                    throw;
+                }
+                finally
+                {
+                    Console.WriteLine(" - Завершение...");
+                    try
+                    {
+                        program.AfterRun();
+                    }
+                    finally
+                    {
+                        program.Report.FinishTime = DateTime.UtcNow;
+                        string report = program.ReportText();
+                        try
+                        {
+                            Console.WriteLine("Отправка отчета");
+                            SendResult(program.ResultURI, report);
+                        } catch (Exception)
+                        {
+                            // stub
+                        }
+                        Console.WriteLine("Сохранение отчета в файл lastresult.json");
+                        File.WriteAllText(@"lastReport.json", report);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.Write("\n\n [!] ");
+                Console.ResetColor();
+                Console.WriteLine(" Ошибка выполнения - {0}", e.Message);
+            }
+            finally
+            {
+                Console.ResetColor(); 
+            }
+        }
+    }
+}
