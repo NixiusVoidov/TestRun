@@ -25,7 +25,7 @@ namespace TestRun
             string jsonText = File.ReadAllText(@"default.settings", System.Text.Encoding.UTF8);
             program.ReadParamsFromJson(jsonText);
 
-            // Читаем настройки из параметров командной строки
+            // Читаем настройки из параметров командной строки.
             for(int paramIndex = 1; paramIndex < args.Length; paramIndex++)
             {
                 string str = args[paramIndex];

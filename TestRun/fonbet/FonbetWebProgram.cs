@@ -72,8 +72,9 @@ namespace TestRun
             IWebElement errorElement = FindWebElement(".//*[@class='login-form__error']");
             if (errorElement != null)
                 throw new Exception(String.Format("Ошибка логина: {0}", errorElement.Text));
-            LogActionSuccess();
+           
         }
+
 
         protected void UpdateLoginInfo()
         {
@@ -112,6 +113,38 @@ namespace TestRun
         {
             LogStage("Переход в линию");
             ClickWebElement(".//*[@href='/#!/bets']", "Вкладка \"Линия\"", "вкладки \"Линия\"");
+        }
+
+        protected void ScrollbarMethod(int x, int y)
+        {
+            var windowSize = new System.Drawing.Size(x, y);
+            driver.Manage().Window.Size = windowSize;
+            Thread.Sleep(1000);
+            var js = driver as IJavaScriptExecutor;
+            const string execScript =
+                "return document.getElementById(\"popup\").scrollHeight>document.getElementById(\"popup\").clientHeight;";
+            bool test = (bool)(js.ExecuteScript(execScript));
+            if (test == true)
+                Console.WriteLine("Скорллв меню работает исправно");
+            else if (test == false)
+            {
+                throw new Exception("Не работает кнопка фильтрации по аремени/совернованию");
+            }
+        }
+
+        protected void ClickOnSportType()
+        {
+            LogStage("Открытие меню с видами спорта");
+            ClickWebElement(".//*[@class='events__filter _type_sport']", "В фильтр выбора спорта", "в фильтр выбора спорта");
+        }
+
+        protected void MakeDefaultSettings()
+        {
+            LogStartAction("Установка настроек по умолчанию");
+            ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
+            ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "Кнопки восстановления настроек по умолчанию");
+            ClickWebElement(".//*[@class='settings__head']/a", "Кпока закрытия меню  настроек", "Кпоки закрытия меню  настроек");
+            LogActionSuccess();
         }
 
         protected void OpenBetsEventFilter()
