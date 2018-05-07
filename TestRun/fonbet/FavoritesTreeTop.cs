@@ -36,14 +36,17 @@ namespace TestRun.fonbet
             IWebElement footbalTournamentStar = GetWebElement(".//*[@id='popup']/li[1]/span", "не найдена звезда в фильтре турнира по футболу");
             if (footbalTournamentStar.GetAttribute("class") !="events__filter-star")
                 throw new Exception("Звездочки в дочерних событиях футбола не работают");
-           ClickOnSportType();
+
+            ClickOnSportType();
             IWebElement footballFilterWithSemistar = GetWebElement(".//*[@href='#!/bets/football']/../span", "не найден футбол в фильтре");
             if (footballFilterWithSemistar.GetAttribute("class") != "events__filter-star _icon_semi")
                 throw new Exception("Полузвездочки в меню футбола не работают");
+
             ClickWebElement(".//*[@href='#!/bets/favorites']", "Переход к избранному в фильтре", "перехода к избранному в фильтре");
             IWebElement tournamentTitle = GetWebElement(".//*[@class='table__title-text']", "не найден заголовок турнира");
             if (!tournamentTitle.Text.Contains("ФУТБОЛ"))
                 throw new Exception("Нет заголовка в футбольных турнирах");
+
             ClickOnSportType();
             ClickWebElement(".//*[@href='#!/bets/announcements']", "Ананос Лайв в фильтре событий", "по анонсу лайф в фильтре событий");
 
@@ -52,6 +55,7 @@ namespace TestRun.fonbet
             var sortByCompetiton = GetWebElement(".//*[@class='events__announce-filter']", "Не найдена кнопка сортировать по соревнованию").Text;
             if (sortByTime == sortByCompetiton)
                 throw new Exception("Не работает кнопка фильтрации по аремени/совернованию");
+
             ClickOnSportType();
             ScrollbarMethod(580,480);
             

@@ -182,5 +182,17 @@ namespace TestRun
             }
         }
 
+        protected object ExecuteJavaScript(string javaScript, string errorMessage)
+        {
+            try
+            {
+                IJavaScriptExecutor executor = driver as IJavaScriptExecutor;
+                return executor.ExecuteScript(javaScript);
+            }
+            catch (Exception)
+            {
+                throw new Exception(errorMessage);
+            }
+        }
     }
 }
