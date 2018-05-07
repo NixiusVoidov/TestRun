@@ -8,7 +8,7 @@ namespace TestRun.fonbet
 {
     class FavoritesTreeTop : FonbetWebProgram
     {
-        public static  CustomProgram FabricateFavoritesTree()
+        public static  CustomProgram FabricateFavoritesTreeTop()
         {
             return new FavoritesTreeTop();
         }
