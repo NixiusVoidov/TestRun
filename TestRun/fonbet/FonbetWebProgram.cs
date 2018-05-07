@@ -72,7 +72,7 @@ namespace TestRun
             IWebElement errorElement = FindWebElement(".//*[@class='login-form__error']");
             if (errorElement != null)
                 throw new Exception(String.Format("Ошибка логина: {0}", errorElement.Text));
-           
+            LogActionSuccess();
         }
 
 
@@ -115,22 +115,14 @@ namespace TestRun
             ClickWebElement(".//*[@href='/#!/bets']", "Вкладка \"Линия\"", "вкладки \"Линия\"");
         }
 
-        protected void ScrollbarMethod(int x, int y)
+        protected void CheckeScrollinFilter(int x, int y)
         {
             var windowSize = new System.Drawing.Size(x, y);
             driver.Manage().Window.Size = windowSize;
-            Thread.Sleep(1000);
-            var js = driver as IJavaScriptExecutor;
-            const string execScript =
-                "return document.getElementById(\"popup\").scrollHeight>document.getElementById(\"popup\").clientHeight;";
-            bool test = (bool)(js.ExecuteScript(execScript));
-            if (test == true)
-                Console.WriteLine("Скорллв меню работает исправно");
-            else if (test == false)
-            {
-                throw new Exception("Не работает кнопка фильтрации по аремени/совернованию");
-            }
+            ExecuteJavaScript("return document.getElementById(\"popup\").scrollHeight>document.getElementById(\"popup\").clientHeight;", "Не работает кнопка фильтрации по аремени/совернованию");
+
         }
+
 
         protected void ClickOnSportType()
         {
@@ -151,6 +143,13 @@ namespace TestRun
         {
             LogStage("Открытие фильтра событий");
             ClickWebElement(".//*[@class='events__filter _type_sport']", "Фильтр событий", "фильтра событий");
+        }
+
+        protected void SwitchToLeftTypeMenu()
+        {
+            LogStage("Переключение в меню 'слева'");
+            ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Разворот меню фильтра", "на разворот меню фильтра");
+            ClickWebElement(".//*[@id='popup']/li[1]", "Выбор меню СЛЕВА", "выбора меню слева");
         }
 
         public override void BeforeRun()
