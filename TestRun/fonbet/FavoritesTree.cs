@@ -58,7 +58,7 @@ namespace TestRun.fonbet
 
             LogStage("Проверка работы скрола в меню фильтра");
             ClickOnSportType();
-            CheckScrollinFilter(580,480);
+            CheckScrollinFilterTopMenu(580,480);
 
         }
     }
@@ -145,7 +145,7 @@ namespace TestRun.fonbet
             LogStage("Развернуть все дочерние события");
             ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
             ClickWebElement(".//*[@id='popup']/li[2]", "Графа разворота всех дочерних событий", "графы разоворота всех дочерних событий");
-            if (!IsElementPresent(".//*[@class='table__star _type_empty']"))
+            if (!WebElementExist(".//*[@class='table__star _type_empty']"))
                 throw new Exception("Не работает развертка дочерних событий");
 
             LogStage("Свернуть все дочерние события");
@@ -155,12 +155,54 @@ namespace TestRun.fonbet
             LogStage("Развернуть все дополнительные пари");
             ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
             ClickWebElement(".//*[@id='popup']/li[4]", "Графа разворота всех дополнительных пари", "графы разоворота всех дополнительных пари");
-            if (!IsElementPresent(".//*[@class='table__match-title _type_with-details _indent_1 _state_expanded']"))
+            if (!WebElementExist(".//*[@class='table__match-title _type_with-details _indent_1 _state_expanded']"))
                 throw new Exception("Не работает развертка дополнительных пари");
 
             LogStage("Свернуть все дополнительные пари");
             ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
             ClickWebElement(".//*[@id='popup']/li[5]", "Графа сворачивания всех дополнительных пари", "графы сворачивания всех дополнительных пари");
+
+        }
+    }
+
+    class TimeTree : FonbetWebProgram
+    {
+        public static CustomProgram FabricateTimeTree()
+        {
+            return new TimeTree();
+        }
+
+        public override void Run()
+        {
+            base.Run();
+            
+            MakeDefaultSettings();
+            SwitchPageToBets();
+
+            LogStage("Проверка фильтра 'Ближайший час'");
+            TimeFilterChecker(60, "Ближайший час");
+
+            LogStage("Проверка фильтра 'Ближайшие 2 часа'");
+            TimeFilterChecker(120, "Ближайшие 2 часа");
+
+            LogStage("Проверка фильтра 'Ближайшие 4 часа'");
+            TimeFilterChecker(240, "Ближайшие 4 часа");
+
+            LogStage("Проверка фильтра 'Ближайшие 6 часов'");
+            TimeFilterChecker(360, "Ближайшие 6 часов");
+
+            LogStage("Проверка фильтра 'Ближайшие 12 часов'");
+            TimeFilterChecker(720, "Ближайшие 12 часов");
+
+            LogStage("Проверка фильтра 'Ближайший день'");
+            TimeFilterChecker(1440, "Ближайший день");
+
+            LogStage("Проверка фильтра 'Ближайшие 2 дня'");
+            TimeFilterChecker(2880, "Ближайшие 2 дня");
+
+            LogStage("Проверка работы скрола в меню фильтра");
+            ClickWebElement(".//*[@class='events__filter _type_time']", "Меню времени в фильтре", "меню времени в фильтре");
+            CheckScrollinFilterTopMenu(480, 350);
 
         }
     }

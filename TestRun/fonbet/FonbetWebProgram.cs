@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using OpenQA.Selenium;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 
 namespace TestRun
@@ -113,11 +115,11 @@ namespace TestRun
             ClickWebElement(".//*[@href='/#!/bets']", "Вкладка \"Линия\"", "вкладки \"Линия\"");
         }
 
-        protected void CheckScrollinFilter(int x, int y)
+        protected void CheckScrollinFilterTopMenu(int x, int y)
         {
             var windowSize = new System.Drawing.Size(x, y);
             driver.Manage().Window.Size = windowSize;
-            ExecuteJavaScript("return document.getElementById(\"popup\").scrollHeight>document.getElementById(\"popup\").clientHeight;", "Не работает кнопка фильтрации по аремени/совернованию");
+            ExecuteJavaScript("return document.getElementById(\"popup\").scrollHeight>document.getElementById(\"popup\").clientHeight;", "Не работает скролл в фильтре верхнего меню");
 
         }
 
@@ -131,8 +133,8 @@ namespace TestRun
         {
             LogStartAction("Установка настроек по умолчанию");
             ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
-            ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "Кнопки восстановления настроек по умолчанию");
-            ClickWebElement(".//*[@class='settings__head']/a", "Кпока закрытия меню  настроек", "Кпоки закрытия меню  настроек");
+            ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
+            ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
             LogActionSuccess();
         }
 
@@ -149,7 +151,7 @@ namespace TestRun
             ClickWebElement(".//*[@id='popup']/li[1]", "Выбор меню СЛЕВА", "выбора меню слева");
         }
 
-        protected bool IsElementPresent(string element)
+        protected bool WebElementExist(string element)
         {
             try
             {
@@ -159,6 +161,32 @@ namespace TestRun
             catch (NoSuchElementException)
             {
                 return false;
+            }
+        }
+
+        protected void TimeFilterChecker(int timeValue, string chooseData)
+        {
+            ClickWebElement(".//*[@class='events__filter _type_time']", "Меню времени в фильтре", "меню времени в фильтре");
+            ClickWebElement(".//*[@class='events__filter-item']//*[text()='" + chooseData + "']", "Значение " + chooseData + "", "значения " + chooseData + "");
+            IList<IWebElement> all = driver.FindElements(By.XPath(".//*[@class='table__time']"));
+           // String[] allText = new String[all.Count];
+            foreach (IWebElement element in all)
+            {
+                string[] timeSplit = element.Text.Split(' ');
+
+                if (timeSplit.Length == 3 || timeSplit.Length == 4)
+                {
+                    string[] hourSplit = timeSplit.Last().Split(':');
+                    int[] numbers = hourSplit.Select(int.Parse).ToArray();
+                    var timeSpan = (new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, numbers[0],
+                                        numbers[1], 0) - DateTime.UtcNow);
+                     if(timeSpan.Minutes > timeValue) 
+                    throw new Exception("Фильтры по времени не работают");
+                }
+                else
+                {
+                    throw new Exception("В массиве больше элементов чем должно быть");
+                }
             }
         }
 
