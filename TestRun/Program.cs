@@ -1,10 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Text;
-using System.Threading;
-using System.Xml;
 
 namespace TestRun
 {
@@ -18,6 +15,7 @@ namespace TestRun
 
             CustomProgram.Register("fonbet_favtreetop", fonbet.FavoritesTree.FabricateFavoritesTreeTop);
             CustomProgram.Register("fonbet_favtreeleft", fonbet.FavoritesTreeLeft.FabricateFavoritesTreeLeft);
+            CustomProgram.Register("fonbet_favexpand", fonbet.FavoritesExpandTree.FabricateFavoritesExpandTree);
         }
 
         static void ApplyParams(CustomProgram program, string[] args)

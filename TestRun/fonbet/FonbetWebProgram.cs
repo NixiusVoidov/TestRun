@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json;
 using OpenQA.Selenium;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+
 
 namespace TestRun
 {
@@ -115,14 +113,13 @@ namespace TestRun
             ClickWebElement(".//*[@href='/#!/bets']", "Вкладка \"Линия\"", "вкладки \"Линия\"");
         }
 
-        protected void CheckeScrollinFilter(int x, int y)
+        protected void CheckScrollinFilter(int x, int y)
         {
             var windowSize = new System.Drawing.Size(x, y);
             driver.Manage().Window.Size = windowSize;
             ExecuteJavaScript("return document.getElementById(\"popup\").scrollHeight>document.getElementById(\"popup\").clientHeight;", "Не работает кнопка фильтрации по аремени/совернованию");
 
         }
-
 
         protected void ClickOnSportType()
         {
@@ -148,8 +145,21 @@ namespace TestRun
         protected void SwitchToLeftTypeMenu()
         {
             LogStage("Переключение в меню 'слева'");
-            ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Разворот меню фильтра", "на разворот меню фильтра");
+            ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
             ClickWebElement(".//*[@id='popup']/li[1]", "Выбор меню СЛЕВА", "выбора меню слева");
+        }
+
+        protected bool IsElementPresent(string element)
+        {
+            try
+            {
+                driver.FindElement(By.XPath(string.Format(element)));
+                return true;
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
+            }
         }
 
         public override void BeforeRun()

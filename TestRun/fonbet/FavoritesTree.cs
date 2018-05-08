@@ -1,8 +1,6 @@
 ﻿using OpenQA.Selenium;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+
 
 namespace TestRun.fonbet
 {
@@ -18,10 +16,9 @@ namespace TestRun.fonbet
             base.Run();
 
             MakeDefaultSettings();
-
             SwitchPageToBets();
-
             OpenBetsEventFilter();
+
             LogStage("Проверка работы звездочки в футболе");
             IWebElement footballFilter = GetWebElement(".//*[@href='#!/bets/football']/../span", "Не найден футбол в фильтре");
             var beforeFilterClickClass = footballFilter.GetAttribute("class");
@@ -61,7 +58,7 @@ namespace TestRun.fonbet
 
             LogStage("Проверка работы скрола в меню фильтра");
             ClickOnSportType();
-            CheckeScrollinFilter(580,480);
+            CheckScrollinFilter(580,480);
 
         }
     }
@@ -78,9 +75,7 @@ namespace TestRun.fonbet
             base.Run();
 
             MakeDefaultSettings();
-
             SwitchPageToBets();
-
             SwitchToLeftTypeMenu();
 
             LogStage("Проверка работы звездочки в футболе");
@@ -126,6 +121,47 @@ namespace TestRun.fonbet
             driver.Manage().Window.Size = windowSize;
             ExecuteJavaScript("return document.getElementsByClassName(\"list-view-new__scroll-box\")[\"0\"].scrollHeight>document.getElementsByClassName(\"list-view-new__scroll-box\")[\"0\"].clientHeight;",
                 "Не работает кнопка фильтрации по аремени/совернованию");
+        }
+    }
+
+    class FavoritesExpandTree : FonbetWebProgram
+    {
+        public static CustomProgram FabricateFavoritesExpandTree()
+        {
+            return new FavoritesExpandTree();
+        }
+
+        public override void Run()
+        {
+            base.Run();
+
+            MakeDefaultSettings();
+            SwitchPageToBets();
+
+            LogStage("Выбор событий в 12 ближ часов");
+            ClickWebElement(".//*[@class='events__filter _type_time']", "Меню времени в фильтре", "меню времени в фильтре");
+            ClickWebElement(".//*[@id='popup']/li[6]", "Значение ближайших 12 часов", "значения ближайших 12 часов");
+
+            LogStage("Развернуть все дочерние события");
+            ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
+            ClickWebElement(".//*[@id='popup']/li[2]", "Графа разворота всех дочерних событий", "графы разоворота всех дочерних событий");
+            if (!IsElementPresent(".//*[@class='table__star _type_empty']"))
+                throw new Exception("Не работает развертка дочерних событий");
+
+            LogStage("Свернуть все дочерние события");
+            ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
+            ClickWebElement(".//*[@id='popup']/li[3]", "Графа сворачивания всех дочерних событий", "графы сворачивания всех дочерних событий");
+
+            LogStage("Развернуть все дополнительные пари");
+            ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
+            ClickWebElement(".//*[@id='popup']/li[4]", "Графа разворота всех дополнительных пари", "графы разоворота всех дополнительных пари");
+            if (!IsElementPresent(".//*[@class='table__match-title _type_with-details _indent_1 _state_expanded']"))
+                throw new Exception("Не работает развертка дополнительных пари");
+
+            LogStage("Свернуть все дополнительные пари");
+            ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
+            ClickWebElement(".//*[@id='popup']/li[5]", "Графа сворачивания всех дополнительных пари", "графы сворачивания всех дополнительных пари");
+
         }
     }
 }
