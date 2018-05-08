@@ -60,6 +60,11 @@ namespace TestRun
             Report.Conditions.Add("Login", Login);
         }
 
+        protected virtual bool NeedLogin()
+        {
+            return true;
+        }
+
         protected void DoLogin()
         {
             LogStage(String.Format("Логин под \"{0}\"", Login));
@@ -120,13 +125,12 @@ namespace TestRun
             var windowSize = new System.Drawing.Size(x, y);
             driver.Manage().Window.Size = windowSize;
             ExecuteJavaScript("return document.getElementById(\"popup\").scrollHeight>document.getElementById(\"popup\").clientHeight;", "Не работает скролл в фильтре верхнего меню");
-
         }
 
         protected void ClickOnSportType()
         {
             LogStage("Открытие меню с видами спорта");
-            ClickWebElement(".//*[@class='events__filter _type_sport']", "В фильтр выбора спорта", "в фильтр выбора спорта");
+            ClickWebElement(".//*[@class='events__filter _type_sport']", "Фильтр выбора спорта", "фильтра выбора спорта");
         }
 
         protected void MakeDefaultSettings()
@@ -147,8 +151,8 @@ namespace TestRun
         protected void SwitchToLeftTypeMenu()
         {
             LogStage("Переключение в меню 'слева'");
-            ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
-            ClickWebElement(".//*[@id='popup']/li[1]", "Выбор меню СЛЕВА", "выбора меню слева");
+            ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Кнопка разворот меню фильтра", "кнопка разворота меню фильтра");
+            ClickWebElement(".//*[@id='popup']/li[1]", "Меню СЛЕВА", "меню слева");
         }
 
         protected bool WebElementExist(string element)
@@ -167,21 +171,20 @@ namespace TestRun
         protected void TimeFilterChecker(int timeValue, string chooseData)
         {
             ClickWebElement(".//*[@class='events__filter _type_time']", "Меню времени в фильтре", "меню времени в фильтре");
-            ClickWebElement(".//*[@class='events__filter-item']//*[text()='" + chooseData + "']", "Значение " + chooseData + "", "значения " + chooseData + "");
+            ClickWebElement(String.Format(".//*[@class='events__filter-item']//*[text()='{0}']", chooseData), String.Format("Значение \"{0}\"", chooseData), String.Format("значения \"{0}\"", chooseData));
             IList<IWebElement> all = driver.FindElements(By.XPath(".//*[@class='table__time']"));
            // String[] allText = new String[all.Count];
             foreach (IWebElement element in all)
             {
                 string[] timeSplit = element.Text.Split(' ');
 
-                if (timeSplit.Length == 3 || timeSplit.Length == 4)
+                if ((timeSplit.Length == 3) || (timeSplit.Length == 4))
                 {
                     string[] hourSplit = timeSplit.Last().Split(':');
                     int[] numbers = hourSplit.Select(int.Parse).ToArray();
-                    var timeSpan = (new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, numbers[0],
-                                        numbers[1], 0) - DateTime.UtcNow);
-                     if(timeSpan.Minutes > timeValue) 
-                    throw new Exception("Фильтры по времени не работают");
+                    var timeSpan = (new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, numbers[0], numbers[1], 0) - DateTime.UtcNow);
+                    if (timeSpan.Minutes > timeValue) 
+                        throw new Exception("Фильтры по времени не работают");
                 }
                 else
                 {
@@ -202,7 +205,7 @@ namespace TestRun
                 ClickWebElement(".//*[@class='header__lang-item']//*[text()='Русский']", "Кнопка выбора русского языка", "кнопки выбора русского языка");
             }
 
-            if (Login.Length > 0)
+            if (NeedLogin())
             {
                 DoLogin();
                 UpdateLoginInfo();
