@@ -83,6 +83,9 @@ namespace TestRun
             }
             else
                 throw new Exception(String.Format("Неизвестный тип браузера: '{0}'", Browser));
+
+            driver.Manage().Window.Maximize();
+
             LogStartAction("Переход браузера на стартовую страницу");
 
             driver.Navigate().GoToUrl(HomeURL);
