@@ -186,21 +186,6 @@ namespace TestRun.fonbet
             MakeDefaultSettings();
             SwitchPageToBets();
 
-            LogStage("Проверка фильтра 'Ближайший час'");
-            TimeFilterChecker(60, "Ближайший час");
-
-            LogStage("Проверка фильтра 'Ближайшие 2 часа'");
-            TimeFilterChecker(120, "Ближайшие 2 часа");
-
-            LogStage("Проверка фильтра 'Ближайшие 4 часа'");
-            TimeFilterChecker(240, "Ближайшие 4 часа");
-
-
-
-            MakeDefaultSettings();
-
-            SwitchPageToBets();
-
             Dictionary<int, string> times = new Dictionary<int, string>()
             {
                 { 60, "Ближайший час" },
