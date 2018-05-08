@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using System;
+using System.Reflection.Metadata.Ecma335;
 
 
 namespace TestRun.fonbet
@@ -173,9 +174,9 @@ namespace TestRun.fonbet
         }
 
         public override void Run()
-        {
+        {   
             base.Run();
-            
+           
             MakeDefaultSettings();
             SwitchPageToBets();
 
