@@ -134,7 +134,7 @@ namespace TestRun
             LogStage("Открытие меню с видами спорта");
             ClickWebElement(".//*[@class='events__filter _type_sport']", "Фильтр выбора спорта", "фильтра выбора спорта");
         }
-        // Метод устанавливает настройки вебсайта по-умолчанию 
+        // Метод устанавливает настройки вебсайта по-умолчанию.
         protected void MakeDefaultSettings()
         {
             LogStartAction("Установка настроек по умолчанию");
