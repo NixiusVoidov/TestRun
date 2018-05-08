@@ -140,8 +140,7 @@ namespace TestRun
             LogStartAction("Установка настроек по умолчанию");
             ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
             ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
-            // ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
-            ClickWebElement(".//a[@class='settings__close header-icon _icon_close-gray']", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
+            ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
             LogActionSuccess();
         }
          // Метод открывает фильтр событий
