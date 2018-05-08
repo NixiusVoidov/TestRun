@@ -2,7 +2,7 @@
   "profiles": {
     "TestRun": {
       "commandName": "Project",
-      "commandLineArgs": "fonbet"
+      "commandLineArgs": "fonbet_timetree"
     }
   }
 }

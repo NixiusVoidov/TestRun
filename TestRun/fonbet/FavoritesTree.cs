@@ -1,6 +1,10 @@
 ﻿using OpenQA.Selenium;
 using System;
+
 using System.Reflection.Metadata.Ecma335;
+
+
+using System.Collections.Generic;
 
 
 namespace TestRun.fonbet
@@ -173,9 +177,11 @@ namespace TestRun.fonbet
             return new TimeTree();
         }
 
+
         public override void Run()
         {   
             base.Run();
+
            
             MakeDefaultSettings();
             SwitchPageToBets();
@@ -189,18 +195,29 @@ namespace TestRun.fonbet
             LogStage("Проверка фильтра 'Ближайшие 4 часа'");
             TimeFilterChecker(240, "Ближайшие 4 часа");
 
-            LogStage("Проверка фильтра 'Ближайшие 6 часов'");
-            TimeFilterChecker(360, "Ближайшие 6 часов");
 
-            LogStage("Проверка фильтра 'Ближайшие 12 часов'");
-            TimeFilterChecker(720, "Ближайшие 12 часов");
 
-            LogStage("Проверка фильтра 'Ближайший день'");
-            TimeFilterChecker(1440, "Ближайший день");
+            MakeDefaultSettings();
 
-            LogStage("Проверка фильтра 'Ближайшие 2 дня'");
-            TimeFilterChecker(2880, "Ближайшие 2 дня");
+            SwitchPageToBets();
 
+            Dictionary<int, string> times = new Dictionary<int, string>()
+            {
+                { 60, "Ближайший час" },
+                { 120, "Ближайшие 2 часа" },
+                { 240, "Ближайшие 4 часа" },
+                { 360, "Ближайшие 6 часов" },
+                { 720, "Ближайшие 12 часов" },
+                { 1440, "Ближайший день" },
+                { 2880, "Ближайшие 2 дня" }
+            };
+
+            foreach(KeyValuePair<int, string> item in times)
+            {
+                LogStage(String.Format("Проверка фильтра \"{0}\"", item.Value));
+                TimeFilterChecker(item.Key, item.Value);
+            }
+            
             LogStage("Проверка работы скрола в меню фильтра");
             ClickWebElement(".//*[@class='events__filter _type_time']", "Меню времени в фильтре", "меню времени в фильтре");
             CheckScrollinFilterTopMenu(480, 350);

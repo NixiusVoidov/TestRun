@@ -127,6 +127,7 @@ namespace TestRun
             driver.Manage().Window.Size = windowSize;
             ExecuteJavaScript("return document.getElementById(\"popup\").scrollHeight>document.getElementById(\"popup\").clientHeight;", "Не работает скролл в фильтре верхнего меню");
         }
+
         // Метод кликает на фильтр выбора спорта
         protected void ClickOnSportType()
         {
