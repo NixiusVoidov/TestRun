@@ -108,13 +108,14 @@ namespace TestRun
             else
                 LogWarning("Информации о балансе клиента на странице не обнаружено.");
         }
-
+        // Метод переходит на вкладку Линия
         protected void SwitchPageToBets()
         {
             LogStage("Переход в линию");
             ClickWebElement(".//*[@href='/#!/bets']", "Вкладка \"Линия\"", "вкладки \"Линия\"");
         }
 
+        // Метод проверяет что при сужении окна бразуера появляется скролл у фильтра в верхнем меню, выдает ошибку если это не так
         protected void CheckScrollinFilterTopMenu(int x, int y)
         {
             var windowSize = new System.Drawing.Size(x, y);
@@ -122,13 +123,13 @@ namespace TestRun
             ExecuteJavaScript("return document.getElementById(\"popup\").scrollHeight>document.getElementById(\"popup\").clientHeight;", "Не работает скролл в фильтре верхнего меню");
 
         }
-
+        // Метод кликает на фильтр выбора спорта
         protected void ClickOnSportType()
         {
             LogStage("Открытие меню с видами спорта");
             ClickWebElement(".//*[@class='events__filter _type_sport']", "В фильтр выбора спорта", "в фильтр выбора спорта");
         }
-
+        // Метод устанавливает настройки вебсайта по-умолчанию 
         protected void MakeDefaultSettings()
         {
             LogStartAction("Установка настроек по умолчанию");
@@ -137,20 +138,20 @@ namespace TestRun
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
             LogActionSuccess();
         }
-
+         // Метод открывает фильтр событий
         protected void OpenBetsEventFilter()
         {
             LogStage("Открытие фильтра событий");
             ClickWebElement(".//*[@class='events__filter _type_sport']", "Фильтр событий", "фильтра событий");
         }
-
+        // Метод переключает меню в режим отображения слева
         protected void SwitchToLeftTypeMenu()
         {
             LogStage("Переключение в меню 'слева'");
             ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
             ClickWebElement(".//*[@id='popup']/li[1]", "Выбор меню СЛЕВА", "выбора меню слева");
         }
-
+        // Метод проверяет существование элемента в DOM
         protected bool WebElementExist(string element)
         {
             try
@@ -163,13 +164,12 @@ namespace TestRun
                 return false;
             }
         }
-
+         // Метод принимает на вход число минут и название строки в фильтре времени и проверяет что в результат выдачи попадают только те события, которые удовлетворяют кол-ву минут, переданных в параметр
         protected void TimeFilterChecker(int timeValue, string chooseData)
         {
             ClickWebElement(".//*[@class='events__filter _type_time']", "Меню времени в фильтре", "меню времени в фильтре");
             ClickWebElement(".//*[@class='events__filter-item']//*[text()='" + chooseData + "']", "Значение " + chooseData + "", "значения " + chooseData + "");
             IList<IWebElement> all = driver.FindElements(By.XPath(".//*[@class='table__time']"));
-           // String[] allText = new String[all.Count];
             foreach (IWebElement element in all)
             {
                 string[] timeSplit = element.Text.Split(' ');
