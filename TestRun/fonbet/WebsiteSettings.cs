@@ -119,7 +119,6 @@ namespace TestRun.fonbet
 
             LogStage("Установка быстрого пари");
             ClickWebElement(".//*[@class='settings__section'][1]/div/div[1]//*[@class='header-ui__checkbox-label']/input", "Чекбокс быстрое пари", "чекбокса быстрое пари");
-            
 
             LogStage("Редактирование Продажи пари");
             ClickWebElement("//*[@class='settings__section'][2]/div[1]//input", "Чекбокс изменение суммы продажи", "чекбокса изменения суммы продажи");
@@ -129,7 +128,6 @@ namespace TestRun.fonbet
             ClickWebElement("//*[@class='settings__section'][3]/div[1]//input", "Чекбокс 'Не спрашивать подтверждение для быстрого пари'", "чекбокса 'Не спрашивать подтверждение для быстрого пари'");
             ClickWebElement("//*[@class='settings__section'][3]/div[2]//input", "Чекбокс 'Не спрашивать подтверждение для продажи'", "чекбокса 'Не спрашивать подтверждение для продажи'");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
-
 
             LogStage("Проверка работы настроек Продажи пари");
             if (WebElementExist(".//*[@class='coupon__sell-button-area']"))
@@ -152,6 +150,92 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='coupons__list-inner']//article[1]//*[@class='coupon__sell-button-area'][1]/a[1]", "Кнопка 'Продать пари'", "кнопки 'Продать пари'");
             if (WebElementExist(".//*[@class='modal-window__button-area']"))
                 throw new Exception("Не работает чекбокс 'Не спрашивать подтверждение для продажи'");
+        }
+
+    }
+
+    class View : FonbetWebProgram
+    {
+        public static CustomProgram FabricateView()
+        {
+            return new View();
+        }
+
+        public override void Run()
+        {
+            base.Run();
+
+            LogStage("Установка настроек по умолчанию");
+            ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
+            ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
+
+            LogStage("Установка чекбоксов меню Вид");
+            for (var i = 1; i <= 7; i++)
+            {
+                var nameTofind = string.Format("//*[@class='settings__section'][5]/div/div[{0}]//input", i);
+                var element = driver.FindElement(By.XPath(nameTofind));
+                element.Click();
+            }
+
+            LogStage("Перевод меню в отображение слева");
+            ClickWebElement(".//*[@class='settings__section']//span[text()='слева']/../input", "Радиобатон отображения меню слева", "радиобатона отображения меню слева");
+            ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
+
+            LogStage("Проверка отображения номеров");
+            if (!WebElementExist(".//*[@class='table__event-number']"))
+                throw new Exception("Не работает отображение номеров событий");
+
+            LogStage("Проверка отображения статусов купонов цветом");
+            IWebElement couponLable = GetWebElement(".//*[@class='coupon__info-head']/div[3]", "Нет результата купона");
+            var couponLableClass = couponLable.GetAttribute("class");
+            if (couponLableClass.Contains("style_colored"))
+                throw new Exception("Не работает отображения статусов купонов цветом");
+
+            LogStage("Проверка компактного режима отображения купонов");
+            IWebElement couponWide = GetWebElement(".//*[@class='page__right']/div[1]", "Пропала лента купонов");
+            var couponWideClass = couponWide.GetAttribute("class");
+            if (!couponWideClass.Contains("type_compact"))
+                throw new Exception("Не работает компактный режим отображения купонов");
+
+            LogStage("Проверка компактного отображения меню в личном кабинете");
+            ClickWebElement(".//*[@class='header__login-item'][1]", "Имя пользователя в шапке", "имени пользователя в шапке");
+            ClickWebElement(".//*[@href='/#!/account']", "Строка личный кабинет пользователя", "строки личный кабинет пользователя");
+            IWebElement accountSidebar = GetWebElement(".//*[@class='page-account__content']/div[1]", "Пропала лента купонов");
+            var accountSidebarClass = accountSidebar.GetAttribute("class");
+            if (!accountSidebarClass.Contains("compact"))
+                throw new Exception("Не работает компактный режим отображения меню в личном кабинете");
+
+            LogStage("Проверка компактного режима отображения подвала сайта");
+            IWebElement footerSidebar = GetWebElement(".//*[@id='footerContainer']//footer/div[1]", "Не сворачивается футер");
+            var footerSidebarClass = footerSidebar.GetAttribute("class");
+            if (!footerSidebarClass.Contains("compact"))
+                throw new Exception("Не работает компактный режим отображения подвала сайта");
+
+            LogStage("Проверка автосворачивания элементов в меню событий");
+            SwitchPageToBets();
+            ClickWebElement(".//*[@class='list-view-new__table-body']/tr[4]//a", "Строка ФУТБОЛ в меню спорта слева", "строки ФУТБОЛ в меню спорта слева");
+            IWebElement footballArrow = GetWebElement(".//*[@class='list-view-new__table-body']/tr[4]//*[@class='event-v-list__cell-overlay']/div", "Нет стрекли разворота вида спорта");
+            var footballArrowClass = footballArrow.GetAttribute("class");
+            if (!footballArrowClass.Contains("state_opened"))
+                throw new Exception("Не работает автосворачивание элементов в меню событий");
+            ClickWebElement(".//*[@href='#!/bets/hockey']", "Строка Хоккей в меню спорта слева", "строки Хоккей в меню спорта слева");
+            IWebElement footballslide = GetWebElement(".//*[@class='list-view-new__table-body']/tr[4]//*[@class='event-v-list__cell-overlay']/div", "Нет стрекли разворота вида спорта");
+            var footballslideClass = footballslide.GetAttribute("class");
+            if (footballslideClass.Contains("state_opened"))
+                throw new Exception("Не работает автосворачивание элементов в меню событий");
+
+            LogStage("Проверка автосворачивания купонов");
+            ClickWebElement(".//*[@class='list-view-new__table-body']/tr[5]//*[@class='event-v-list__cell-overlay']/div", "Стрелка сворачивания строки Хоккей", "стрелки сворачивания строки Хоккей");
+            ClickWebElement(".//*[@href='#!/bets/0']", "Строка Все события", "строки Все события");
+            IList<IWebElement> allBets = driver.FindElements(By.XPath(".//*[@class='table__body']/tr[5]/td[3]"));
+            allBets[3].Click();
+            allBets[4].Click();
+            allBets[5].Click();
+            ClickWebElement(".//*[@class='coupons']/div[1]//*[@class='coupon__foot-btn']", "Кнопка заключить пари", "кнопки заключить пари");
+            IWebElement couponArrow = GetWebElement(".//*[@class='coupons__list-inner']/div[1]/article[1]/div/i", "Нет стрелки разворота у купона");
+            var couponArrowClass = couponArrow.GetAttribute("class");
+            if (!couponArrowClass.Contains("expanded"))
+                throw new Exception("Не работает автосворачивание купонов");
         }
 
     }
