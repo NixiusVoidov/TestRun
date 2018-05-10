@@ -239,4 +239,47 @@ namespace TestRun.fonbet
         }
 
     }
+
+    class ViewWithoutLogin : FonbetWebProgram
+    {
+        public static CustomProgram FabricateViewWithoutLogin()
+        {
+            return new ViewWithoutLogin();
+        }
+
+        protected override bool NeedLogin()
+        {
+            return false;
+        }
+
+        public override void Run()
+        {
+            base.Run();
+
+            LogStage("Установка настроек вида и отображение меню слева");
+            ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
+            ClickWebElement(".//*[@class='settings__rows']/div[1]//input", "Чекбокс отображать номера событий", "чекбокса отображать номера событий");
+            ClickWebElement(".//*[@class='settings__rows']/div[2]//input", "Чекбокс компактный режим отображения подвала", "чекбокса компактный режим отображения подвала");
+            ClickWebElement(".//*[@class='settings__section']//span[text()='слева']/../input", "Радиобатон отображения меню слева", "радиобатона отображения меню слева");
+            ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
+
+            LogStage("Проверка отображения номеров");
+            SwitchPageToBets();
+            if (!WebElementExist(".//*[@class='table__event-number']"))
+                throw new Exception("Не работает отображение номеров событий");
+
+            LogStage("Проверка сворачивание футера");
+            IWebElement footerSidebar = GetWebElement(".//*[@id='footerContainer']//footer/div[1]", "Не сворачивается футер");
+            var footerSidebarClass = footerSidebar.GetAttribute("class");
+            if (!footerSidebarClass.Contains("compact"))
+                throw new Exception("Не работает компактный режим отображения подвала сайта");
+
+            LogStage("Проверка меню слева");
+            IWebElement menuBar = GetWebElement(".//*[@class='page__main']/div/div[1]", "Нет фильтр меню");
+            var menuBarClass = menuBar.GetAttribute("class");
+            if (!menuBarClass.Contains("menu-left"))
+                throw new Exception("Не работает отображение меню слева");
+        }
+
+    }
 }
