@@ -21,6 +21,7 @@ namespace TestRun
             CustomProgram.Register("fonbet_cashoutanddialog", fonbet.CashOutAndDialogsSettings.FabricateCashOutAndDialogsSettings);
             CustomProgram.Register("fonbet_view", fonbet.View.FabricateView);
             CustomProgram.Register("fonbet_viewwologin", fonbet.ViewWithoutLogin.FabricateViewWithoutLogin);
+            CustomProgram.Register("fonbet_superexpress", fonbet.SuperExpress.FabricateSuperExpress);
         }
 
         static void ApplyParams(CustomProgram program, string[] args)

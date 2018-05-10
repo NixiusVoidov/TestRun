@@ -183,7 +183,7 @@ namespace TestRun
                 {
                     string[] hourSplit = timeSplit.Last().Split(':');
                     int[] numbers = hourSplit.Select(int.Parse).ToArray();
-                    var timeSpan = (new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, numbers[0], numbers[1], 0) - DateTime.UtcNow);
+                    var timeSpan = (new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, numbers[0], numbers[1], 0) - DateTime.Now);
                     if (timeSpan.Minutes > timeValue) 
                         throw new Exception("Фильтры по времени не работают");
                 }
@@ -191,6 +191,35 @@ namespace TestRun
                 {
                     throw new Exception("В массиве больше элементов чем должно быть");
                 }
+            }
+        }
+
+        // Метод впринимает кол-во отмеченных событий в суперэкспрессе
+        protected void MarkedBoxCounter(int value, string mark)
+        {
+            IList<IWebElement> all = driver.FindElements(By.XPath(String.Format(".//*[@class='matrix-form__mark-box{0}']", mark)));
+            if (all.Count != value)
+            {
+                throw new Exception("Что-то не так с выбором/очисткой полей возможных вариантов");
+            }
+        }
+
+        // Метод выбирает два исхода в 1ой строчке, независимо от того какого уже там событие выбрано
+        protected void ChooseTwoResults()
+        {
+            if (driver.FindElement(By.XPath(".//*[@class='bet-table']//tr[2]//td[4]/div")).GetAttribute("class")
+                .Equals("matrix-form__mark-box"))
+            {
+                driver.FindElement(By.XPath(".//*[@class='bet-table']//tr[2]//td[4]/div")).Click();
+            }
+            else if (driver.FindElement(By.XPath(".//*[@class='bet-table']//tr[2]//td[5]/div")).GetAttribute("class")
+                .Equals("matrix-form__mark-box"))
+            {
+                driver.FindElement(By.XPath(".//*[@class='bet-table']//tr[2]//td[5]/div")).Click();
+            }
+            else
+            {
+                driver.FindElement(By.XPath(".//*[@class='bet-table']//tr[2]//td[6]/div")).Click();
             }
         }
 

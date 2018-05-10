@@ -90,7 +90,6 @@ namespace TestRun.fonbet
                 }
             }
 
-
             LogStage("Проверка ввода суммы больше чем баланс счета");
             SendKeysToWebElement(".//*[@class='coupon__foot-sum']/input", "9999999999", "поле ввода значения ставки", "поля ввода значения ставки");
             IWebElement placeBet = GetWebElement(".//*[@class='coupon__foot']/a", "Нет кнопки заключить пари");
