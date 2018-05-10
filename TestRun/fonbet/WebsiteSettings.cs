@@ -101,4 +101,58 @@ namespace TestRun.fonbet
         }
         
     }
+
+    class CashOutAndDialogsSettings : FonbetWebProgram
+    {
+        public static CustomProgram FabricateCashOutAndDialogsSettings()
+        {
+            return new CashOutAndDialogsSettings();
+        }
+
+        public override void Run()
+        {
+            base.Run();
+
+            LogStage("Установка настроек по умолчанию");
+            ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
+            ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
+
+            LogStage("Установка быстрого пари");
+            ClickWebElement(".//*[@class='settings__section'][1]/div/div[1]//*[@class='header-ui__checkbox-label']/input", "Чекбокс быстрое пари", "чекбокса быстрое пари");
+            
+
+            LogStage("Редактирование Продажи пари");
+            ClickWebElement("//*[@class='settings__section'][2]/div[1]//input", "Чекбокс изменение суммы продажи", "чекбокса изменения суммы продажи");
+            ClickWebElement("//*[@class='settings__section'][2]/div[3]//input", "Чекбокс показывать продажу на всех вкладках", "чекбокса проказывать продажу на всех вкладках");
+           
+            LogStage("Редактирование меню Диалоги");
+            ClickWebElement("//*[@class='settings__section'][3]/div[1]//input", "Чекбокс 'Не спрашивать подтверждение для быстрого пари'", "чекбокса 'Не спрашивать подтверждение для быстрого пари'");
+            ClickWebElement("//*[@class='settings__section'][3]/div[2]//input", "Чекбокс 'Не спрашивать подтверждение для продажи'", "чекбокса 'Не спрашивать подтверждение для продажи'");
+            ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
+
+
+            LogStage("Проверка работы настроек Продажи пари");
+            if (WebElementExist(".//*[@class='coupon__sell-button-area']"))
+                throw new Exception("Не работает чекбокс показывать продажу на всех вкладках");
+            ClickWebElement(".//*[@class='coupons-toolbar']//*[@title='На продажу']", "Вкладка 'На продажу' в меню купонов", "вкладки 'На продажу' в меню купонов");
+            if (!(WebElementExist(".//*[@class='coupon__sell-button-area']") || WebElementExist(".//*[@class='coupon__content-empty']")))
+                throw new Exception("Не корректно отрабатывает вкладка меню 'На продажу'");
+            IWebElement sellSwitch = GetWebElement(".//*[@class='coupon__sell-button-area']/a[2]", "Нет тумблера рядом с кнопкой продажи пари");
+            var sellSwitchClass = sellSwitch.GetAttribute("class");
+            if (!sellSwitchClass.Contains("coupon__sell-switch _all"))
+                throw new Exception("Не работает чекбокс изменение суммы продажи");
+
+            LogStage("Проверка работы настроек Диалогов");
+            SwitchPageToBets();
+            IList<IWebElement> bet = driver.FindElements(By.XPath(".//*[@class='table']/tbody//td[5]"));
+            bet[4].Click();
+            if (WebElementExist(".//*[@class='modal-window__button-area']"))
+                throw new Exception("Не работает чекбокс 'Не спрашивать подтверждение для быстрого пари'");
+            ClickWebElement(".//*[@class='coupons-toolbar']//*[@title='На продажу']", "Вкладка 'На продажу' в меню купонов", "вкладки 'На продажу' в меню купонов");
+            ClickWebElement(".//*[@class='coupons__list-inner']//article[1]//*[@class='coupon__sell-button-area'][1]/a[1]", "Кнопка 'Продать пари'", "кнопки 'Продать пари'");
+            if (WebElementExist(".//*[@class='modal-window__button-area']"))
+                throw new Exception("Не работает чекбокс 'Не спрашивать подтверждение для продажи'");
+        }
+
+    }
 }

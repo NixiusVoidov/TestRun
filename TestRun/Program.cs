@@ -18,6 +18,7 @@ namespace TestRun
             CustomProgram.Register("fonbet_favexpand", fonbet.FavoritesExpandTree.FabricateFavoritesExpandTree);
             CustomProgram.Register("fonbet_timetree", fonbet.TimeTree.FabricateTimeTree);
             CustomProgram.Register("fonbet_betssettings", fonbet.BetsSettings.FabricateBetsSettings);
+            CustomProgram.Register("fonbet_cashoutanddialog", fonbet.CashOutAndDialogsSettings.FabricateCashOutAndDialogsSettings);
         }
 
         static void ApplyParams(CustomProgram program, string[] args)
