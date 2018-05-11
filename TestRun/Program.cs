@@ -23,6 +23,7 @@ namespace TestRun
             CustomProgram.Register("fonbet_viewwologin", fonbet.ViewWithoutLogin.FabricateViewWithoutLogin);
             CustomProgram.Register("fonbet_superexpress", fonbet.SuperExpress.FabricateSuperExpress);
             CustomProgram.Register("fonbet_coupongrid", fonbet.CouponGridInterface.FabricateCouponGridInterface);
+            CustomProgram.Register("fonbet_results", fonbet.ResultsTab.FabricateResultsTab);
         }
 
         static void ApplyParams(CustomProgram program, string[] args)

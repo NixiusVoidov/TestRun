@@ -18,9 +18,7 @@ namespace TestRun.fonbet
         {
             base.Run();
 
-            LogStage("Установка настроек по умолчанию");
-            ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
-            ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
+            MakeDefaultSettings();
 
             LogStage("Переход в Суперэкспресс");
             ClickWebElement(".//*[@href='/#!/superexpress']", "Вкладка \"Суперэкспресс\"", "вкладки \"Суперэкспресс\"");
