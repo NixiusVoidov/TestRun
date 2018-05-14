@@ -24,7 +24,8 @@ namespace TestRun
             CustomProgram.Register("fonbet_superexpress", fonbet.SuperExpress.FabricateSuperExpress);
             CustomProgram.Register("fonbet_coupongrid", fonbet.CouponGridInterface.FabricateCouponGridInterface);
             CustomProgram.Register("fonbet_results", fonbet.ResultsTab.FabricateResultsTab);
-            CustomProgram.Register("fonbet_history", fonbet.ProfileHistoryBet.FabricateProfileHistoryBet);
+            CustomProgram.Register("fonbet_historybet", fonbet.ProfileHistoryBet.FabricateProfileHistoryBet);
+            CustomProgram.Register("fonbet_operationbet", fonbet.ProfileHistoryOperation.FabricateProfileHistoryOperation);
         }
 
         static void ApplyParams(CustomProgram program, string[] args)

@@ -156,6 +156,15 @@ namespace TestRun
             }
         }
 
+        protected void ClickWebElementWithText(string className, string text, string elementCaptionInNominative,
+            string elementCaptionInGenitive)
+        {
+            var checkValue = string.Format(".//*[@class='{0}']/*[text()='{1}']", className, text);
+            var stringError = string.Format("{0} \"{1}\"", elementCaptionInNominative, text);
+            var stringErrorTwo = string.Format("{0} \"{1}\"", elementCaptionInGenitive, text);
+            ClickWebElement(checkValue, stringError, stringErrorTwo);
+        }
+
         protected void SendKeysToWebElement(string xPath, string keys, string elementCaptionInNominative, string elementCaptionInGenitive)
         {
             try
