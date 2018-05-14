@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 
 namespace TestRun.fonbet
@@ -236,6 +237,37 @@ namespace TestRun.fonbet
                 throw new Exception("Не работает автосворачивание купонов");
         }
 
+    }
+    class PlayerProtection : FonbetWebProgram
+    {
+        public static CustomProgram FabricatePlayerProtection()
+        {
+            return new PlayerProtection();
+        }
+
+        public override void Run()
+        {
+            base.Run();
+           
+            LogStage("Сброс настроек по умолчанию и установка самоограничения в 1 минуту");
+            ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
+            ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
+            SendKeysToWebElement(".//*[text()='Самоограничения']/../div//input", Keys.Backspace, "Поле Самоограничения", "поля Самоограничения");
+            SendKeysToWebElement(".//*[text()='Самоограничения']/../div//input", "1", "Поле Самоограничения", "поля Самоограничения");
+            ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
+            LogStage("Ожидание минуты");
+            Thread.Sleep(62000);
+            LogStage("Проверка продолжения сессии");
+            ClickWebElement(".//*[@class='session-dialog__buttons']/div[2]", "Кнопка Продолжить в диалоговом окне", "кнопки  Продолжить в диалоговом окне");
+            LogStage("Ожидание минуты");
+            Thread.Sleep(62000);
+            LogStage("Проверка выхода из сессии");
+            ClickWebElement(".//*[@class='session-dialog__buttons']/div[1]", "Кнопка Выход в диалоговом окне", "кнопки  Выход в диалоговом окне");
+            IWebElement loginStatus = GetWebElement(".//*[@class='header__login-head']/a", "Нет кнопки Войти");
+            var loginStatusText = loginStatus.Text.ToLower();
+            if (!loginStatusText.Contains("войти"))
+                throw new Exception("Кнопка называется иначе чем Войти");
+        }
     }
 
     class ViewWithoutLogin : FonbetWebProgram
