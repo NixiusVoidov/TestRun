@@ -26,6 +26,7 @@ namespace TestRun
             CustomProgram.Register("fonbet_results", fonbet.ResultsTab.FabricateResultsTab);
             CustomProgram.Register("fonbet_historybet", fonbet.ProfileHistoryBet.FabricateProfileHistoryBet);
             CustomProgram.Register("fonbet_operationbet", fonbet.ProfileHistoryOperation.FabricateProfileHistoryOperation);
+            CustomProgram.Register("fonbet_auth", fonbet.AuthorizationChecker.FabricateAuthorizationChecker);
         }
 
         static void ApplyParams(CustomProgram program, string[] args)
