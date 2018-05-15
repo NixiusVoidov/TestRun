@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 
 namespace TestRun
@@ -135,6 +136,15 @@ namespace TestRun
             LogStage("Открытие меню с видами спорта");
             ClickWebElement(".//*[@class='events__filter _type_sport']", "Фильтр выбора спорта", "фильтра выбора спорта");
         }
+
+        // Метод переходит в личный кабинет
+        protected void ClickOnAccount()
+        {
+            LogStage("Переход в Личный кабинет");
+            ClickWebElement(".//*[@class='header__login-head']/div[1]/span", "ФИО в шапке", "ФИО в шапке");
+            ClickWebElement(".//*[@id='popup']/li[1]", "Кнопка Личный кабинет", "кнопки Личный кабинет");
+        }
+
         // Метод устанавливает настройки вебсайта по-умолчанию.
         protected void MakeDefaultSettings()
         {
@@ -149,6 +159,14 @@ namespace TestRun
         {
             LogStage("Открытие фильтра событий");
             ClickWebElement(".//*[@class='events__filter _type_sport']", "Фильтр событий", "фильтра событий");
+        }
+
+        protected void OpenRequests()
+        {
+            LogStage("Переход в меню \"Запросы\" ");
+            ClickWebElement(".//*[@href='#!/account/requests']", "Меню \"Запросы\"", "меню \"Запросы\"");
+            if (driver.Title != "Запросы")
+                throw new Exception("Страница не содержит title \"Запросы\"");
         }
         // Метод переключает меню в режим отображения слева
         protected void SwitchToLeftTypeMenu()
@@ -200,19 +218,11 @@ namespace TestRun
             bool exist = false;
             string Path = System.Environment.GetEnvironmentVariable("USERPROFILE") + "\\Downloads";
             string[] filePaths = Directory.GetFiles(Path);
-            Console.WriteLine(Path);
-            Console.WriteLine(filePaths);
             foreach (string p in filePaths)
             {
                 if (p.Contains(filename))
                 {
-                   // FileInfo thisFile = new FileInfo(p);
-                    //Check the file that are downloaded in the last 3 minutes
-                    //if (thisFile.LastWriteTime.ToShortTimeString() == DateTime.Now.ToShortTimeString() ||
-                    //    thisFile.LastWriteTime.AddMinutes(1).ToShortTimeString() == DateTime.Now.ToShortTimeString() ||
-                    //    thisFile.LastWriteTime.AddMinutes(2).ToShortTimeString() == DateTime.Now.ToShortTimeString() ||
-                    //    thisFile.LastWriteTime.AddMinutes(3).ToShortTimeString() == DateTime.Now.ToShortTimeString())
-                        exist = true;
+                    exist = true;
                     File.Delete(p);
                     break;
                 }
@@ -220,6 +230,91 @@ namespace TestRun
             return exist;
         }
 
+        protected void CreateNewRequest(string firstClassValue, string firstError, string secondClassValue, string secondError)
+        {
+            LogStage("Создание нового запроса");
+            var firstMenuValue = string.Format(".//*[@class='ui-dropdown__items']/div[{0}]", firstClassValue);
+            var secondMenuValue = string.Format(".//*[@class='ui-dropdown__items']/div[{0}]", secondClassValue);
+            var firstErrorValue = string.Format("Строка \"{0}\"", firstError);
+            var firstErrorValueTwo = string.Format("строки \"{0}\"", firstError);
+            var secondErrorValue = string.Format("Строка \"{0}\"", secondError);
+            var secondErrorValueTwo = string.Format("cтроки \"{0}\"", secondError);
+
+            ClickWebElement(".//*[@class='toolbar__item _left']", "Кнопка Новый запрос", "кнопки Новый запрос");
+            ClickWebElement(".//*[@class='ui__field-inner']", "Меню Тип запроса", "меню тип запроса");
+            ClickWebElement(firstMenuValue, firstErrorValue, firstErrorValueTwo);
+            ClickWebElement(".//*[@class='account-form__window _icon_img']//label[2]", "Меню Тема запроса", "меню Тема запроса");
+            ClickWebElement(secondMenuValue, secondErrorValue, secondErrorValueTwo);
+            ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
+            if (!WebElementExist(".//*[@class='account-form__message _kind-error _style-box']"))
+                throw new Exception("В форме нет обязательных полей");
+        }
+
+        protected void CheckRequestFilter(string requestName)
+        {
+            LogStage("Проверка сообщения о создании заявки");
+            if (!WebElementExist(".//*[@class='account-form__message _kind-top-notice _style-box']"))
+                throw new Exception("Нет сообщения о создании заявки");
+            IWebElement createResult = GetWebElement(".//*[@class='account-form__message _kind-top-notice _style-box']", "Нет сообщения о создании заявки");
+            var createResultText = createResult.Text;
+            var createResultTextConvert = Regex.Replace(createResultText, @"[^\d]+", ""); // Вычленение номера заявки из общего сообщения о создании заявки
+            ClickWebElement(".//*[@class='toolbar__item account-form__button']/a//span", "Кнопка Закрыть", "кнопки Закрыть");
+
+            LogStage("Проверка работы фильтра по статусу");
+            ClickWebElement(".//*[@class='account-requests__form']//*[@class='ui__label']", "Кнопка разворота меню фильтра", "кнопки разворота меню фильтра");
+            ClickWebElement(".//*[@class='ui-dropdown__items']/div[2]", "Строка Отвеченный", "строки Отвеченный");
+            ClickWebElement(".//*[@class='ui-dropdown__items']/div[3]", "Строка В Облработке", "строки В Облработке");
+            ClickWebElement(".//*[@class='ui__field-inner']//*[@class='toolbar__icon _caret-up']", "Стрелка фильтра по статусу", "стрелки фильтра по статусу");
+            IList<IWebElement> gridNumber = driver.FindElements(By.XPath(".//*[@class='wrap']")); //все строки
+            if (gridNumber.Count < 2)
+                throw new Exception("Не работает фильтр по статусу");
+
+            LogStage("Проверка работы фильтра по номеру");
+            ClickWebElement(".//*[@class='account-requests__form']//*[@class='ui__label']", "Кнопка разворота меню фильтра", "кнопки разворота меню фильтра");
+            ClickWebElement(".//*[@class='ui-dropdown__items']/div[2]", "Строка Отвеченный", "строки Отвеченный");
+            ClickWebElement(".//*[@class='ui-dropdown__items']/div[3]", "Строка В Обработке", "строки В Обработке");
+            SendKeysToWebElement(".//*[@class='account-requests__form']//*[@class='ui__field-inner']//input", createResultTextConvert, "Поле Номер запроса", "поля Номер запроса");
+            IList<IWebElement> myRequest = driver.FindElements(By.XPath(".//*[@class='wrap']/div/div[1]"));
+            if (myRequest.Count != 1)
+                throw new Exception("Есть два одинаковых номера запроса");
+            IWebElement numberCell = GetWebElement(".//*[@class='wrap']/div/div[1]", "Нет поля номера заявки");
+            var numberCellText = numberCell.Text;
+            if (createResultTextConvert != numberCellText)
+                throw new Exception("Не работает фильтр по номеру");
+            ClickWebElement(".//*[@class='toolbar__icon icon _clear']", "Кнопка Очистить фильтр по номеру", "кнопки Очистить фильтр по номеру");
+
+            LogStage("Закрытие готовой заявки");
+            ClickWebElement(".//*[@class='requests-list__data']/div[1]", "Строка с последней созданной заявкой", "строки с последней созданной заявкой");
+            ClickWebElement(".//*[@class='request-details']//*[@class='toolbar__item']", "Кнопка закрыть заявку", "кнопки закрыть заявку");
+            IWebElement requestCell = GetWebElement(".//*[@class='requests-list__data']/div[1]/div", "Нет строк с заявками");
+            var requestCellClass = requestCell.GetAttribute("class");
+            if (requestCellClass.Contains("new"))
+                throw new Exception("Не работает закрытие заявки");
+            IWebElement requestStatus = GetWebElement(".//*[@class='requests-list__data']/div[1]//*[@class='column column-4']", "Нет колонки Статус");
+            var requestStatusText = requestStatus.Text;
+            if (requestStatusText != "Отвеченный")
+                throw new Exception("Не поменялся статус заявки после ее закрытия");
+
+            LogStage("Проверка переоткрытия заявки");
+            ClickWebElement(".//*[@class='requests-list__data']/div[1]", "Строка с последней созданной заявкой", "строки с последней созданной заявкой");
+            SendKeysToWebElement(".//*[@class='ui__field _message']", "Test", "Поле для ввода нового сообщения", "поля для ввода нового сообщения");
+            ClickWebElement(".//*[@class='request-details__form-wrap']//button", "Кнопка отправки нового сообщения", "кнопки отправки нового сообщения");
+            IWebElement newStatus = GetWebElement(".//*[@class='requests-list__data']/div[1]//*[@class='column column-4']", "Нет колонки Статус");
+            var newStatussText = newStatus.Text;
+            if (newStatussText != "Неотвеченный")
+                throw new Exception("Не поменялся статус заявки после ее переоткрытия");
+            IWebElement theme = GetWebElement(".//*[@class='requests-list__data']/div[1]//*[@class='column column-3']", "Нет колонки Тема");
+            var themeText = theme.Text;
+            if (!themeText.Contains(requestName))
+                throw new Exception("Тема не связана с QIWI кошельком");
+
+            LogStage("Проверка что фаил скачивается из заявки");
+            ClickWebElement(".//*[@class='requests-list__data']/div[1]", "Строка с последней созданной заявкой", "строки с последней созданной заявкой");
+            ClickWebElement(".//*[@class='request-details']//*[@class='toolbar__item']", "Кнопка закрыть заявку", "кнопки закрыть заявку");
+            ClickWebElement(".//*[@class='request-details__request-file']/span", "Кнопка скачать прикрепленный фаил", "кнопки скачать прикрепленный фаил");
+            if (CheckFileDownloaded("rccimg_0000000011_d180d396.jpg") == false)
+                throw new Exception("Фаил из заявки не скачался");
+        }
         // Метод принимает кол-во отмеченных событий в суперэкспрессе
         protected void MarkedBoxCounter(int value, string mark)
         {

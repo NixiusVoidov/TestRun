@@ -16,10 +16,7 @@ namespace TestRun.fonbet
             base.Run();
 
             MakeDefaultSettings();
-
-            LogStage("Переход в Личный кабинет");
-            ClickWebElement(".//*[@class='header__login-head']/div[1]/span", "ФИО в шапке", "ФИО в шапке");
-            ClickWebElement(".//*[@id='popup']/li[1]", "Кнопка Личный кабинет", "кнопки Личный кабинет");
+            ClickOnAccount();
 
             LogStage("Проверка открытия всех вкладок меню");
             Dictionary<string,string> menu = new Dictionary<string,string>()
@@ -119,10 +116,7 @@ namespace TestRun.fonbet
             base.Run();
 
             MakeDefaultSettings();
-
-            LogStage("Переход в Личный кабинет");
-            ClickWebElement(".//*[@class='header__login-head']/div[1]/span", "ФИО в шапке", "ФИО в шапке");
-            ClickWebElement(".//*[@id='popup']/li[1]", "Кнопка Личный кабинет", "кнопки Личный кабинет");
+            ClickOnAccount();
 
             LogStage("Проверка разворачивания/сворачивания меню в личном кабинете");
             if (WebElementExist(".//*[@class='account-menu__icon _switcher']"))

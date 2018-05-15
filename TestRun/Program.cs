@@ -29,6 +29,7 @@ namespace TestRun
             CustomProgram.Register("fonbet_auth", fonbet.AuthorizationChecker.FabricateAuthorizationChecker);
             CustomProgram.Register("fonbet_playerprotection", fonbet.PlayerProtection.FabricatePlayerProtection);
             CustomProgram.Register("fonbet_depositqiwi", fonbet.DepositQiwi.FabricateDepositQiwi);
+            CustomProgram.Register("fonbet_depositcard", fonbet.DepositCard.FabricateDepositCard);
         }
 
         static void ApplyParams(CustomProgram program, string[] args)
