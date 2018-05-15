@@ -252,7 +252,7 @@ namespace TestRun.fonbet
             LogStage("Сброс настроек по умолчанию и установка самоограничения в 1 минуту");
             ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
             ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
-            SendKeysToWebElement(".//*[text()='Самоограничения']/../div//input", Keys.Backspace, "Поле Самоограничения", "поля Самоограничения");
+            driver.FindElement(By.XPath(".//*[text()='Самоограничения']/../div//input")).Clear();
             SendKeysToWebElement(".//*[text()='Самоограничения']/../div//input", "1", "Поле Самоограничения", "поля Самоограничения");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
             LogStage("Ожидание минуты");

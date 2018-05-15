@@ -2,6 +2,7 @@
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 
@@ -193,8 +194,33 @@ namespace TestRun
                 }
             }
         }
+        // Метод проверяет что фаил из параметра скачался на компьютер
+        protected static bool CheckFileDownloaded(string filename)
+        {
+            bool exist = false;
+            string Path = System.Environment.GetEnvironmentVariable("USERPROFILE") + "\\Downloads";
+            string[] filePaths = Directory.GetFiles(Path);
+            Console.WriteLine(Path);
+            Console.WriteLine(filePaths);
+            foreach (string p in filePaths)
+            {
+                if (p.Contains(filename))
+                {
+                   // FileInfo thisFile = new FileInfo(p);
+                    //Check the file that are downloaded in the last 3 minutes
+                    //if (thisFile.LastWriteTime.ToShortTimeString() == DateTime.Now.ToShortTimeString() ||
+                    //    thisFile.LastWriteTime.AddMinutes(1).ToShortTimeString() == DateTime.Now.ToShortTimeString() ||
+                    //    thisFile.LastWriteTime.AddMinutes(2).ToShortTimeString() == DateTime.Now.ToShortTimeString() ||
+                    //    thisFile.LastWriteTime.AddMinutes(3).ToShortTimeString() == DateTime.Now.ToShortTimeString())
+                        exist = true;
+                    File.Delete(p);
+                    break;
+                }
+            }
+            return exist;
+        }
 
-        // Метод впринимает кол-во отмеченных событий в суперэкспрессе
+        // Метод принимает кол-во отмеченных событий в суперэкспрессе
         protected void MarkedBoxCounter(int value, string mark)
         {
             IList<IWebElement> all = driver.FindElements(By.XPath(String.Format(".//*[@class='matrix-form__mark-box{0}']", mark)));

@@ -31,7 +31,7 @@ namespace TestRun.fonbet
             };
             foreach (KeyValuePair<string, string> item in menu)
             {
-                LogStage(String.Format("Проверка фильтра \"{0}\"", item.Value));
+                LogStage(String.Format("Проверка меню \"{0}\"", item.Value));
                 ClickWebElement(".//*[@href='#!/account/" + item.Key + "']", "Меню \"" + item.Value + "\"", "меню \"" + item.Value + "\"");
                 if (driver.Title != item.Value)
                     throw new Exception(String.Format("Страница не содержит title \"{0}\" ", item.Value));
