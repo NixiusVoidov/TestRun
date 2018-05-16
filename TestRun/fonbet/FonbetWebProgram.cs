@@ -230,6 +230,112 @@ namespace TestRun
             return exist;
         }
 
+        protected void FillAndCreateFormBuilder(int inputValue) // парметр это число из 2х цифр - 1ая цифра то номер строки меню при выборе типа запроса, 2ая цифра - номер строки меню при выборе темы запроса
+        {
+            LogStage("Заполнение и создание нового запроса");
+            //qiwi, ,банковская карта, яндекс деньги , 5 все
+            if (inputValue == 11 || inputValue == 12 || inputValue == 14 || inputValue == 5)
+            {
+                SendKeysToWebElement(".//*[@name='THEDESCRIPTIONOFTHEPROBLEM']", "Test", "Поле описания проблемы", "поля описания проблемы");
+                SendKeysToWebElement(".//*[@name='AMOUNTRUB']", "2409", "Поле Суммы(руб)", "поля Суммы(руб)");
+                SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg","Поле Прикрепления файла", "поля Прикрепления файла");
+                ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
+                return;
+            }
+
+            if (inputValue == 13)
+            {
+                SendKeysToWebElement(".//*[@name='AMOUNTRUB']", "2409", "Поле Суммы(руб)", "поля Суммы(руб)");
+                SendKeysToWebElement(".//*[@name='PROBLEMDESCRIPTION']", "Test", "Поле описания проблемы", "поля описания проблемы"); //1 - мобильный телефон
+                SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
+                return;
+            }
+
+            if (inputValue == 21)
+            {
+                SendKeysToWebElement(".//*[@name='QUESTION']", "Test", "Поле Вопрос", "поля Вопрос"); //2-1 вопрос по работе сайта 
+                SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg","Поле Прикрепления файла", "поля Прикрепления файла");
+                ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
+                return;
+            }
+
+            if (inputValue == 22)
+            {
+                SendKeysToWebElement(".//*[@name='COMMENT']", "Test", "Поле Замечание", "поля Замечание"); //2-2 замечания и предложения
+                SendKeysToWebElement(".//*[@name='SUGGESTION']", "Test", "Поле Предложение", "поля Предложение");
+                SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg","Поле Прикрепления файла", "поля Прикрепления файла");
+                ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
+                return;
+            }
+
+            if (inputValue == 23)
+            {
+                SendKeysToWebElement(".//*[@name='TYPEOFAPPLICATION']", "Test", "Поле Тип приложения", "поля Тип приложения"); //2-3 вопрос по работе моб приложения
+                SendKeysToWebElement(".//*[@name='QUESTION']", "Test", "Поле Вопрос", "поля Вопрос");
+                SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
+                return;
+            }
+
+            if (inputValue == 31)
+            {
+                SendKeysToWebElement(".//*[@name='BETNUMBER']", "523", "Поле Номер ставки", "поля Номер ставки"); //3-1 пари Лайф
+                ClickWebElement(".//*[@class='ui-datetime__actions']", "Иконка календарь", "иконки календаря");
+                ClickWebElement(".//*[@class='ui-calendar__body']/tr[1]/td[1]", "Поле даты в календаре", "поля даты в календаре");
+                SendKeysToWebElement(".//*[@name='QUESTION']", "Test Question", "Поле Содержание вопроса", "поля Содержание вопроса");
+                SendKeysToWebElement(".//*[@name='REQUEST']", "Test Request", "Поле Просьба к администрации", "поля Просьба к администрации");
+                ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
+                return;
+            }
+
+            if (inputValue == 32 || inputValue == 62)
+            {
+                SendKeysToWebElement(".//*[@name='QUESTION']", "Test Question", "Поле Содержание вопроса", "поля Содержание вопроса"); //3-2 пари 6-2
+                SendKeysToWebElement(".//*[@name='REQUEST']", "Test Request", "Поле Просьба к администрации", "поля Просьба к администрации");
+                ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
+                return;
+            }
+
+            if (inputValue == 41)
+            {
+                ClickWebElement(".//*[@class='ui-datetime__actions']", "Иконка календарь", "иконки календаря"); //4 повысить максимум
+                ClickWebElement(".//*[@class='ui-calendar__body']/tr[1]/td[1]", "Поле даты в календаре", "поля даты в календаре");
+                SendKeysToWebElement(".//*[@name='TOURNAMENTANDEVENT']", "Test tournament", "Поле Чемпионат и событие", "поля Чемпионат и событие");
+                SendKeysToWebElement(".//*[@name='DESIREDSTAKE']", "12432", "Поле Сумма ставки", "поля Сумма ставки");
+                SendKeysToWebElement(".//*[@name='COMMENTS']", "Test comment", "Поле Комментарий", "поля Комментарий");
+                ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
+                return;
+            }
+
+            if (inputValue == 61)
+            {
+                SendKeysToWebElement(".//*[@name='BETNUMBER']", "523", "Поле Номер ставки", "поля Номер ставки"); //6-1
+                ClickWebElement(".//*[@class='ui-datetime__actions']", "Иконка календарь", "иконки календаря");
+                ClickWebElement(".//*[@class='ui-calendar__body']/tr[1]/td[1]", "Поле даты в календаре", "поля даты в календаре");
+                SendKeysToWebElement(".//*[@name='OPERATORNUMBER']", "11", "Поле Номер оператора", "поля Номер оператора");
+                SendKeysToWebElement(".//*[@name='QUESTION']", "Test Question", "Поле Содержание вопроса", "поля Содержание вопроса");
+                SendKeysToWebElement(".//*[@name='REQUEST']", "Test Request", "Поле Просьба к администрации", "поля Просьба к администрации");
+                ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
+                return;
+            }
+
+            if (inputValue == 71)
+            {
+                SendKeysToWebElement(".//*[@name='QUESTION']", "Test", "Поле Вопрос", "поля Вопрос"); //7-1
+                ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
+                return;
+            }
+
+            if (inputValue == 72)
+            {
+                SendKeysToWebElement(".//*[@name='COMMENT']", "Test", "Поле Замечание", "поля Замечание"); //7-2 
+                SendKeysToWebElement(".//*[@name='SUGGESTION']", "Test", "Поле Предложение", "поля Предложение");
+                ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
+                return;
+            }
+        }
+
         protected void CreateNewRequest(string firstClassValue, string firstError, string secondClassValue, string secondError)
         {
             LogStage("Создание нового запроса");
@@ -306,7 +412,7 @@ namespace TestRun
             IWebElement theme = GetWebElement(".//*[@class='requests-list__data']/div[1]//*[@class='column column-3']", "Нет колонки Тема");
             var themeText = theme.Text;
             if (!themeText.Contains(requestName))
-                throw new Exception("Тема не связана с QIWI кошельком");
+                throw new Exception("Тема не связана с "+ requestName + "");
 
             LogStage("Проверка что фаил скачивается из заявки");
             ClickWebElement(".//*[@class='requests-list__data']/div[1]", "Строка с последней созданной заявкой", "строки с последней созданной заявкой");
