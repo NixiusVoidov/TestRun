@@ -31,6 +31,7 @@ namespace TestRun
             CustomProgram.Register("fonbet_depositqiwi", fonbet.DepositQiwi.FabricateDepositQiwi);
             CustomProgram.Register("fonbet_depositcard", fonbet.DepositCard.FabricateDepositCard);
             CustomProgram.Register("fonbet_depositmobile", fonbet.DepositMobile.FabricateDepositMobile);
+            CustomProgram.Register("fonbet_broadcast", fonbet.BroadCastCheck.FabricateBroadCastCheck);
         }
 
         static void ApplyParams(CustomProgram program, string[] args)

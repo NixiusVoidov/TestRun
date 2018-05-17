@@ -229,7 +229,7 @@ namespace TestRun
             }
             return exist;
         }
-
+        //Метод заполняет форму запроса в зависимостиот типа и темы
         protected void FillAndCreateFormBuilder(int inputValue) // парметр это число из 2х цифр - 1ая цифра то номер строки меню при выборе типа запроса, 2ая цифра - номер строки меню при выборе темы запроса
         {
             LogStage("Заполнение и создание нового запроса");
@@ -335,7 +335,7 @@ namespace TestRun
                 return;
             }
         }
-
+        //Метод создает новый запрос в зависимости от типа и темы 
         protected void CreateNewRequest(string firstClassValue, string firstError, string secondClassValue, string secondError)
         {
             LogStage("Создание нового запроса");
@@ -356,6 +356,7 @@ namespace TestRun
                 throw new Exception("В форме нет обязательных полей");
         }
 
+        //Метод проверяет все фильтры при работе с запросом
         protected void CheckRequestFilter(string requestName)
         {
             LogStage("Проверка сообщения о создании заявки");
