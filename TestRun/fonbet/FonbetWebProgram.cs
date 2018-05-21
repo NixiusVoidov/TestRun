@@ -148,7 +148,7 @@ namespace TestRun
         // Метод устанавливает настройки вебсайта по-умолчанию.
         protected void MakeDefaultSettings()
         {
-            LogStartAction("Установка настроек по умолчанию");
+            LogStage("Установка настроек по умолчанию");
             ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
             ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");

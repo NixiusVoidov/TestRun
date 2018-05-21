@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace TestRun.fonbet
 {
@@ -184,6 +185,80 @@ namespace TestRun.fonbet
                 if(couponResultValue != "" + x + "")
                     throw new Exception("Исход события в гриде и в купоне отличаются");
             }
+        }
+    }
+
+    class FreeBet : FonbetWebProgram
+    {
+        public static CustomProgram FabricateFreeBet()
+        {
+            return new FreeBet();
+        }
+
+
+        public override void Run()
+        {
+
+            base.Run();
+
+            MakeDefaultSettings();
+            SwitchPageToBets();
+
+            LogStage("Выбираю событие для купона");
+            IList<IWebElement> grid = driver.FindElements(By.XPath(".//*[@class='table']/tbody//td[5]")); //все ставки из одного столбца грида событий
+            grid[6].Click();
+
+            if(!WebElementExist(".//*[@class='coupon__freebet-switcher-head']"))
+                throw new Exception("Отсутсвтуют фрибеты на аккаунте");
+            ClickWebElement(".//*[@class='coupon__freebet-switcher-head']", "Кнопка использовать фрибет", "кнопки использовать фрибет");
+            IWebElement titleBet = GetWebElement(".//*[@class='coupons']/div[1]//*[@class='coupon__title']", "Не отображается title купона");
+            if(titleBet.Text!="Новый фрибет")
+                throw new Exception("Не верный тайтл у фрибета");
+            IList<IWebElement> fbButton = driver.FindElements(By.XPath(".//*[@class='coupon__foot-freebet-button-list']/div/span[2]")); //все кнопки с фрибетами
+            int basicCount = fbButton.Count;
+
+            LogStage("Перебираем подходящий по сумме фрибет и ставим его");
+            var myBet = "";
+            for (var i = 0; i < fbButton.Count; i++)  
+            {
+                fbButton[i].Click();
+                IWebElement fbPlaceButton = GetWebElement(".//*[@class='coupon__foot-freebet']/a", "Нет кнопки поставить фрибет");
+                if (!fbPlaceButton.GetAttribute("class").Contains("disabled"))
+                {
+                    myBet = fbButton[i].Text;
+                    fbPlaceButton.Click();
+                    break;
+                }
+
+                if (i == fbButton.Count - 1)
+                {
+                    throw new Exception("Отсутсвтуют подходящие по сумме фрибеты");
+                }
+                
+            }
+
+            LogStage("Проверяю что фрибет не остался и пропал из списка фрибетов");
+            grid[6].Click();
+            ClickWebElement(".//*[@class='coupon__freebet-switcher-head']", "Кнопка использовать фрибет", "кнопки использовать фрибет");
+            IList<IWebElement> newFbButton = driver.FindElements(By.XPath(".//*[@class='coupon__foot-freebet-button-list']/div/span[2]")); //все кнопки с фрибетами
+            int newCount = newFbButton.Count;
+
+            if(newCount!=basicCount-1)
+                throw new Exception("Фрибет не пропал после ставки");
+
+            LogStage("Проверяю что фрибет правильно отображается в истории ставок");
+            ClickWebElement(".//*[@class='header__login-item'][1]", "ФИО в шапке", "ФИО в шапке");
+            ClickWebElement(".//*[@id='popup']/li[1]", "Кнопка Личный кабинет", "кнопки Личный кабинет");
+            ClickWebElement(".//*[@href='#!/account/history']", "Меню \"История\"", "меню \"История\"");
+            IWebElement betType = GetWebElement(".//*[@class='bets-list__data']/div[1]//*[@class='column column-4']", "Не отображается тип пари");
+            string betTypeText = betType.Text;
+            IWebElement betSum = GetWebElement(".//*[@class='bets-list__data']/div[1]//*[@class='column column-5']/span", "Не отображается сумма пари");
+            string betSumText = betSum.Text;
+            if(betTypeText != "Фрибет")
+                throw new Exception("Фрибет не верно отображается в истории");
+            if (betSumText != myBet)
+                throw new Exception("Не верно отображается сумма фрибета в истории");
+
         }
     }
 }

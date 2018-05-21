@@ -50,6 +50,7 @@ namespace TestRun
             CustomProgram.Register("fonbet_atleasttwo", fonbet.AtLeastTwo.FabricateAtLeastTwo);
             CustomProgram.Register("fonbet_correctbetshowing", fonbet.CorrectBetsShowing.FabricateCorrectBetsShowing);
             CustomProgram.Register("fonbet_appcheking", fonbet.AppChecking.FabricateAppChecking);
+            CustomProgram.Register("fonbet_freebet", fonbet.FreeBet.FabricateFreeBet);
         }
 
         static void ApplyParams(CustomProgram program, string[] args)
