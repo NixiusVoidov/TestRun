@@ -32,19 +32,19 @@ namespace TestRun.fonbet
             foreach (var key in data)
             {
                 LogStage("Проверка текстовых блоков");
-                var titleApp = String.Format(".//*[@id='{0}']//h2", key);
-                var titleAppText = driver.FindElement(By.XPath(titleApp)).Text.ToLower();
+                string titleApp = String.Format(".//*[@id='{0}']//h2", key);
+                string titleAppText = driver.FindElement(By.XPath(titleApp)).Text.ToLower();
                 if(!titleAppText.Contains("приложение для " + key + ""))
                     throw new Exception("Отсутствует заголовок приложение для " + key + "");
 
                 LogStage("Проверка графических блоков");
-                var appBlock = String.Format(".//*[@id='{0}']//*[@class='appPage__os-body-wrap']/div[1]", key);
+                string appBlock = String.Format(".//*[@id='{0}']//*[@class='appPage__os-body-wrap']/div[1]", key);
                 var appBlockClass = driver.FindElement(By.XPath(appBlock)).GetAttribute("class");
                 if(appBlockClass.Contains("_hidden"))
                     throw new Exception("По умолчанию стоит не тот переключатель");
 
                 LogStage("Проверка работы переключателя");
-                var switcher = String.Format(".//*[@id='{0}']//*[@class='appPage__head-switch']/span[2]", key);
+                string switcher = String.Format(".//*[@id='{0}']//*[@class='appPage__head-switch']/span[2]", key);
                 if (WebElementExist(switcher)) //переключатель айфон/айпад или смартфон/планшет
                 {
                     ClickWebElement(switcher, "Кнопка переключения устройства", "кнопки переключения устройства");
@@ -55,7 +55,7 @@ namespace TestRun.fonbet
                 }
             }
             var macTitle = GetWebElement(".//*[@id='macOS']//h2", "Нет тайтл для мака");
-            var macTitleText = macTitle.Text.ToLower();
+            string macTitleText = macTitle.Text.ToLower();
             if (!macTitleText.Contains("приложение для macos"))
                 throw new Exception("Отсутствует заголовок приложение для приложение для macos");
         }

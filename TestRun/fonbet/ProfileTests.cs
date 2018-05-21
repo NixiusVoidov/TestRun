@@ -38,7 +38,7 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='account-calendar__row'][1]/div[1]", "Дата первого видимого дня календаря", "даты первого видимого дня календаря"); //подгружаю события минимум за прошедший месяц
             ClickWebElement(".//*[@class='ui__checkbox-text']/*[text()='Линия']", "Чекбокс Линия", "чекбокса Линия");
             IWebElement betTypeGrid = GetWebElement(".//*[@class='wrap'][1]//*[@class='operation-row _odd']/div[4]", "Не отображается Тип пари в гриде");
-            var betTypeGridText = betTypeGrid.Text;
+            string betTypeGridText = betTypeGrid.Text;
             if (!betTypeGridText.Equals("Фрибет"))
                 throw new Exception("Добавился новый тип пари, кроме фрибета и линии");
             ClickWebElement(".//*[@class='ui__checkbox-text']/*[text()='Фрибет']", "Чекбокс Фрибет", "чекбокса Фрибет");
@@ -52,21 +52,21 @@ namespace TestRun.fonbet
             IList<IWebElement> all = driver.FindElements(By.XPath(".//*[@class='account-filter']/div[2]//*[@class='ui__checkboxes']/div")); //Все чекбоксы в столбце Результат
             for (var i = 1; i <= all.Count; i++)
             {
-                var nameTofind = string.Format(".//*[@class='account-filter']/div[2]//*[@class='ui__checkboxes']/div[{0}]//*[@class='ui__checkbox-text']/span", i);
+                string nameTofind = string.Format(".//*[@class='account-filter']/div[2]//*[@class='ui__checkboxes']/div[{0}]//*[@class='ui__checkbox-text']/span", i);
                 var checkbox = driver.FindElement(By.XPath(nameTofind));
                 checkbox.Click();
             }
             LogStage("Проверка работы всех фильтров в столбце \"Результат\"");
             for (var i = 1; i <= all.Count; i++)
             {
-                var nameTofind = string.Format(".//*[@class='account-filter']/div[2]//*[@class='ui__checkboxes']/div[{0}]//*[@class='ui__checkbox-text']/span", i);
-                var dataText = driver.FindElement(By.XPath(nameTofind)).Text;
+                string nameTofind = string.Format(".//*[@class='account-filter']/div[2]//*[@class='ui__checkboxes']/div[{0}]//*[@class='ui__checkbox-text']/span", i);
+                string dataText = driver.FindElement(By.XPath(nameTofind)).Text;
                 ClickWebElementWithText("ui__checkbox-text", dataText, "Чекбокс", "чекбокса");
           
                 if (!WebElementExist(".//*[@class='page-account__empty-list-text']"))
                 {
                     IWebElement betresultGrid = GetWebElement(".//*[@class=\'wrap\'][1]//*[@class=\"operation-row _odd\"]/div[6]/span[1]", "Не отображается Результат пари в гриде");
-                    var betresultGridText = betresultGrid.Text;
+                    string betresultGridText = betresultGrid.Text;
                     if (!betresultGridText.Equals(dataText))
                         throw new Exception("Не работают фильтры Результата пари");
                 }
@@ -78,7 +78,7 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='ui__checkbox-text']/*[text()='Выигрыш']", "Чекбокс Выигрыш", "чекбокса Выигрыш");
             ClickWebElement(".//*[@class='wrap'][1]//*[@class='operation-row _odd']/div[7]", "Стрелка разворота события", "стрелки разворота события");
             IWebElement betValue = GetWebElement(".//*[@class='bet-details _odd']//table//*[text()='Выигрыш']", "Не отображается Результат пари в развернутом гриде");
-            var betValueText = betValue.Text;
+            string betValueText = betValue.Text;
             if (!betValueText.Equals("Выигрыш"))
                 throw new Exception("Не верный результат в развернутом пари");
 
@@ -140,7 +140,7 @@ namespace TestRun.fonbet
             IList<IWebElement> all = driver.FindElements(By.XPath(".//*[@class='ui__checkboxes']/div")); //Все доступные типы операций в фильтре
             for (var i = 1; i <= all.Count; i++)
             {
-                var nameTofind = string.Format(".//*[@class='ui__checkboxes']/div[{0}]//*[@class='ui__checkbox-text']/span", i);
+                string nameTofind = string.Format(".//*[@class='ui__checkboxes']/div[{0}]//*[@class='ui__checkbox-text']/span", i);
                 var element = driver.FindElement(By.XPath(nameTofind));
                 element.Click();
             }
@@ -148,14 +148,14 @@ namespace TestRun.fonbet
             LogStage("Проверка работы всех фильтров в столбце \"Тип операции\"");
             for (var i = 1; i <= all.Count; i++)
             {
-                var nameTofind = string.Format(".//*[@class='ui__checkboxes']/div[{0}]//*[@class='ui__checkbox-text']/span", i);
+                string nameTofind = string.Format(".//*[@class='ui__checkboxes']/div[{0}]//*[@class='ui__checkbox-text']/span", i);
                 var element = driver.FindElement(By.XPath(nameTofind)).Text;
 
                 ClickWebElementWithText("ui__checkbox-text", element, "Чекбокс", "чекбокса");
                 if (!WebElementExist(".//*[@class='page-account__empty-list-text']"))
                 {
                     IWebElement betoperationGrid = GetWebElement(".//*[@class='operation-row _odd']/div[4]", "Не отображается Операции в гриде");
-                    var betoperationGridText = betoperationGrid.Text;
+                    string betoperationGridText = betoperationGrid.Text;
                     if (!betoperationGridText.Equals(element))
                         throw new Exception("Не работают фильтры Типа операций");
                 }
@@ -166,7 +166,7 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='ui__checkbox-text']/*[text()='Заключено пари']", "Чекбокс заключено пари", "чекбокса заключено пари");
             ClickWebElement(".//*[@class='wrap'][1]//*[@class='operation-row _odd']/div[7]", "Стрелка разворота операции", "Стрелка разворота операции");
             IWebElement betMark = GetWebElement(".//*[@class='bet-details _odd']//table//*[text()='Коэфф']", "Не отображается коэффициент в развернутом гриде");
-            var betMarkText = betMark.Text;
+            string betMarkText = betMark.Text;
             if (!betMarkText.Equals("Коэфф"))
                 throw new Exception("Нет коэфф в развернутой операции");
         }

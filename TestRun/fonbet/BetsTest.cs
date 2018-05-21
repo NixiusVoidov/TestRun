@@ -25,8 +25,8 @@ namespace TestRun.fonbet
             {
                 IWebElement lastprice = GetWebElement(".//*[@class='coupon__sell-button _state_orange']/span[2]", "Не отображается цена продажи на кнопке продажи");
                 IWebElement firstprice = GetWebElement(".//*[@class='coupon__sell-button _state_orange']/../../../*[@class='coupon__info']//*[@title='Сумма пари']/i[2]", "Не отображается сумма пари в купоне");
-                var lastPriceText = Convert.ToDouble(lastprice.Text);
-                var firstPriceText = Convert.ToDouble(firstprice.Text);
+                double lastPriceText = Convert.ToDouble(lastprice.Text);
+                double firstPriceText = Convert.ToDouble(firstprice.Text);
 
                 if (lastPriceText < firstPriceText)
                 {
@@ -53,21 +53,21 @@ namespace TestRun.fonbet
             IWebElement combinationRate = GetWebElement("//*[@class='calculator__table _right']/tbody/tr[6]/td[1]", "Не отображается коэффициент комбинации");
             IWebElement winRate = GetWebElement("//*[@class='calculator__table _right']/tbody/tr[7]/td[1]", "Не отображается выигрыш комбинации");
 
-            var possibleWinText = possibleWin.Text;
-            var firstBetfirstEvText = firstBetfirstEv.Text;
-            var firstBetSecEvText = firstBetSecEv.Text;
+            string possibleWinText = possibleWin.Text;
+            string firstBetfirstEvText = firstBetfirstEv.Text;
+            string firstBetSecEvText = firstBetSecEv.Text;
 
-            var betSummText = Convert.ToDouble(betSumm.Text);
+            double betSummText = Convert.ToDouble(betSumm.Text);
             var a = Math.Round(betSummText / 3, 2);
-            var b = Convert.ToDouble(combinationRate.Text, CultureInfo.GetCultureInfo("en-US").NumberFormat);
+            double b = Convert.ToDouble(combinationRate.Text, CultureInfo.GetCultureInfo("en-US").NumberFormat);
             string input = winRate.Text;
             string pattern = "\\s+";
             string replacement = "";
             Regex rgx = new Regex(pattern);
             string result = rgx.Replace(input, replacement);
-            var sum = Convert.ToDouble(result);
+            double sum = Convert.ToDouble(result);
             string finalResult = rgx.Replace(possibleWinText, replacement);
-            var finalSum = Convert.ToDouble(finalResult);
+            double finalSum = Convert.ToDouble(finalResult);
 
             if (Convert.ToDouble(firstBetfirstEvText, CultureInfo.GetCultureInfo("en-US").NumberFormat) *
                 Convert.ToDouble(firstBetSecEvText, CultureInfo.GetCultureInfo("en-US").NumberFormat) == Math.Round(
@@ -105,8 +105,8 @@ namespace TestRun.fonbet
                             throw new Exception("Не обнуляется кэф при снятии чекбокса");
 
                         IWebElement winCombo = GetWebElement("//*[@class='calculator__table _right']/tbody/tr[7]/td[3]", "Не отображается выигрыш комбинации");
-                        var winComboValue = winCombo.Text;
-                        var possibleWinValue = possibleWin.Text;
+                        string winComboValue = winCombo.Text;
+                        string possibleWinValue = possibleWin.Text;
                         if (winComboValue != possibleWinValue)
                             throw new Exception("Выигрыш комбинации и возможный выигрыш не совпадают");
                     }
@@ -156,7 +156,7 @@ namespace TestRun.fonbet
                 btns = null;
             }
 
-            var foraText = fora[2].Text;
+            string foraText = fora[2].Text;
 
             string[] data = {
                 "Поб 1",
@@ -176,12 +176,12 @@ namespace TestRun.fonbet
                 string x = data[i];
                 btns[i].Click();
                 IWebElement couponRate = GetWebElement("//*[@class='coupons']/div[1]//*[@class='coupon__info-head']/div[2]/div[2]/i[2]", "Не отображается кэф ставки в купоне");
-                var couponRateValue = couponRate.Text;
+                string couponRateValue = couponRate.Text;
                 if(btns[i].Text != couponRateValue)
                     throw new Exception("Коэффициенты в гриде и в купоне отличаются");
                 
                 IWebElement couponResult = GetWebElement("//*[@class='coupons']/div[1]//tbody/tr/td[3]/span", "Не отображается исход ставки в купоне");
-                var couponResultValue = couponResult.Text;
+                string couponResultValue = couponResult.Text;
                 if(couponResultValue != "" + x + "")
                     throw new Exception("Исход события в гриде и в купоне отличаются");
             }
@@ -218,7 +218,7 @@ namespace TestRun.fonbet
             int basicCount = fbButton.Count;
 
             LogStage("Перебираем подходящий по сумме фрибет и ставим его");
-            var myBet = "";
+            string myBet = "";
             for (var i = 0; i < fbButton.Count; i++)  
             {
                 fbButton[i].Click();
@@ -258,7 +258,6 @@ namespace TestRun.fonbet
                 throw new Exception("Фрибет не верно отображается в истории");
             if (betSumText != myBet)
                 throw new Exception("Не верно отображается сумма фрибета в истории");
-
         }
     }
 }

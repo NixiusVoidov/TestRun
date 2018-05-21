@@ -66,14 +66,14 @@ namespace TestRun.fonbet
             grid[3].Click();
             //Проверка рачета ставки
              IWebElement newBetValue = GetWebElement(".//*[@class='coupon__foot-stakes']/a[4]", "Не найдена добавленная кнопка с ставкой в 1%");
-            var betValue = Convert.ToDouble(newBetValue.Text);
+            double betValue = Convert.ToDouble(newBetValue.Text);
             IWebElement accounBalance = GetWebElement(".//*[@class='header__login-item']//*[@class='header__login-balance']", "Не отображается баланс счета");
             string input = accounBalance.Text;
             string pattern = "\\s+";
             string replacement = "";
             Regex rgx = new Regex(pattern);
             string result = rgx.Replace(input, replacement);
-            var balance = Convert.ToDouble(result, CultureInfo.GetCultureInfo("en-US").NumberFormat);
+            double balance = Convert.ToDouble(result, CultureInfo.GetCultureInfo("en-US").NumberFormat);
             //Отнимаю 1 когда баланс не четный, т/к деление тогда получается дробным
             if (betValue % 2 == 0)
             {
@@ -171,7 +171,7 @@ namespace TestRun.fonbet
             LogStage("Установка чекбоксов меню Вид");
             for (var i = 1; i <= 7; i++)
             {
-                var nameTofind = string.Format("//*[@class='settings__section'][5]/div/div[{0}]//input", i);
+                string nameTofind = string.Format("//*[@class='settings__section'][5]/div/div[{0}]//input", i);
                 var element = driver.FindElement(By.XPath(nameTofind));
                 element.Click();
             }
@@ -264,7 +264,7 @@ namespace TestRun.fonbet
             LogStage("Проверка выхода из сессии");
             ClickWebElement(".//*[@class='session-dialog__buttons']/div[1]", "Кнопка Выход в диалоговом окне", "кнопки  Выход в диалоговом окне");
             IWebElement loginStatus = GetWebElement(".//*[@class='header__login-head']/a", "Нет кнопки Войти");
-            var loginStatusText = loginStatus.Text.ToLower();
+            string loginStatusText = loginStatus.Text.ToLower();
             if (!loginStatusText.Contains("войти"))
                 throw new Exception("Кнопка называется иначе чем Войти");
         }
@@ -343,7 +343,7 @@ namespace TestRun.fonbet
             LogStartAction("Проверка кол-ва стрелочек у купонов");
             IList<IWebElement> betType = driver.FindElements(By.XPath(".//*[@class='coupon__info-item-inner']//*[@class='coupon__info-text']"));
 
-            var betCount = 0;
+            int betCount = 0;
             foreach (IWebElement element in betType)
             {
                 string typeBet = element.Text;

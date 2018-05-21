@@ -51,9 +51,9 @@ namespace TestRun.fonbet
             LogStage("Проверка работы АнонсЛайф");
             ClickOnSportType();
             ClickWebElement(".//*[@href='#!/bets/announcements']", "Анонс Лайв в фильтре событий", "по анонсу лайф в фильтре событий");
-            var sortByTime = GetWebElement(".//*[@class='events__announce-filter']", "Не найдена кнопка сортировать по времени").Text;
+            string sortByTime = GetWebElement(".//*[@class='events__announce-filter']", "Не найдена кнопка сортировать по времени").Text;
             ClickWebElement(".//*[@class='events__announce-filter']", "Фильтр сортировки по времени/соревнованию", "Фильтра сортировки по времени/соревнованию");
-            var sortByCompetiton = GetWebElement(".//*[@class='events__announce-filter']", "Не найдена кнопка сортировать по соревнованию").Text;
+            string sortByCompetiton = GetWebElement(".//*[@class='events__announce-filter']", "Не найдена кнопка сортировать по соревнованию").Text;
             if (sortByTime == sortByCompetiton)
                 throw new Exception("Не работает кнопка фильтрации по времени/совернованию");
 
@@ -110,10 +110,10 @@ namespace TestRun.fonbet
 
             LogStage("Проверка работы АнонсЛайф");
             ClickWebElement(".//*[@href='#!/bets/announcements']", "Анонс Лайв в фильтре событий", "по анонсу лайф в фильтре событий");
-            var sortByCompetiton = GetWebElement(".//*[@class='event-v-list__announce-filter-btn']", "Не найдена кнопка сортировать по соревнованию").Text;
+            string sortByCompetiton = GetWebElement(".//*[@class='event-v-list__announce-filter-btn']", "Не найдена кнопка сортировать по соревнованию").Text;
             ClickWebElement(".//*[@class='event-v-list__announce-filter-btn']", "Фильтр сортировки по времени/соревнованию", "фильтра сортировки по времени/соревнованию");
             ClickWebElement(".//*[@class='event-v-list__announce-popup-menu']/li[2]", "Фильтр сортировки по времени", "фильтра сортировки по времени");
-            var sortByTime = GetWebElement(".//*[@class='event-v-list__announce-filter-btn']", "Не найдена кнопка сортировать по соревнованию").Text;
+            string sortByTime = GetWebElement(".//*[@class='event-v-list__announce-filter-btn']", "Не найдена кнопка сортировать по соревнованию").Text;
             if (sortByTime == sortByCompetiton)
                 throw new Exception("Не работает кнопка фильтрации по времени/совернованию");
 
