@@ -129,10 +129,12 @@ namespace TestRun.fonbet
             return new CorrectBetsShowing();
         }
 
+       
         public override void Run()
         {
+            
             base.Run();
-
+            
             MakeDefaultSettings();
             SwitchPageToBets();
 
