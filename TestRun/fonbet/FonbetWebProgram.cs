@@ -148,7 +148,7 @@ namespace TestRun
         // Метод устанавливает настройки вебсайта по-умолчанию.
         protected void MakeDefaultSettings()
         {
-            LogStartAction("Установка настроек по умолчанию");
+            LogStage("Установка настроек по умолчанию");
             ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
             ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
@@ -339,12 +339,12 @@ namespace TestRun
         protected void CreateNewRequest(string firstClassValue, string firstError, string secondClassValue, string secondError)
         {
             LogStage("Создание нового запроса");
-            var firstMenuValue = string.Format(".//*[@class='ui-dropdown__items']/div[{0}]", firstClassValue);
-            var secondMenuValue = string.Format(".//*[@class='ui-dropdown__items']/div[{0}]", secondClassValue);
-            var firstErrorValue = string.Format("Строка \"{0}\"", firstError);
-            var firstErrorValueTwo = string.Format("строки \"{0}\"", firstError);
-            var secondErrorValue = string.Format("Строка \"{0}\"", secondError);
-            var secondErrorValueTwo = string.Format("cтроки \"{0}\"", secondError);
+            string firstMenuValue = string.Format(".//*[@class='ui-dropdown__items']/div[{0}]", firstClassValue);
+            string secondMenuValue = string.Format(".//*[@class='ui-dropdown__items']/div[{0}]", secondClassValue);
+            string firstErrorValue = string.Format("Строка \"{0}\"", firstError);
+            string firstErrorValueTwo = string.Format("строки \"{0}\"", firstError);
+            string secondErrorValue = string.Format("Строка \"{0}\"", secondError);
+            string secondErrorValueTwo = string.Format("cтроки \"{0}\"", secondError);
 
             ClickWebElement(".//*[@class='toolbar__item _left']", "Кнопка Новый запрос", "кнопки Новый запрос");
             ClickWebElement(".//*[@class='ui__field-inner']", "Меню Тип запроса", "меню тип запроса");
@@ -363,7 +363,7 @@ namespace TestRun
             if (!WebElementExist(".//*[@class='account-form__message _kind-top-notice _style-box']"))
                 throw new Exception("Нет сообщения о создании заявки");
             IWebElement createResult = GetWebElement(".//*[@class='account-form__message _kind-top-notice _style-box']", "Нет сообщения о создании заявки");
-            var createResultText = createResult.Text;
+            string createResultText = createResult.Text;
             var createResultTextConvert = Regex.Replace(createResultText, @"[^\d]+", ""); // Вычленение номера заявки из общего сообщения о создании заявки
             ClickWebElement(".//*[@class='toolbar__item account-form__button']/a//span", "Кнопка Закрыть", "кнопки Закрыть");
 
@@ -385,7 +385,7 @@ namespace TestRun
             if (myRequest.Count != 1)
                 throw new Exception("Есть два одинаковых номера запроса");
             IWebElement numberCell = GetWebElement(".//*[@class='wrap']/div/div[1]", "Нет поля номера заявки");
-            var numberCellText = numberCell.Text;
+            string numberCellText = numberCell.Text;
             if (createResultTextConvert != numberCellText)
                 throw new Exception("Не работает фильтр по номеру");
             ClickWebElement(".//*[@class='toolbar__icon icon _clear']", "Кнопка Очистить фильтр по номеру", "кнопки Очистить фильтр по номеру");
@@ -398,7 +398,7 @@ namespace TestRun
             if (requestCellClass.Contains("new"))
                 throw new Exception("Не работает закрытие заявки");
             IWebElement requestStatus = GetWebElement(".//*[@class='requests-list__data']/div[1]//*[@class='column column-4']", "Нет колонки Статус");
-            var requestStatusText = requestStatus.Text;
+            string requestStatusText = requestStatus.Text;
             if (requestStatusText != "Отвеченный")
                 throw new Exception("Не поменялся статус заявки после ее закрытия");
 
@@ -407,11 +407,11 @@ namespace TestRun
             SendKeysToWebElement(".//*[@class='ui__field _message']", "Test", "Поле для ввода нового сообщения", "поля для ввода нового сообщения");
             ClickWebElement(".//*[@class='request-details__form-wrap']//button", "Кнопка отправки нового сообщения", "кнопки отправки нового сообщения");
             IWebElement newStatus = GetWebElement(".//*[@class='requests-list__data']/div[1]//*[@class='column column-4']", "Нет колонки Статус");
-            var newStatussText = newStatus.Text;
+            string newStatussText = newStatus.Text;
             if (newStatussText != "Неотвеченный")
                 throw new Exception("Не поменялся статус заявки после ее переоткрытия");
             IWebElement theme = GetWebElement(".//*[@class='requests-list__data']/div[1]//*[@class='column column-3']", "Нет колонки Тема");
-            var themeText = theme.Text;
+            string themeText = theme.Text;
             if (!themeText.Contains(requestName))
                 throw new Exception("Тема не связана с "+ requestName + "");
 

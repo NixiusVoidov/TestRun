@@ -57,7 +57,7 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='header__login-head']/div[1]/span", "ФИО в шапке", "ФИО в шапке");
             ClickWebElement(".//*[@id='popup']/li[last()]", "Кнопка Выйти из аккаунта", "кнопки выйти из аккаунта");
             IWebElement loginButton = GetWebElement(".//*[@class='header__login-head']/a", "Нет кнопки логина");
-            var bloginButtonClass = loginButton.Text.ToLower();
+            string bloginButtonClass = loginButton.Text.ToLower();
             if (!bloginButtonClass.Contains("войти"))
                 throw new Exception("Логаут не сработал");
         }
