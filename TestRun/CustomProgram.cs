@@ -42,7 +42,7 @@ namespace TestRun
 
     class CustomProgram
     {
-        public string ResultURI = "";
+        public string ResultURI = ""; 
         public string AgentId = "";
         public string Actor = "";
 
