@@ -8,6 +8,7 @@ namespace TestRun
 
     public class ProgramParameters
     {
+        public string AgentId { get; set; }
         public string ResultURI { get; set; }
         
     }
@@ -27,6 +28,7 @@ namespace TestRun
 
     public class ProgramReport
     {
+        public string AgentId = null;
         public string ProgramName = null;
         public DateTime? StartTime = null;
         public DateTime? FinishTime = null;
@@ -39,6 +41,7 @@ namespace TestRun
     class CustomProgram
     {
         public string ResultURI = "";
+        public string AgentId = "";
 
         private static Dictionary<string, FabricateProgram> programList = new Dictionary<string, FabricateProgram>();
 
@@ -74,6 +77,7 @@ namespace TestRun
         protected void ReadParameters(ProgramParameters parameters)
         {
             ResultURI = parameters.ResultURI;
+            AgentId = parameters.AgentId;
         }
 
         public virtual void ReadParamsFromJson(string jsonText)
@@ -97,11 +101,13 @@ namespace TestRun
 
         public virtual void PrintParameters()
         {
+            Console.WriteLine("Идентификатор агента: \t\t{0}", AgentId ?? "[не указан]");
             Console.WriteLine("URI отправки результата: \t{0}", ResultURI ?? "[неопределен]");
         }
 
         public virtual void WriteParametersToReport()
         {
+            Report.AgentId = AgentId;
             Report.Conditions.Add("ResultURI", ResultURI);
         }
 
