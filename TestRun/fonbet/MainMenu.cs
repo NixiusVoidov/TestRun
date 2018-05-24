@@ -92,9 +92,66 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='home-slider__bets']/div[1]", "Модуль ставки на странице слайдера", "модуля ставки на странице сладера");
             if (!WebElementExist(".//*[@class='coupons']/div[1]//*[@class='coupon__title']"))
                 throw new Exception("Не появилась новая ставка");
-            //  waitElementIsVisible(driver, By.XPath(".//*[@class='home-slider__bets']/div[1]"));
-          
            
+        }
+    }
+    class NewsAndWinnerClub : FonbetWebProgram
+    {
+        public static CustomProgram FabricateNewsAndWinnerClub()
+        {
+            return new NewsAndWinnerClub();
+        }
+
+        protected override bool NeedLogin()
+        {
+            return false;
+        }
+
+        public override void Run()
+        {
+            base.Run();
+
+
+            LogStage("Проверка наличия блока новостей");
+            if (!WebElementExist(".//*[@class='home-news__items']"))
+                throw new Exception("Нет блока новостей на главной странице сайта");
+
+            LogStage("Проверка отображения и корретной работы блока новостей");
+            ClickWebElement(".//*[@class='home-news__items']/article[1]/h1", "1ый топик из ленты новостей", "1ого топика из ленты новостей");
+            if (!WebElementExist(".//*[@id='popupModal']"))
+                throw new Exception("Не открылся попап с новостью");
+            ClickWebElement(".//*[@class='news-modal__close']", "Кнопка закрытия popup", "кнопки закрытия popup");
+
+            ClickWebElement(".//*[@class='home-news__source-box']/span[2]", "Вкладка \"Прогнозы\"", "вкладки \"Прогнозы\"");
+            var prediction = GetWebElement(".//*[@class='home-news__source-box']/span[2]", "Нет вкладки \"Прогнозы\"");
+            var predictionClass = prediction.GetAttribute("class");
+            if (!predictionClass.Contains("_selected"))
+                throw new Exception("Не переключается на вкладку Прогнозы в шапке новостей");
+            ClickWebElement(".//*[@class='home-news__items']/article[2]//a", "2ой топик из ленты новостей", "2ого топика из ленты новостей");
+            if (!WebElementExist(".//*[@id='popupModal']"))
+                throw new Exception("Не открылся попап с новостью");
+            ClickWebElement(".//*[@class='news-modal__close']", "Кнопка закрытия popup", "кнопки закрытия popup");
+
+            ClickWebElement(".//*[@class='home-news__source-box']/span[3]", "Вкладка \"Спорт с Фонтбет\"", "вкладки \"Спорт с Фонтбет\"");
+            var sport = GetWebElement(".//*[@class='home-news__source-box']/span[3]", "Нет вкладки \"Прогнозы\"");
+            var sportClass = sport.GetAttribute("class");
+            if (!sportClass.Contains("_selected"))
+                throw new Exception("Не переключается на вкладку Прогнозы в шапке новостей");
+            ClickWebElement(".//*[@class='home-news__items']/article[3]//a", "3ий топик из ленты новостей", "3ого топика из ленты новостей");
+            if (!WebElementExist(".//*[@id='popupModal']"))
+                throw new Exception("Не открылся попап с новостью");
+            ClickWebElement(".//*[@class='news-modal__close']", "Кнопка закрытия popup", "кнопки закрытия popup");
+
+            ClickWebElement(".//*[@class='top-win__items']/article[1]//a", "Топик в модуле \"Клуб победителей\"", "топика в модуле \"Клуб победителей\"");
+            if (!WebElementExist(".//*[@id='popupModal']"))
+                throw new Exception("Не открылся попап с новостью");
+            ClickWebElement(".//*[@class='news-modal__close']", "Кнопка закрытия popup", "кнопки закрытия popup");
+
+            ClickWebElement(".//*[@href='#!/news/fnl']", "Ссылка на ВСЕ новости", "ссылки на ВСЕ новости");
+            var titleNews = GetWebElement(".//*[@class='content-page__title']", "Нет тайтала на странице \"Новости\"");
+            var titleNewsText = titleNews.Text;
+            if (!titleNewsText.Contains("Новости"))
+                throw new Exception("Тайтл не соответсвует странице");
         }
     }
 }

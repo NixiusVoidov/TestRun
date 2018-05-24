@@ -53,6 +53,7 @@ namespace TestRun
             CustomProgram.Register("fonbet_freebet", fonbet.FreeBet.FabricateFreeBet); //Проврека правильности работы со ставкой "Фрибет"
             CustomProgram.Register("fonbet_howtoplay", fonbet.HowToPlay.FabricateHowToPlay); //Проверка работы функционала модуля "Как делать ставки" на главной странице (видно только для неавторизованных пользователей)
             CustomProgram.Register("fonbet_slider", fonbet.Slider.FabricateSlider); //Проверка работы функционала слайдера на главной странице (видно только для неавторизованных пользователей)
+            CustomProgram.Register("fonbet_newsandwinners", fonbet.NewsAndWinnerClub.FabricateNewsAndWinnerClub); //Проверка работы функционала модуля Новости на главной странице (видно только для неавторизованных пользователей)
         }
 
         static void ApplyParams(CustomProgram program, string[] args)
