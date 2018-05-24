@@ -13,45 +13,45 @@ namespace TestRun
             CustomProgram.Register("webbrowser", CustomWebTestProgram.FabricateCustomWebTestProgram);
             CustomProgram.Register("fonbet", FonbetWebProgram.FabricateFonbetWebProgram);
 
-            CustomProgram.Register("fonbet_favtreetop", fonbet.FavoritesTree.FabricateFavoritesTreeTop);
-            CustomProgram.Register("fonbet_favtreeleft", fonbet.FavoritesTreeLeft.FabricateFavoritesTreeLeft);
-            CustomProgram.Register("fonbet_favexpand", fonbet.FavoritesExpandTree.FabricateFavoritesExpandTree);
-            CustomProgram.Register("fonbet_timetree", fonbet.TimeTree.FabricateTimeTree);
-            CustomProgram.Register("fonbet_betssettings", fonbet.BetsSettings.FabricateBetsSettings);
-            CustomProgram.Register("fonbet_cashoutanddialog", fonbet.CashOutAndDialogsSettings.FabricateCashOutAndDialogsSettings);
-            CustomProgram.Register("fonbet_view", fonbet.View.FabricateView);
-            CustomProgram.Register("fonbet_viewwologin", fonbet.ViewWithoutLogin.FabricateViewWithoutLogin);
-            CustomProgram.Register("fonbet_superexpress", fonbet.SuperExpress.FabricateSuperExpress);
-            CustomProgram.Register("fonbet_coupongrid", fonbet.CouponGridInterface.FabricateCouponGridInterface);
-            CustomProgram.Register("fonbet_results", fonbet.ResultsTab.FabricateResultsTab);
-            CustomProgram.Register("fonbet_historybet", fonbet.ProfileHistoryBet.FabricateProfileHistoryBet);
-            CustomProgram.Register("fonbet_operationbet", fonbet.ProfileHistoryOperation.FabricateProfileHistoryOperation);
-            CustomProgram.Register("fonbet_auth", fonbet.AuthorizationChecker.FabricateAuthorizationChecker);
-            CustomProgram.Register("fonbet_playerprotection", fonbet.PlayerProtection.FabricatePlayerProtection);
-            CustomProgram.Register("request_depositqiwi", fonbet.requests.DepositQiwi.FabricateDepositQiwi);
-            CustomProgram.Register("request_depositcard", fonbet.requests.DepositCard.FabricateDepositCard);
-            CustomProgram.Register("request_depositmobile", fonbet.requests.DepositMobile.FabricateDepositMobile);
-            CustomProgram.Register("request_deposityandex", fonbet.requests.DepositYandex.FabricateDepositYandex);
-            CustomProgram.Register("request_supportsite", fonbet.requests.SupportSite.FabricateSupportSite);
-            CustomProgram.Register("request_supportsuggestion", fonbet.requests.SupportSuggestion.FabricateSupportSuggestion);
-            CustomProgram.Register("request_supportmobile", fonbet.requests.SupportMobile.FabricateSupportMobile);
-            CustomProgram.Register("request_calculationsbetlife", fonbet.requests.CalculationsBetLife.FabricateCalculationsBetLife);
-            CustomProgram.Register("request_calculationsbet", fonbet.requests.CalculationsBet.FabricateCalculationsBet);
-            CustomProgram.Register("request_increasedmax", fonbet.requests.IncreasedMax.FabricateIncreasedMax);
-            CustomProgram.Register("request_paymentqiwi", fonbet.requests.PaymentQiwi.FabricatePaymentQiwi);
-            CustomProgram.Register("request_paymentcard", fonbet.requests.PaymentCard.FabricatePaymentCard);
-            CustomProgram.Register("request_paymentmobile", fonbet.requests.PaymentMobile.FabricatePaymentMobile);
-            CustomProgram.Register("request_paymentyandex", fonbet.requests.PaymentYandex.FabricatePaymentYandex);
-            CustomProgram.Register("request_phonecalculation", fonbet.requests.PhoneCalculation.FabricatePhoneCalculation);
-            CustomProgram.Register("request_phoneservice", fonbet.requests.PhoneService.FabricatePhoneService);
-            CustomProgram.Register("request_otheradministration", fonbet.requests.OtherAdministration.FabricateOtherAdministration);
-            CustomProgram.Register("request_othersuggestion", fonbet.requests.OtherSuggestion.FabricateOtherSuggestion);
-            CustomProgram.Register("fonbet_broadcast", fonbet.BroadCastCheck.FabricateBroadCastCheck);
-            CustomProgram.Register("fonbet_atleasttwo", fonbet.AtLeastTwo.FabricateAtLeastTwo);
-            CustomProgram.Register("fonbet_correctbetshowing", fonbet.CorrectBetsShowing.FabricateCorrectBetsShowing);
-            CustomProgram.Register("fonbet_appcheking", fonbet.AppChecking.FabricateAppChecking);
-            CustomProgram.Register("fonbet_freebet", fonbet.FreeBet.FabricateFreeBet);
-            CustomProgram.Register("fonbet_howtoplay", fonbet.HowToPlay.FabricateHowToPlay);
+            CustomProgram.Register("fonbet_favtreetop", fonbet.FavoritesTree.FabricateFavoritesTreeTop);   //Проверка работы избранных событий, если фильтр меню событий сверху
+            CustomProgram.Register("fonbet_favtreeleft", fonbet.FavoritesTreeLeft.FabricateFavoritesTreeLeft); // Проверка работы избранных событий, если фильтр меню событий слева
+            CustomProgram.Register("fonbet_favexpand", fonbet.FavoritesExpandTree.FabricateFavoritesExpandTree); //Проверка разворачивания/сворачивания всех дочерних событий и доп. пари
+            CustomProgram.Register("fonbet_timetree", fonbet.TimeTree.FabricateTimeTree); //Проверка фильтра времени в меню событий
+            CustomProgram.Register("fonbet_betssettings", fonbet.BetsSettings.FabricateBetsSettings); //Проверка всего функционала из модуля "Пари" в настройках сайта
+            CustomProgram.Register("fonbet_cashoutanddialog", fonbet.CashOutAndDialogsSettings.FabricateCashOutAndDialogsSettings); //Проверка всего функционала из модуля "Продажа пари" и "Диалоги" в настройках сайта
+            CustomProgram.Register("fonbet_view", fonbet.View.FabricateView); //Проверка всего функционала из модуля "Вид" в настройках сайта
+            CustomProgram.Register("fonbet_viewwologin", fonbet.ViewWithoutLogin.FabricateViewWithoutLogin); //Проверка всего функционала из модуля "Вид" в настройках сайта без авторизации пользователя
+            CustomProgram.Register("fonbet_superexpress", fonbet.SuperExpress.FabricateSuperExpress); //Проверка всего функционала во вкладке "Суперэкспресс"
+            CustomProgram.Register("fonbet_coupongrid", fonbet.CouponGridInterface.FabricateCouponGridInterface); //Проверка работы панели фильтров из модуля ленты купонов (Меню, Все недавние, Нерасчитанные, На продажу)
+            CustomProgram.Register("fonbet_results", fonbet.ResultsTab.FabricateResultsTab); //Проверка работы всего функицонала во вкладке "Результат"
+            CustomProgram.Register("fonbet_historybet", fonbet.ProfileHistoryBet.FabricateProfileHistoryBet); //Проверка работы вкладки История в Личном кабинете пользователя
+            CustomProgram.Register("fonbet_operationbet", fonbet.ProfileHistoryOperation.FabricateProfileHistoryOperation); //Проверка работы вкладки Операции в Личном кабинете пользователя
+            CustomProgram.Register("fonbet_auth", fonbet.AuthorizationChecker.FabricateAuthorizationChecker); //Проверка всех трех типов авторизации(номер счета, номер телефона, почта)
+            CustomProgram.Register("fonbet_playerprotection", fonbet.PlayerProtection.FabricatePlayerProtection); //Проверка модуля "Самоограничения" в настройках сайта 
+            CustomProgram.Register("request_depositqiwi", fonbet.requests.DepositQiwi.FabricateDepositQiwi); //Проверка полного цикла создания и работы с запросом на тему "Депозит-Киви" из личного кабинета пользователя
+            CustomProgram.Register("request_depositcard", fonbet.requests.DepositCard.FabricateDepositCard); //Проверка полного цикла создания и работы с запросом на тему "Депозит-Карта" из личного кабинета пользователя
+            CustomProgram.Register("request_depositmobile", fonbet.requests.DepositMobile.FabricateDepositMobile); //Проверка полного цикла создания и работы с запросом на тему "Депозит-Мобильный телефон" из личного кабинета пользователя
+            CustomProgram.Register("request_deposityandex", fonbet.requests.DepositYandex.FabricateDepositYandex); //Проверка полного цикла создания и работы с запросом на тему "Депозит-Янлекс Деньги" из личного кабинета пользователя
+            CustomProgram.Register("request_supportsite", fonbet.requests.SupportSite.FabricateSupportSite); //Проверка полного цикла создания и работы с запросом на тему "Техподдержка-Сайт" из личного кабинета пользователя
+            CustomProgram.Register("request_supportsuggestion", fonbet.requests.SupportSuggestion.FabricateSupportSuggestion); //Проверка полного цикла создания и работы с запросом на тему "Техподдержка-Вопросы и предложениия" из личного кабинета пользователя
+            CustomProgram.Register("request_supportmobile", fonbet.requests.SupportMobile.FabricateSupportMobile); //Проверка полного цикла создания и работы с запросом на тему "Техподдержка-Вопрос по мобильному приложению" из личного кабинета пользователя
+            CustomProgram.Register("request_calculationsbetlife", fonbet.requests.CalculationsBetLife.FabricateCalculationsBetLife); //Проверка полного цикла создания и работы с запросом на тему "Вопрос по расчету-Пари Лайф" из личного кабинета пользователя
+            CustomProgram.Register("request_calculationsbet", fonbet.requests.CalculationsBet.FabricateCalculationsBet); //Проверка полного цикла создания и работы с запросом на тему "Вопрос по расчету-Пари" из личного кабинета пользователя
+            CustomProgram.Register("request_increasedmax", fonbet.requests.IncreasedMax.FabricateIncreasedMax); //Проверка полного цикла создания и работы с запросом на тему "Повышенный максимум" из личного кабинета пользователя
+            CustomProgram.Register("request_paymentqiwi", fonbet.requests.PaymentQiwi.FabricatePaymentQiwi); //Проверка полного цикла создания и работы с запросом на тему "Проблемы с выплатой - Киви" из личного кабинета пользователя
+            CustomProgram.Register("request_paymentcard", fonbet.requests.PaymentCard.FabricatePaymentCard); //Проверка полного цикла создания и работы с запросом на тему "Проблемы с выплатой - Карта" из личного кабинета пользователя
+            CustomProgram.Register("request_paymentmobile", fonbet.requests.PaymentMobile.FabricatePaymentMobile); //Проверка полного цикла создания и работы с запросом на тему "Проблемы с выплатой - Мобильный" из личного кабинета пользователя
+            CustomProgram.Register("request_paymentyandex", fonbet.requests.PaymentYandex.FabricatePaymentYandex); //Проверка полного цикла создания и работы с запросом на тему "Проблемы с выплатой - Яндекс Деньги" из личного кабинета пользователя
+            CustomProgram.Register("request_phonecalculation", fonbet.requests.PhoneCalculation.FabricatePhoneCalculation); //Проверка полного цикла создания и работы с запросом на тему "Телефонный сервис - Вопрос по расчету" из личного кабинета пользователя
+            CustomProgram.Register("request_phoneservice", fonbet.requests.PhoneService.FabricatePhoneService); //Проверка полного цикла создания и работы с запросом на тему "Телефонный сервис - Вопрос по тел сервису" из личного кабинета пользователя
+            CustomProgram.Register("request_otheradministration", fonbet.requests.OtherAdministration.FabricateOtherAdministration); //Проверка полного цикла создания и работы с запросом на тему "Прочие вопросы - Вопросы к администрации" из личного кабинета пользователя
+            CustomProgram.Register("request_othersuggestion", fonbet.requests.OtherSuggestion.FabricateOtherSuggestion); //Проверка полного цикла создания и работы с запросом на тему "Прочие вопросы - Замечания и предложения" из личного кабинета пользователя
+            CustomProgram.Register("fonbet_broadcast", fonbet.BroadCastCheck.FabricateBroadCastCheck); //Проверка отображения всех видов трансляций лайф событий 
+            CustomProgram.Register("fonbet_atleasttwo", fonbet.AtLeastTwo.FabricateAtLeastTwo); //Проверка правильности работы ставки "Система 2/3"
+            CustomProgram.Register("fonbet_correctbetshowing", fonbet.CorrectBetsShowing.FabricateCorrectBetsShowing); //Проверка соответствия отображения типа ставки в таблице событий и в ленте купонов (например поб 1, Ничья, Тотал..)
+            CustomProgram.Register("fonbet_appcheking", fonbet.AppChecking.FabricateAppChecking); //Проверка правильного отображения и работы функционала во вкладке "Приложения"
+            CustomProgram.Register("fonbet_freebet", fonbet.FreeBet.FabricateFreeBet); //Проврека правильности работы со ставкой "Фрибет"
+            CustomProgram.Register("fonbet_howtoplay", fonbet.HowToPlay.FabricateHowToPlay); //Проверка работы функционала модуля "Как делать ставки" на главной странице (видно только для неавторизованных пользователей)
         }
 
         static void ApplyParams(CustomProgram program, string[] args)

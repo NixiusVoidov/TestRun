@@ -142,6 +142,8 @@ namespace TestRun.fonbet
             LogStage("Выбор событий в 12 ближ часов");
             ClickWebElement(".//*[@class='events__filter _type_time']", "Меню времени в фильтре", "меню времени в фильтре");
             ClickWebElement(".//*[@id='popup']/li[6]", "Значение ближайших 12 часов", "значения ближайших 12 часов");
+            if (WebElementExist(".//*[@class='table__empty table__flex-container']"))
+                throw new Exception("Нет событий чтобы выполнить тест");
 
             LogStage("Развернуть все дочерние события");
             ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
