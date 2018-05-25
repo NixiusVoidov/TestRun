@@ -1,8 +1,6 @@
 ﻿using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Text.RegularExpressions;
 
 namespace TestRun.fonbet
 {
