@@ -450,6 +450,31 @@ namespace TestRun
                 driver.FindElement(By.XPath(".//*[@class='bet-table']//tr[2]//td[6]/div")).Click();
             }
         }
+          // Метод принимает на вход  ожидаемый номер ошибки и нномер телефона и проверяет правильность работы функции восстановления пароля по тестовому сценарию на тестовых данных
+        protected void RejectValueChecker(string rejectValue, string phoneValue)
+        {
+            string errorText = "";
+            if (rejectValue == "12")
+                errorText = "Исчерпано количество попыток восстановления пароля";
+            if (rejectValue == "10")
+                errorText = "Клиент с указанными данными не найден";
+            if (rejectValue == "4")
+                errorText = "Предыдущий процесс не завершён";
+            if (rejectValue == "1")
+                errorText = "В процессе регистрации произошла неожиданная ошибка";
+
+            LogStage("Переход на страницу восстановление пароля");
+            ClickWebElement(".//*[@href='/#!/account/restore-password']", "Кнопка Забыли пароль", "кнопки забыли пароль");
+
+            LogStage("Проверка createProcessWithCaptcha по тестовому сценарию на rejected " + rejectValue + "");
+            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[2]//input", phoneValue , "Поле номер телефона", "поля номер телефона");
+            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[3]//input", "11", "Поле капча", "поля капчи");
+            ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
+            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
+            if (!errorMessage.Text.Contains(errorText))
+                throw new Exception("Неверный код ошибки");
+            ClickWebElement(".//*[@class='account__heading-close']", "Крестик Закрыть окно", "Крестика Закрыть оно");
+        }
 
         public override void BeforeRun()
         {
