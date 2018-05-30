@@ -169,14 +169,10 @@ namespace TestRun.fonbet
         {
             base.Run();
 
-            if (!WebElementExist(".//*[@class='how2play']"))
-                throw new Exception("Нет виджета HowToPlay");
-
-
-            RejectValueChecker("12", "000000001");
-            RejectValueChecker("10", "000000002");
-            RejectValueChecker("4", "000000003");
-            RejectValueChecker("1", "000000004");
+            RejectPwdChecker("12", "000000001");
+            RejectPwdChecker("10", "000000002");
+            RejectPwdChecker("4", "000000003");
+            RejectPwdChecker("1", "000000004");
 
             LogStage("Переход на страницу восстановление пароля");
             ClickWebElement(".//*[@href='/#!/account/restore-password']", "Кнопка Забыли пароль", "кнопки забыли пароль");
@@ -219,6 +215,46 @@ namespace TestRun.fonbet
             if (!message.Text.Contains("Пароль успешно изменён"))
                 throw new Exception("Тестовое восстановление пароля не удалось");
 
+        }
+    }
+    class EmailConfirm : FonbetWebProgram
+    {
+        public static CustomProgram FabricateEmailConfirm()
+        {
+            return new EmailConfirm();
+        }
+
+        public override void Run()
+        {
+            base.Run();
+
+            ClickOnAccount();
+            ClickWebElement(".//*[@href='#!/account/profile/change-email']", "Вкладка Смена email", "вкладки смена email");
+
+            CreateProcesslChecker("14", "1@dev.dev");
+            CreateProcesslChecker("13", "2@dev.dev");
+            CreateProcesslChecker("12", "3@dev.dev");
+
+            LogStage("Проверка sendCode по тестовому сценарию");
+            driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
+            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "4@dev.dev", "Поле email", "поля email");
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
+            SendEmailCodeChecker("10", "1235");
+            SendEmailCodeChecker("1", "9999");
+            driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
+            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "4@dev.dev", "Поле email", "поля email");
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
+            driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
+            SendKeysToWebElement(".//*[@class='ui__field-inner']/input","1234", "Поле email", "поля email");
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки отправить");
+            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
+            if (!errorMessage.Text.Contains("E-mail успешно подверждён"))
+                throw new Exception("Неверный текст ошибки");
+            ClickWebElement(".//*[@classid='account-error__btn-inner']//span", "Кнопка Вернуться к профилю", "кнопки Вернуться к профилю");
+            var mainTab = GetWebElement(".//*[@class='account-tabs']/a[1]", "Нет вкладки Основные данные");
+            var mainTabClass = mainTab.GetAttribute("class");
+            if (!mainTabClass.Contains("state_active"))
+                throw new Exception("Не произошло возвращения на главную страницу");
         }
     }
 }

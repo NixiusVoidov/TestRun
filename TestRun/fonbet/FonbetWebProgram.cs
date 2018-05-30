@@ -141,7 +141,7 @@ namespace TestRun
         protected void ClickOnAccount()
         {
             LogStage("Переход в Личный кабинет");
-            ClickWebElement(".//*[@class='header__login-head']/div[1]/span", "ФИО в шапке", "ФИО в шапке");
+            ClickWebElement(".//*[@class='header__item header__login']/div/div[1]/span", "ФИО в шапке", "ФИО в шапке");
             ClickWebElement(".//*[@id='popup']/li[1]", "Кнопка Личный кабинет", "кнопки Личный кабинет");
         }
 
@@ -451,7 +451,7 @@ namespace TestRun
             }
         }
           // Метод принимает на вход  ожидаемый номер ошибки и нномер телефона и проверяет правильность работы функции восстановления пароля по тестовому сценарию на тестовых данных
-        protected void RejectValueChecker(string rejectValue, string phoneValue)
+        protected void RejectPwdChecker(string rejectValue, string phoneValue)
         {
             string errorText = "";
             if (rejectValue == "12")
@@ -469,11 +469,49 @@ namespace TestRun
             LogStage("Проверка createProcessWithCaptcha по тестовому сценарию на rejected " + rejectValue + "");
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[2]//input", phoneValue , "Поле номер телефона", "поля номер телефона");
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[3]//input", "11", "Поле капча", "поля капчи");
-            ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
+            ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки Отправить");
             var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
             if (!errorMessage.Text.Contains(errorText))
                 throw new Exception("Неверный код ошибки");
             ClickWebElement(".//*[@class='account__heading-close']", "Крестик Закрыть окно", "Крестика Закрыть оно");
+        }
+
+        // Метод принимает на вход  ожидаемый номер ошибки и почту и проверяет правильность работы функции подтверждения email по тестовому сценарию на тестовых данных
+        protected void CreateProcesslChecker(string rejectValue, string emailValue)
+        {
+            string errorText = "";
+            if (rejectValue == "14")
+                errorText = "Исчерпан лимит на количество изменений адреса электронной почты";
+            if (rejectValue == "13")
+                errorText = "Адрес электронной почты уже подтверждён";
+            if (rejectValue == "12")
+                errorText = "Адрес электронной почты занят";
+
+            LogStage("Проверка creatProcess по тестовому сценарию на rejected " + rejectValue + "");
+            driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
+            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", emailValue, "Поле email", "поля email");
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
+            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
+            if (!errorMessage.Text.Contains(errorText))
+                throw new Exception("Неверный текст ошибки");
+            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
+        }
+
+        // Метод принимает на вход  ожидаемый номер ошибки и почту и проверяет правильность работы функции подтверждения email по тестовому сценарию на тестовых данных
+        protected void SendEmailCodeChecker(string value, string emailValue)
+        {
+            string errorText = "";
+            if (value == "10")
+                errorText = "Неправильный код подтверждения";
+            if (value == "1")
+                errorText = "Внутренняя ошибка";
+            driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
+            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", emailValue, "Поле email", "поля email");
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки отправить");
+            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
+            if (!errorMessage.Text.Contains(errorText))
+                throw new Exception("Неверный текст ошибки");
+            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
         }
 
         public override void BeforeRun()

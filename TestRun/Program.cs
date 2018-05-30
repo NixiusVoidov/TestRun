@@ -55,6 +55,8 @@ namespace TestRun
             CustomProgram.Register("fonbet_slider", fonbet.Slider.FabricateSlider); //Проверка работы функционала слайдера на главной странице (видно только для неавторизованных пользователей)
             CustomProgram.Register("fonbet_newsandwinners", fonbet.NewsAndWinnerClub.FabricateNewsAndWinnerClub); //Проверка работы функционала модуля Новости на главной странице (видно только для неавторизованных пользователей)
             CustomProgram.Register("fonbet_pwdrecovery", fonbet.PwdRecovery.FabricatePwdRecovery); //Проверка работы функционала восстановление пароля по тестовому сценарию
+            CustomProgram.Register("fonbet_emailconfirm", fonbet.EmailConfirm.FabricateEmailConfirm); //Проверка работы процесса подтверждения email по тестовому сценарию
+
         }
 
         static void ApplyParams(CustomProgram program, string[] args)
