@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using OpenQA.Selenium.Support.UI;
 
 
 namespace TestRun
@@ -477,7 +479,7 @@ namespace TestRun
         }
 
         // Метод принимает на вход  ожидаемый номер ошибки и почту и проверяет правильность работы функции подтверждения email по тестовому сценарию на тестовых данных
-        protected void CreateProcesslChecker(string rejectValue, string emailValue)
+        protected void CreateProcessemailChecker(string rejectValue, string emailValue)
         {
             string errorText = "";
             if (rejectValue == "14")
@@ -512,6 +514,158 @@ namespace TestRun
             if (!errorMessage.Text.Contains(errorText))
                 throw new Exception("Неверный текст ошибки");
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
+        }
+
+        // Метод принимает на вход  ожидаемый номер телефона и  проверяет правильность работы createProcess по тестовому сценарию на тестовых данных для супер-регистрации
+        protected void CreateProcessRegistration(string phoneValue)
+        {
+            string errorText = "";
+            if (phoneValue == "000000002")
+                errorText = "Мы не смогли Вас зарегистрировать";
+            if (phoneValue == "000000003")
+            {
+                driver.Navigate().GoToUrl("http://fonred5000.dvt24.com/?test=1#!/account/registration/Reg4");
+                driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input")).Clear();
+                SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input", phoneValue, "Поле Номер телефона", "поля Номер телефона");
+                ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
+                if (!WebElementExist(".//*[@class='registration-v4__captcha-wrap']"))
+                    throw new Exception("Нет капчи");
+                ClickWebElement(".//*[@class='account__heading-close']", "Крестик окна", "крестика окна");
+                return;
+            }
+                    
+            if (phoneValue == "000000004")
+                errorText = "Указан некорректный номер телефона";
+            if (phoneValue == "000000005")
+                errorText = "К сожалению, мы не можем вас зарегистрировать с указанным номером QIWI";
+            if (phoneValue == "000000006")
+                errorText = "Ошибка при взаимодействии с ЦУПИС";
+            if (phoneValue == "000000007")
+                errorText = "Внутренняя ошибка";
+            driver.Navigate().GoToUrl("http://fonred5000.dvt24.com/?test=1#!/account/registration/Reg4");
+            driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input")).Clear();
+            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input", phoneValue, "Поле Номер телефона", "поля Номер телефона");
+            ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
+            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
+            if (!errorMessage.Text.Contains(errorText))
+                throw new Exception("Неверный текст ошибки");
+            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть", "кнопки Закрыть");
+        }
+
+        // Метод принимает на вход  ожидаемый номер телефона и  проверяет правильность работы createProcess по тестовому сценарию на тестовых данных для супер-регистрации
+        protected void SendSmsCodeRegistration(string phoneValue)
+        {
+            string errorText = "";
+            if (phoneValue == "000000002")
+                errorText = "Мы не смогли Вас зарегистрировать";
+            if (phoneValue == "000000003")
+            {
+                driver.Navigate().GoToUrl("http://fonred5000.4hsoft.com/?test=1#!/account/registration/Reg4");
+                driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input")).Clear();
+                SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input", phoneValue, "Поле Номер телефона", "поля Номер телефона");
+                ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
+                if (!WebElementExist(".//*[@class='registration-v4__captcha-wrap']"))
+                    throw new Exception("Нет капчи");
+                ClickWebElement(".//*[@class='account__heading-close']", "Крестик окна", "крестика окна");
+                return;
+            }
+
+            if (phoneValue == "000000004")
+                errorText = "Указан некорректный номер телефона";
+            if (phoneValue == "000000005")
+                errorText = "К сожалению, мы не можем вас зарегистрировать с указанным номером QIWI";
+            if (phoneValue == "000000006")
+                errorText = "Ошибка при взаимодействии с ЦУПИС";
+            if (phoneValue == "000000007")
+                errorText = "Внутренняя ошибка";
+            driver.Navigate().GoToUrl("http://fonred5000.4hsoft.com/?test=1#!/account/registration/Reg4");
+            driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input")).Clear();
+            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input", phoneValue, "Поле Номер телефона", "поля Номер телефона");
+            ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
+            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
+            if (!errorMessage.Text.Contains(errorText))
+                throw new Exception("Неверный текст ошибки");
+            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть", "кнопки Закрыть");
+        }
+        // Метод принимает на вход  ожидаемый номер телефона и  проверяет правильность работы createProcess по тестовому сценарию на тестовых данных для идентификации киви
+        protected void CreateProcessVerificationQiwi(string phoneValue)
+        {
+            string errorText = "";
+           
+            if (phoneValue == "79000000003")
+                errorText = "Предыдущий процесс не завершён";
+            if (phoneValue == "79000000004")
+                errorText = "Сервис временно недоступен.";
+            if (phoneValue == "79000000005")
+                errorText = "Ошибка при взаимодействии с ЦУПИС";
+            if (phoneValue == "79000000006")
+                errorText = "Указан некорректный номер телефона";
+            if (phoneValue == "79000000007")
+                errorText = "К сожалению, мы не можем вас верифицировать с указанным номером QIWI-кошелька";
+            if (phoneValue == "79000000008")
+                errorText = "Внутренняя ошибка";
+            LogStage("Проверка createProcess по тестовому сценарию");
+            driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).Clear();
+            SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", phoneValue, "Поле Номер телефона","поля Номер телефона");
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
+            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
+            if (!errorMessage.Text.Contains(errorText))
+                throw new Exception("Неверный текст ошибки");
+            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
+        }
+        protected void CreateProcessPhoneChange(string phoneValue)
+        {
+            string errorText = "";
+            if (phoneValue == "000000002")
+                errorText = "Предыдущий процесс не завершён";
+            if (phoneValue == "000000003")
+                errorText = "Указанный номер телефона уже установлен";
+            if (phoneValue == "000000004")
+                errorText = "В процессе подтверждения номера телефона произошла неожиданная ошибка. Приносим Вам свои извинения за эту неприятную ситуацию";
+
+            driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
+            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", phoneValue, "Поле Номер телефона", "поля Номер телефона");
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
+            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
+            if (!errorMessage.Text.Contains(errorText))
+                throw new Exception("Неверный текст ошибки");
+            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+        }
+
+        protected void SendSmsPhoneChange(string smsValue)
+        {
+            string errorText = "";
+            if (smsValue == "2")
+                errorText = "Паспортные данные нового номера телефона не совпадают с полученными от ЦУПИС";
+            if (smsValue == "3")
+                errorText = "Введён неверный код из смс";
+            if (smsValue == "4")
+                errorText = "Внутренняя ошибка";
+            if (smsValue == "1")
+            {
+
+                Thread.Sleep(2000);
+                SendKeysToWebElement(".//*[@class='ui__field-inner']/input", smsValue, "Поле Код смс", "поля Код смс");
+                ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
+                var message = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
+                if (!message.Text.Contains("Номер телефона успешно подверждён."))
+                    throw new Exception("Неверный текст ошибки");
+                ClickWebElement(".//*[@class='account-profile__form-inner']//*[@class='toolbar__item']/a","Кнопка Вернуться к профилю", "кнопки Вернуться к профилю");
+                if(!WebElementExist(".//*[@class='account-profile__block']"))
+                    throw new Exception("Не вернулись к профилю");
+                return;
+            }
+
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@class='ui__field-inner']/input")));
+            Thread.Sleep(2000);
+            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", smsValue, "Поле Код смс", "поля Код смс");
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
+            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
+            if (!errorMessage.Text.Contains(errorText))
+                throw new Exception("Неверный текст ошибки");
+            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
         }
 
         public override void BeforeRun()

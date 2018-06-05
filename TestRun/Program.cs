@@ -56,6 +56,11 @@ namespace TestRun
             CustomProgram.Register("fonbet_newsandwinners", fonbet.NewsAndWinnerClub.FabricateNewsAndWinnerClub); //Проверка работы функционала модуля Новости на главной странице (видно только для неавторизованных пользователей)
             CustomProgram.Register("fonbet_pwdrecovery", fonbet.PwdRecovery.FabricatePwdRecovery); //Проверка работы функционала восстановление пароля по тестовому сценарию
             CustomProgram.Register("fonbet_emailconfirm", fonbet.EmailConfirm.FabricateEmailConfirm); //Проверка работы процесса подтверждения email по тестовому сценарию
+            CustomProgram.Register("fonbet_registrationv4", fonbet.RegistrationV4.FabricateRegistrationV4); //Проверка работы процесса супер-регистрации(v4) по тестовому сценарию
+            CustomProgram.Register("fonbet_verificationcupisqiwi", fonbet.VerificationCupisQiwi.FabricateVerificationCupisQiwi); //Проверка работы процесса верификации через КИВИ по тестовому сценарию
+            CustomProgram.Register("fonbet_changephonecupis", fonbet.ChangePhoneCupis.FabricateChangePhoneCupis); //Проверка работы процесса верификации через КИВИ по тестовому сценарию
+
+
 
         }
 
