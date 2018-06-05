@@ -372,14 +372,16 @@ namespace TestRun.fonbet
 
             driver.Navigate().GoToUrl("http://fonred5000.dvt24.com/?test=1#!/account/registration/Reg4");
             ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
-
-            LogStage("Проверка sendSmsCode по тестовому сценарию");
-            SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", "1111", "Поле СМС код", "поля СМС код");
-            ClickWebElement(".//*[@class='toolbar__item process-button']/button", "Кнопка Отправить", "Кнопка Отправить");
-            var errorMessage1 = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-            if (!errorMessage1.Text.Contains("Вы ввели неверный код подтверждения, будьте внимательнее при наборе кода."))
-                throw new Exception("Неверный текст ошибки");
-            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+            SendSmsCodeRegistration("1");
+            SendSmsCodeRegistration("2");
+            SendSmsCodeRegistration("3");
+            SendSmsCodeRegistration("4");
+            SendSmsCodeRegistration("5");
+            SendSmsCodeRegistration("6");
+            SendSmsCodeRegistration("7");
+            SendSmsCodeRegistration("8");
+            SendSmsCodeRegistration("9");
+            SendSmsCodeRegistration("0");
 
         }
     }
