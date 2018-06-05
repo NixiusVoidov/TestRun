@@ -558,34 +558,7 @@ namespace TestRun
             string errorText = "";
             if (phoneValue == "000000002")
                 errorText = "Мы не смогли Вас зарегистрировать";
-            if (phoneValue == "000000003")
-            {
-                driver.Navigate().GoToUrl("http://fonred5000.4hsoft.com/?test=1#!/account/registration/Reg4");
-                driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input")).Clear();
-                SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input", phoneValue, "Поле Номер телефона", "поля Номер телефона");
-                ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
-                if (!WebElementExist(".//*[@class='registration-v4__captcha-wrap']"))
-                    throw new Exception("Нет капчи");
-                ClickWebElement(".//*[@class='account__heading-close']", "Крестик окна", "крестика окна");
-                return;
-            }
-
-            if (phoneValue == "000000004")
-                errorText = "Указан некорректный номер телефона";
-            if (phoneValue == "000000005")
-                errorText = "К сожалению, мы не можем вас зарегистрировать с указанным номером QIWI";
-            if (phoneValue == "000000006")
-                errorText = "Ошибка при взаимодействии с ЦУПИС";
-            if (phoneValue == "000000007")
-                errorText = "Внутренняя ошибка";
-            driver.Navigate().GoToUrl("http://fonred5000.4hsoft.com/?test=1#!/account/registration/Reg4");
-            driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input")).Clear();
-            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input", phoneValue, "Поле Номер телефона", "поля Номер телефона");
-            ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
-            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-            if (!errorMessage.Text.Contains(errorText))
-                throw new Exception("Неверный текст ошибки");
-            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть", "кнопки Закрыть");
+          
         }
         // Метод принимает на вход  ожидаемый номер телефона и  проверяет правильность работы createProcess по тестовому сценарию на тестовых данных для идентификации киви
         protected void CreateProcessVerificationQiwi(string phoneValue)

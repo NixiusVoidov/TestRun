@@ -493,7 +493,6 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
 
             LogStage("Проверка sendSmsCode по тестовому сценарию");
-
             SendSmsPhoneChange("2");
             SendSmsPhoneChange("3");
             SendSmsPhoneChange("4");
