@@ -380,8 +380,9 @@ namespace TestRun.fonbet
             SendSmsCodeRegistration("6");
             SendSmsCodeRegistration("7");
             SendSmsCodeRegistration("8");
-            SendSmsCodeRegistration("9");
             SendSmsCodeRegistration("0");
+            SendSmsCodeRegistration("9");
+           
 
         }
     }

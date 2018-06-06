@@ -572,6 +572,7 @@ namespace TestRun
                 errorText = "Номер телефона уже зарегистрирован";
             if (smsValue == "8")
             {
+                LogStage("Проверка sendSmsCode по тестовому сценарию");
                 errorText = "Регистрация прошла успешно";
                 if (!WebElementExist(".//*[@class='registration-v4__form-inner']/div[2]//input"))
                 {
@@ -599,6 +600,7 @@ namespace TestRun
 
             if (smsValue == "9")
             {
+                LogStage("Проверка sendSmsCode по тестовому сценарию");
                 errorText = "Регистрация прошла успешно";
                 if (!WebElementExist(".//*[@class='registration-v4__form-inner']/div[2]//input"))
                 {
@@ -611,22 +613,38 @@ namespace TestRun
                 var error = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
                 if (!error.Text.Contains(errorText))
                     throw new Exception("Неверный текст ошибки");
-                if (!driver.FindElement(By.XPath(".//*[@class='registration-v4__verification-info']")).Text.Contains("Введите номер карты Фонбет "))
+                if (!driver.FindElement(By.XPath(".//*[@class='registration-v4__verification-info']")).Text.Contains("Введите паспортные данные, чтобы пользоваться возможностями сайта без ограничений."))
                     throw new Exception("Смс не ведет на фонбет верификацию");
-                if (!WebElementExist(".//*[@class='registration-v4__form-inner']//*[text()='Номер карты клуба']"))
-                    throw new Exception("Нет ввода номера карты клуба");
                 ClickWebElement(".//*[@class='registration-v4__form-inner']//*[@class='toolbar__item']//span", "Кнопка Перейти в личный кабинет", "кнопки Перейти в личный кабинет");
                 if (!WebElementExist(".//*[@class='confirm__inner---LYRu']"))
                     throw new Exception("Непоявилось подтверждение");
                 ClickWebElement(".//*[@class='confirm__inner---LYRu']/div[3]/div[1]/a", "Кнопка Отмена", "кнопки Отмена");
-                ClickWebElement(".//*[@class='toolbar__item process-button']", "Кнопка Отправить данные по киви", "кнопки Отправить данные по киви");
-                if (!WebElementExist(".//*[@class='registration-v4__form-inner']/div[2]//input"))
+                ClickWebElement(".//*[@class='toolbar__item process-button']", "Кнопка Отправить данные", "кнопки Отправить данные");
+                if (!WebElementExist(".//*[@class='account-error _type_success']"))
                     throw new Exception("Верификация по фонбет не прошла");
+                ClickWebElement(".//*[@class='account-error__actions-inner']//a", "Кнопка Переход в личный кабинет", "кнопки Переход в личный кабинет");
+                if (!driver.Title.Contains("Мой профиль"))
+                    throw new Exception("Нет перехода в личный кабинет");
+                return;
+            }
+
+            if (smsValue == "0")
+            {
+                if (!WebElementExist(".//*[@class='registration-v4__form-inner']/div[2]//input"))
+                {
+                    driver.Navigate().GoToUrl("http://fonred5000.dvt24.com/?test=1#!/account/registration/Reg4");
+                    ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
+                }
+                driver.FindElement(By.XPath(".//*[@class='registration-v4__form-inner']/div[2]//input")).Clear();
+                SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", smsValue, "Поле СМС код", "поля СМС код");
+                ClickWebElement(".//*[@class='toolbar__item process-button']/button", "Кнопка Отправить", "Кнопка Отправить");
+                var message = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
+                if (!message.Text.Contains("Регистрация прошла успешно"))
+                    throw new Exception("Неверный текст ошибки");
                 ClickWebElement(".//*[@class='account__heading-title']/a", "Крестик формы регистрации", "крестика формы регистрации");
                 return;
             }
-            if (smsValue == "0")
-                errorText = "Регистрация прошла успешно";
+                
 
             LogStage("Проверка sendSmsCode по тестовому сценарию");
             if (!WebElementExist(".//*[@class='registration-v4__form-inner']/div[2]//input"))
