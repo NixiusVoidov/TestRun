@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using OpenQA.Selenium;
 
 namespace TestRun.fonbet
@@ -339,7 +340,7 @@ namespace TestRun.fonbet
             base.Run();
 
             if(!WebElementExist(".//*[@href='/#!/account/registration/Reg4']"))
-                throw new Exception("На данном сайте не супер-регистрации");
+                throw new Exception("На данном сайте нет супер-регистрации");
 
             LogStage("Переход на страницу регистрации");
             ClickWebElement(".//*[@href='/#!/account/registration/Reg4']", "Кнопка Регистрации", "кнопки Регистрации");
@@ -350,38 +351,53 @@ namespace TestRun.fonbet
             LogStage("Заполнение персональных данных");
             SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[2]/label[1]//input", "Это", "Поле Фамилия", "поля Фамилия");
             SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[2]/label[2]//input", "Тест", "Поле Имя", "поля Имя");
-            LogStage("Заполнение контактной информации");
-            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input", "test@mail.ru", "Поле email", "поля email");
-            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input", "000000001", "Поле Номер телефона", "поля Номер телефона");
+            ClickWebElement(".//*[@id='checkbox2']", "Чекбокс Подтверждения правил", "чекбокса Подтверждения правил");
+            IWebElement button = GetWebElement(".//*[@class='toolbar__item process-button']//button", "Нет кнопки отправить форму");
+            if (!button.GetAttribute("class").Contains("state_disabled"))
+                throw new Exception("Возможно продолжить только с Именем и Фамилией");
             LogStage("Заполнение пароля");
             SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[6]/label[1]//input", "123qwe123", "Поле Пароль", "поля Пароль");
             SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[6]/label[2]//input", "123qwe123", "Поле Подтверждение пароля", "поля Подтверждение пароля");
-            ClickWebElement(".//*[@id='checkbox2']", "Чекбокс Подтверждения правил", "чекбокса Подтверждения правил");
+            if (!button.GetAttribute("class").Contains("state_disabled"))
+                throw new Exception("Возможно продолжить без мыла и номера телефона");
+            LogStage("Заполнение контактной информации");
+            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input", "4000100@mail.ru", "Поле email", "поля email");
+            if (!button.GetAttribute("class").Contains("state_disabled"))
+                throw new Exception("Возможно продолжить без телефона");
+            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input", "000000001", "Поле Номер телефона", "поля Номер телефона");
+            driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input")).Clear();
+            driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input")).SendKeys("a");
+            driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input")).SendKeys(Keys.Backspace);
+            if (!button.GetAttribute("class").Contains("state_disabled"))
+                throw new Exception("Возможно продолжить без почты");
+            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input", "4000100@mail.ru", "Поле email", "поля email");
             ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
-            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-            if (!errorMessage.Text.Contains("Предыдущий процесс не завершён"))
-                throw new Exception("Неверный текст ошибки");
+            var errorMessage = GetWebElement(".//*[@id='registration-v4-error']", "Нет модуля с ошибкой");
+            if (!errorMessage.GetAttribute("data-rejectioncode").Equals("4") && !errorMessage.GetAttribute("data-processstate").Equals("rejected"))
+                throw new Exception("Неверная обработка ошибки");
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть", "кнопки Закрыть");
 
-            CreateProcessRegistration("000000002");
-            CreateProcessRegistration("000000003");
-            CreateProcessRegistration("000000004");
-            CreateProcessRegistration("000000005");
-            CreateProcessRegistration("000000006");
-            CreateProcessRegistration("000000007");
+            CreateProcessRegistration("000000002", null, "2", null);
+            CreateProcessRegistration("000000003", null, null, null);
+            CreateProcessRegistration("000000004", "rejected", "0", "11");
+            CreateProcessRegistration("000000005", "rejected", "0", "13");
+            CreateProcessRegistration("000000006", "rejected", "0", "10");
+            CreateProcessRegistration("000000007", "rejected", "0", "1");
 
-            driver.Navigate().GoToUrl("http://fonred5000.dvt24.com/?test=1#!/account/registration/Reg4");
+            FillRegistrationForm();
+            // driver.Navigate().GoToUrl("http://fonred5000.dvt24.com/?test=1#!/account/registration/Reg4");
+            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input", "000000008", "Поле Номер телефона", "поля Номер телефона");
             ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
-            SendSmsCodeRegistration("1");
-            SendSmsCodeRegistration("2");
-            SendSmsCodeRegistration("3");
-            SendSmsCodeRegistration("4");
-            SendSmsCodeRegistration("5");
-            SendSmsCodeRegistration("6");
-            SendSmsCodeRegistration("7");
-            SendSmsCodeRegistration("8");
-            SendSmsCodeRegistration("0");
-            SendSmsCodeRegistration("9");
+            SendSmsCodeRegistration("1", "waitForSmsCode", "10", null);
+            SendSmsCodeRegistration("2", "waitForSmsCode", "11", null);
+            SendSmsCodeRegistration("3", "rejected", "10", "12");
+            SendSmsCodeRegistration("4", "rejected", "0", "10");
+            SendSmsCodeRegistration("5", "rejected", "0", "14");
+            SendSmsCodeRegistration("6", "rejected", "0", "15");
+            SendSmsCodeRegistration("7", "rejected", "0", "16");
+            SendSmsCodeRegistration("8", null, null, null);
+            SendSmsCodeRegistration("0", null, null, null);
+            SendSmsCodeRegistration("9", null, null, null);
            
 
         }
@@ -434,13 +450,19 @@ namespace TestRun.fonbet
                 ClickWebElement(".//*[text()='Сохранить']", "Кнопка Сохранить", "кнопки Сохранить");
                 driver.Navigate().GoToUrl("http://fonred5051.dvt24.com/");
                 ClickOnAccount();
-                // return;
+                
             }
 
             LogStage("Проверка createProcess по тестовому сценарию");
+            if(!WebElementExist(".//*[@href='#!/account/verification/qiwi']")) { 
+            ClickWebElement(".//*[@class='verification__notice-types-wrap']/a[1]", "Кнопка Сброса верификации",
+                "кнопки Сброса верификации"); }
+        
             ClickWebElement(".//*[@href='#!/account/verification/qiwi']", "Кнопка Верификации по киви",
                 "кнопки Верификации по киви");
-            driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).Clear();
+            IWebElement inputData = GetWebElement(".//*[@class='ui__field-wrap-inner']//input", "Нет поля для ввода");
+            WaitForElementByXpath(".//*[@class='ui__field-wrap-inner']//input");
+            inputData.Clear();
             SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "79000000002", "Поле Номер телефона",
                 "поля Номер телефона");
             ClickWebElement(".//*[@id='rulesAgree']", "Чекбокс Соглашения с правилами",
@@ -451,18 +473,41 @@ namespace TestRun.fonbet
                 throw new Exception("Неверный текст ошибки");
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
 
-            CreateProcessVerificationQiwi("79000000003");
-            CreateProcessVerificationQiwi("79000000004");
-            CreateProcessVerificationQiwi("79000000005");
-            CreateProcessVerificationQiwi("79000000006");
-            CreateProcessVerificationQiwi("79000000007");
-            CreateProcessVerificationQiwi("79000000008");
+            //CreateProcessVerificationQiwi("79000000003");
+            //CreateProcessVerificationQiwi("79000000004");
+            //CreateProcessVerificationQiwi("79000000005");
+            //CreateProcessVerificationQiwi("79000000006");
+            //CreateProcessVerificationQiwi("79000000007");
+            //CreateProcessVerificationQiwi("79000000008");
 
             driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).Clear();
             SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "79000000009", "Поле Номер телефона",
                 "поля Номер телефона");
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
 
+            //SendSmsVerificationQiwi("2");
+            //SendSmsVerificationQiwi("3");
+            //SendSmsVerificationQiwi("4");
+            //SendSmsVerificationQiwi("5");
+            //SendSmsVerificationQiwi("6");
+
+
+            driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).Clear();
+            SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "7", "Поле Номер телефона", "поля Номер телефона");
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
+
+            LogStage("Проверка sendPassport по тестовому сценарию");
+            SendKeysToWebElement(".//*[@class='verification__form-row']/label[1]//input", "2222222222", "Поле Серия и Номер паспорта", "поля Серия и Номер паспорта");
+            SendKeysToWebElement(".//*[@class='verification__form-row']/label[2]//input", "111120000", "Поле Дата выдачи", "поля Дата выдачи");
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
+            var errorMessag1e = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
+            if (!errorMessag1e.Text.Contains("Сервис временно недоступен."))
+                throw new Exception("Неверный текст ошибки");
+            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть", "кнопки Закрыть");
+            driver.Navigate().GoToUrl("http://fonred5051.dvt24.com/?test=1#!/account/verification/qiwi");
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
+            driver.FindElement(By.XPath(".//*[@class='verification__form-row']/label[1]//input")).Clear();
         }
 
     }
