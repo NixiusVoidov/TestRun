@@ -461,53 +461,46 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@href='#!/account/verification/qiwi']", "Кнопка Верификации по киви",
                 "кнопки Верификации по киви");
             IWebElement inputData = GetWebElement(".//*[@class='ui__field-wrap-inner']//input", "Нет поля для ввода");
-            WaitForElementByXpath(".//*[@class='ui__field-wrap-inner']//input");
+
             inputData.Clear();
-            SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "79000000002", "Поле Номер телефона",
+            SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "000000002", "Поле Номер телефона",
                 "поля Номер телефона");
             ClickWebElement(".//*[@id='rulesAgree']", "Чекбокс Соглашения с правилами",
                 "чекбокс Соглашения с правилами");
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
-            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-            if (!errorMessage.Text.Contains("Счёт уже верифицирован"))
-                throw new Exception("Неверный текст ошибки");
+            var errorMessage = GetWebElement(".//*[@id='verification-qiwi-error']", "Нет текста ошибки");
+            if (!(errorMessage.GetAttribute("data-errorcode").Equals("0") && errorMessage.GetAttribute("data-processstate").Equals("rejected") && errorMessage.GetAttribute("data-rejectioncode").Equals("11")))
+                throw new Exception("Неверная обработка ошибки");
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
 
-            //CreateProcessVerificationQiwi("79000000003");
-            //CreateProcessVerificationQiwi("79000000004");
-            //CreateProcessVerificationQiwi("79000000005");
-            //CreateProcessVerificationQiwi("79000000006");
-            //CreateProcessVerificationQiwi("79000000007");
-            //CreateProcessVerificationQiwi("79000000008");
+            CreateProcessVerificationQiwi("3", "rejected", "0", "4");
+            CreateProcessVerificationQiwi("4", null, "2", null);
+            CreateProcessVerificationQiwi("5", "rejected", "0", "10");
+            CreateProcessVerificationQiwi("6", "rejected", "0", "12");
+            CreateProcessVerificationQiwi("7", "rejected", "0", "15");
+            CreateProcessVerificationQiwi("8", "rejected", "0", "1");
 
-            driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).Clear();
-            SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "79000000009", "Поле Номер телефона",
+            driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).SendKeys(Keys.Backspace);
+            SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "9", "Поле Номер телефона",
                 "поля Номер телефона");
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
 
-            //SendSmsVerificationQiwi("2");
-            //SendSmsVerificationQiwi("3");
-            //SendSmsVerificationQiwi("4");
-            //SendSmsVerificationQiwi("5");
-            //SendSmsVerificationQiwi("6");
-
+            SendSmsVerificationQiwi("2", "rejected", "0", "10");
+            SendSmsVerificationQiwi("3", "rejected", "0", "14");
+            SendSmsVerificationQiwi("4", "rejected", "0", "13");
+            SendSmsVerificationQiwi("5", "rejected", "0", "15");
+            SendSmsVerificationQiwi("6", "rejected", "0", "1");
 
             driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).Clear();
             SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "7", "Поле Номер телефона", "поля Номер телефона");
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
 
             LogStage("Проверка sendPassport по тестовому сценарию");
-            SendKeysToWebElement(".//*[@class='verification__form-row']/label[1]//input", "2222222222", "Поле Серия и Номер паспорта", "поля Серия и Номер паспорта");
-            SendKeysToWebElement(".//*[@class='verification__form-row']/label[2]//input", "111120000", "Поле Дата выдачи", "поля Дата выдачи");
-            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
-            var errorMessag1e = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-            if (!errorMessag1e.Text.Contains("Сервис временно недоступен."))
-                throw new Exception("Неверный текст ошибки");
-            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть", "кнопки Закрыть");
-            driver.Navigate().GoToUrl("http://fonred5051.dvt24.com/?test=1#!/account/verification/qiwi");
-            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
-            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
-            driver.FindElement(By.XPath(".//*[@class='verification__form-row']/label[1]//input")).Clear();
+            SendPasportVerificationQiwi("2", null, "2", null);
+            SendPasportVerificationQiwi("3", "waitForPassport", "10", null);
+            SendPasportVerificationQiwi("4", "rejected", "0", "17");
+            SendPasportVerificationQiwi("5", "rejected", "0", "1");
+            SendPasportVerificationQiwi("6", null, null, null);
         }
 
     }

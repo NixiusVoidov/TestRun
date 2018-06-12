@@ -2,7 +2,7 @@
   "profiles": {
     "TestRun": {
       "commandName": "Project",
-      "commandLineArgs": "fonbet_registrationv4"
+      "commandLineArgs": "fonbet_verificationcupisqiwi"
     }
   }
 }
