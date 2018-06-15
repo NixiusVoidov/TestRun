@@ -84,20 +84,6 @@ namespace TestRun
                 throw new Exception(String.Format("Ошибка логина: {0}", errorElement.Text));
             LogActionSuccess();
         }
-        protected void DoLoginBackoffice()
-        {
-            LogStage(String.Format("Логин под \"{0}\"", Login));
-            SendKeysToWebElement(".//*[@id='username']", Login, "поле логина", "поля логина");
-            SendKeysToWebElement(".//*[@id='password']", Password, "поле пароля", "поля пароля");
-            ClickWebElement(".//*[@class='login__btn']", "Кнопка логина", "кнопки логина");
-
-            LogStartAction("Ожидание входа");
-            IWebElement errorElement = FindWebElement(".//*[@class='login-form__error']");
-            if (errorElement != null)
-                throw new Exception(String.Format("Ошибка логина: {0}", errorElement.Text));
-            LogActionSuccess();
-        }
-
 
         protected void UpdateLoginInfo()
         {
@@ -1131,13 +1117,6 @@ namespace TestRun
                 LogStage("Смена языка на русский");
                 ClickWebElement(".//*[@class='header__lang-set']", "Кнопка выбора языка", "кнопки выбора языка");
                 ClickWebElement(".//*[@class='header__lang-item']//*[text()='Русский']", "Кнопка выбора русского языка", "кнопки выбора русского языка");
-            }
-
-            if (driver.Title.Contains("Панель администратора"))
-            {
-                DoLoginBackoffice();
-                UpdateLoginInfo();
-                return;
             }
 
             if (NeedLogin())
