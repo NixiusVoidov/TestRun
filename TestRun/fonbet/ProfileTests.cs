@@ -413,45 +413,7 @@ namespace TestRun.fonbet
         public override void Run()
         {
             base.Run();
-            ClickOnAccount();
-
-            LogStage("Проверка на статус верификации");
-            if (!WebElementExist(".//*[@class='verification__notice-types-wrap']"))
-            {
-                LogStage("Переход в админку");
-                driver.Navigate().GoToUrl("http://fonbackoffice.dvt24.com/");
-
-                LogStage("Логирование в админке");
-                SendKeysToWebElement(".//*[@id='username']", "mashkov", "Поле Пользователь", "поля Пользователь");
-                SendKeysToWebElement(".//*[@id='password']", "ueueue11", "Поле Пароль", "поля Пароль");
-                ClickWebElement(".//*[@class='login__btn']", "Кнопка Вход", "кнопки Вход");
-
-                LogStage("Проверка аккаунта на верификацию");
-                ClickWebElement(".//*[@class='home__items']//*[@href='#/clientManager']", "Меню Поиск клиентов",
-                    "меню Поиск клиентов");
-                SendKeysToWebElement(".//*[@class='clients__fields']/label//input", "13", "Поле Идентификатор клиента",
-                    "поля Идентификатор клиента");
-                ClickWebElement(".//*[@class='clients__btn-inner']//button", "Кнпока Найти", "кнопки Найти");
-                ClickWebElement(".//*[@class='tabs__head tabs__slider']/span/a[2]", "Вкладка Расширенная информация",
-                    "вкладки Расширенная информация");
-                ClickWebElement(".//*[@class='form__col-wide']/div[1]//i", "Иконка Редактировать",
-                    "иконки Редактировать");
-                IList<IWebElement> status = driver.FindElements(By.XPath(".//*[@class='form__col-wide']/form//input"));
-                foreach (IWebElement element in status)
-                {
-                    string statusClass = element.GetAttribute("class");
-
-                    if (statusClass.Contains("checked"))
-                        element.Click();
-                }
-
-                SendKeysToWebElement(".//*[@class='ui__field-inner']/textarea", "autotest", "Поле Комментарий",
-                    "поля Комментарий");
-                ClickWebElement(".//*[text()='Сохранить']", "Кнопка Сохранить", "кнопки Сохранить");
-                driver.Navigate().GoToUrl("http://fonred5051.dvt24.com/");
-                ClickOnAccount();
-                
-            }
+            VerificationStatusCheck();
 
             LogStage("Проверка createProcess по тестовому сценарию");
             if(!WebElementExist(".//*[@href='#!/account/verification/qiwi']")) { 
@@ -501,6 +463,77 @@ namespace TestRun.fonbet
             SendPasportVerificationQiwi("4", "rejected", "0", "17");
             SendPasportVerificationQiwi("5", "rejected", "0", "1");
             SendPasportVerificationQiwi("6", null, null, null);
+        }
+
+    }
+    class VerificationCupisBk : FonbetWebProgram //захожу пот 13 учеткой на 5051  и смотрю чтобы была галка в админке
+    {
+        public static CustomProgram FabricateVerificationCupisBk()
+        {
+            return new VerificationCupisBk();
+        }
+
+        public override void Run()
+        {
+            base.Run();
+            VerificationStatusCheck();
+
+            LogStage("Проверка createProcess по тестовому сценарию");
+            if (!WebElementExist(".//*[@href='#!/account/verification/bk']"))
+            {
+                ClickWebElement(".//*[@class='verification__notice-types-wrap']/a[1]", "Кнопка Сброса верификации",
+                    "кнопки Сброса верификации");
+            }
+
+            ClickWebElement(".//*[@href='#!/account/verification/bk']", "Кнопка Верификации по БК",
+                "кнопки Верификации по БК");
+            IWebElement inputData = GetWebElement(".//*[@class='verification__form-inner']/div/div[2]//input", "Нет поля номера карты фонбет");
+
+            inputData.Clear();
+            SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[2]//input", "0000FFFF0002", "Поле Номера карты фонбет","поля Номера карты фонбет");
+            SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[1]//input", "2", "Поле Серия и номер паспорта", "поля Серия и номер паспорта");
+            SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[2]//input", "11112011", "Поле Дата выдачи", "поля Дата выдачи");
+            ClickWebElement(".//*[@id='rulesAgree']", "Чекбокс Соглашения с правилами", "чекбокс Соглашения с правилами");
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
+
+
+            var errorMessage = GetWebElement(".//*[@id='verification-bk-error']", "Нет текста ошибки");
+            if (!(errorMessage.GetAttribute("data-errorcode").Equals("0") && errorMessage.GetAttribute("data-processstate").Equals("rejected") && errorMessage.GetAttribute("data-rejectioncode").Equals("11")))
+                throw new Exception("Неверная обработка ошибки");
+            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
+
+
+            CreateProcessVerificationBk("3", "rejected", "0", "12");
+            CreateProcessVerificationBk("4", "rejected", "0", "13");
+            CreateProcessVerificationBk("5", "rejected", "0", "18");
+            CreateProcessVerificationBk("6", "rejected", "0", "4");
+            CreateProcessVerificationBk("7", null, "2", null);
+            CreateProcessVerificationBk("8", "rejected", "0", "14");
+            CreateProcessVerificationBk("9", "rejected", "0", "10");
+
+            driver.FindElement(By.XPath(".//*[@class='verification__form-inner']/div/div[2]//input")).SendKeys(Keys.Backspace);
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
+
+            SendSmsVerificationQiwi("2", null, "2", null);
+            SendSmsVerificationQiwi("3", "rejected", "0", "15");
+            SendSmsVerificationQiwi("4", "rejected", "0", "17");
+            SendSmsVerificationQiwi("5", "rejected", "0", "19");
+            SendSmsVerificationQiwi("6", "rejected", "0", "10");
+            SendSmsVerificationQiwi("7", "rejected", "0", "16");
+            SendSmsVerificationQiwi("8", "rejected", "0", "1");
+            //SendSmsVerificationQiwi("0", "rejected", "0", "10");
+            //SendSmsVerificationQiwi("9", "rejected", "0", "10");
+
+            //driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).Clear();
+            //SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "7", "Поле Номер телефона", "поля Номер телефона");
+            //ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
+
+            //LogStage("Проверка sendPassport по тестовому сценарию");
+            //SendPasportVerificationQiwi("2", null, "2", null);
+            //SendPasportVerificationQiwi("3", "waitForPassport", "10", null);
+            //SendPasportVerificationQiwi("4", "rejected", "0", "17");
+            //SendPasportVerificationQiwi("5", "rejected", "0", "1");
+            //SendPasportVerificationQiwi("6", null, null, null);
         }
 
     }

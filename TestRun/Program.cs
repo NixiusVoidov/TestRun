@@ -58,7 +58,12 @@ namespace TestRun
             CustomProgram.Register("fonbet_emailconfirm", fonbet.EmailConfirm.FabricateEmailConfirm); //Проверка работы процесса подтверждения email по тестовому сценарию
             CustomProgram.Register("fonbet_registrationv4", fonbet.RegistrationV4.FabricateRegistrationV4); //Проверка работы процесса супер-регистрации(v4) по тестовому сценарию
             CustomProgram.Register("fonbet_verificationcupisqiwi", fonbet.VerificationCupisQiwi.FabricateVerificationCupisQiwi); //Проверка работы процесса верификации через КИВИ по тестовому сценарию
-            CustomProgram.Register("fonbet_changephonecupis", fonbet.ChangePhoneCupis.FabricateChangePhoneCupis); //Проверка работы процесса верификации через КИВИ по тестовому сценарию
+            CustomProgram.Register("fonbet_changephonecupis", fonbet.ChangePhoneCupis.FabricateChangePhoneCupis); //Проверка работы процесса изменения номера телефона по тестовому сценарию
+            CustomProgram.Register("fonbet_verificationcupisbk", fonbet.VerificationCupisBk.FabricateVerificationCupisBk); //Проверка работы процесса верификации через BK по тестовому сценарию
+
+
+
+            CustomProgram.Register("backoffice_clientcontrol", backoffice.СlientControl.FabricateСlientControl); 
 
 
 

@@ -84,6 +84,19 @@ namespace TestRun
                 throw new Exception(String.Format("Ошибка логина: {0}", errorElement.Text));
             LogActionSuccess();
         }
+        protected void DoLoginBackoffice()
+        {
+            LogStage(String.Format("Логин под \"{0}\"", Login));
+            SendKeysToWebElement(".//*[@id='username']", Login, "поле логина", "поля логина");
+            SendKeysToWebElement(".//*[@id='password']", Password, "поле пароля", "поля пароля");
+            ClickWebElement(".//*[@class='login__btn']", "Кнопка логина", "кнопки логина");
+
+            LogStartAction("Ожидание входа");
+            IWebElement errorElement = FindWebElement(".//*[@class='login-form__error']");
+            if (errorElement != null)
+                throw new Exception(String.Format("Ошибка логина: {0}", errorElement.Text));
+            LogActionSuccess();
+        }
 
 
         protected void UpdateLoginInfo()
@@ -491,6 +504,45 @@ namespace TestRun
             ClickWebElement(".//*[@class='account__heading-close']", "Крестик Закрыть окно", "Крестика Закрыть оно");
         }
 
+        protected void VerificationStatusCheck()
+        {
+            ClickOnAccount();
+            LogStage("Проверка на статус верификации");
+            if (!WebElementExist(".//*[@class='verification__notice-types-wrap']"))
+            {
+                LogStage("Переход в админку");
+                driver.Navigate().GoToUrl("http://fonbackoffice.dvt24.com/");
+
+                LogStage("Логирование в админке");
+                SendKeysToWebElement(".//*[@id='username']", "mashkov", "Поле Пользователь", "поля Пользователь");
+                SendKeysToWebElement(".//*[@id='password']", "ueueue11", "Поле Пароль", "поля Пароль");
+                ClickWebElement(".//*[@class='login__btn']", "Кнопка Вход", "кнопки Вход");
+
+                LogStage("Проверка аккаунта на верификацию");
+                ClickWebElement(".//*[@class='home__items']//*[@href='#/clientManager']", "Меню Поиск клиентов",
+                    "меню Поиск клиентов");
+                SendKeysToWebElement(".//*[@class='clients__fields']/label//input", "13", "Поле Идентификатор клиента",
+                    "поля Идентификатор клиента");
+                ClickWebElement(".//*[@class='clients__btn-inner']//button", "Кнпока Найти", "кнопки Найти");
+                ClickWebElement(".//*[@class='tabs__head tabs__slider']/span/a[2]", "Вкладка Расширенная информация",
+                    "вкладки Расширенная информация");
+                ClickWebElement(".//*[@class='form__col-wide']/div[1]//i", "Иконка Редактировать",
+                    "иконки Редактировать");
+                IList<IWebElement> status = driver.FindElements(By.XPath(".//*[@class='form__col-wide']/form//input"));
+                foreach (IWebElement element in status)
+                {
+                    string statusClass = element.GetAttribute("class");
+
+                    if (statusClass.Contains("checked"))
+                        element.Click();
+                }
+                SendKeysToWebElement(".//*[@class='ui__field-inner']/textarea", "autotest", "Поле Комментарий",
+                    "поля Комментарий");
+                ClickWebElement(".//*[text()='Сохранить']", "Кнопка Сохранить", "кнопки Сохранить");
+                driver.Navigate().GoToUrl("http://fonred5051.dvt24.com/");
+                ClickOnAccount();
+            }
+        }
         // Метод принимает на вход  ожидаемый номер ошибки и почту и проверяет правильность работы функции подтверждения email по тестовому сценарию на тестовых данных
         protected void CreateProcessemailChecker(string rejectValue, string emailValue)
         {
@@ -862,6 +914,56 @@ namespace TestRun
 
         }
 
+        // Метод принимает на вход  ожидаемый номер телефона и  проверяет правильность работы createProcess по тестовому сценарию на тестовых данных для идентификации bk
+        protected void CreateProcessVerificationBk(string phoneValue, string process, string code, string rejcode)
+        {
+            if (phoneValue == "7")
+            {
+                LogStage("Проверка createProcess по тестовому сценарию");
+                driver.FindElement(By.XPath(".//*[@class='verification__form-inner']/div/div[2]//input")).SendKeys(Keys.Backspace);
+                SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[2]//input", phoneValue, "Поле Номера карты фонбет", "поля Номера карты фонбет");
+                ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
+                var message = GetWebElement(".//*[@id='verification-bk-error']", "Нет модуля с ошибкой");
+                if (!(message.GetAttribute("data-errorcode").Equals(code)))
+                    throw new Exception("Неверная обработка ошибки");
+                ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
+                return;
+            }
+
+            LogStage("Проверка createProcess по тестовому сценарию");
+
+            driver.FindElement(By.XPath(".//*[@class='verification__form-inner']/div/div[2]//input")).SendKeys(Keys.Backspace);
+            SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[2]//input", phoneValue, "Поле Номера карты фонбет", "поля Номера карты фонбет");
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
+            var messageData = GetWebElement(".//*[@id='verification-bk-error']", "Нет модуля с ошибкой");
+            if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-processstate").Equals(process) && messageData.GetAttribute("data-rejectioncode").Equals(rejcode)))
+                throw new Exception("Неверная обработка ошибки");
+            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
+        }
+
+        protected void SendSmsVerificationBK(string smsValue, string process, string code, string rejcode)
+        {
+            LogStage("Проверка SendSmsCode по тестовому сценарию");
+            if (smsValue == "2")
+            {
+                driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).Clear();
+                SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", smsValue, "Поле Номер телефона", "поля Номер телефона");
+                ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
+                var message = GetWebElement(".//*[@id='verification-bk-error']", "Нет модуля с ошибкой");
+                if (!(message.GetAttribute("data-errorcode").Equals(code)))
+                    throw new Exception("Неверная обработка ошибки");
+                ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
+                return;
+            }
+            driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).Clear();
+            SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", smsValue, "Поле Номер телефона", "поля Номер телефона");
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
+            var messageData = GetWebElement(".//*[@id='verification-bk-error']", "Нет модуля с ошибкой");
+            if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-processstate").Equals(process) && messageData.GetAttribute("data-rejectioncode").Equals(rejcode)))
+                throw new Exception("Неверная обработка ошибки");
+            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
+            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
+        }
         // Метод принимает на вход  ожидаемый номер телефона и  проверяет правильность работы createProcess по тестовому сценарию на тестовых данных для идентификации киви
         protected void CreateProcessVerificationQiwi(string phoneValue, string process, string code, string rejcode)
         {        
@@ -1031,11 +1133,19 @@ namespace TestRun
                 ClickWebElement(".//*[@class='header__lang-item']//*[text()='Русский']", "Кнопка выбора русского языка", "кнопки выбора русского языка");
             }
 
+            if (driver.Title.Contains("Панель администратора"))
+            {
+                DoLoginBackoffice();
+                UpdateLoginInfo();
+                return;
+            }
+
             if (NeedLogin())
             {
                 DoLogin();
                 UpdateLoginInfo();
             }
+
         }
     }
 }
