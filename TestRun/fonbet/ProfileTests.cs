@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace TestRun.fonbet
 {
@@ -514,29 +515,22 @@ namespace TestRun.fonbet
             driver.FindElement(By.XPath(".//*[@class='verification__form-inner']/div/div[2]//input")).SendKeys(Keys.Backspace);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
 
-            SendSmsVerificationQiwi("2", null, "2", null);
-            SendSmsVerificationQiwi("3", "rejected", "0", "15");
-            SendSmsVerificationQiwi("4", "rejected", "0", "17");
-            SendSmsVerificationQiwi("5", "rejected", "0", "19");
-            SendSmsVerificationQiwi("6", "rejected", "0", "10");
-            SendSmsVerificationQiwi("7", "rejected", "0", "16");
-            SendSmsVerificationQiwi("8", "rejected", "0", "1");
-            //SendSmsVerificationQiwi("0", "rejected", "0", "10");
-            //SendSmsVerificationQiwi("9", "rejected", "0", "10");
+            SendSmsVerificationBK("2", null, "2", null);
+            SendSmsVerificationBK("3", "rejected", "0", "15");
+            SendSmsVerificationBK("4", "rejected", "0", "17");
+            SendSmsVerificationBK("5", "rejected", "0", "19");
+            SendSmsVerificationBK("6", "rejected", "0", "10");
+            SendSmsVerificationBK("7", "rejected", "0", "16");
+            SendSmsVerificationBK("8", "rejected", "0", "1");
+            SendSmsVerificationBK("0", null, null, null);
+            SendSmsVerificationBK("9", null, null, null);
 
-            //driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).Clear();
-            //SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "7", "Поле Номер телефона", "поля Номер телефона");
-            //ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
-
-            //LogStage("Проверка sendPassport по тестовому сценарию");
-            //SendPasportVerificationQiwi("2", null, "2", null);
-            //SendPasportVerificationQiwi("3", "waitForPassport", "10", null);
-            //SendPasportVerificationQiwi("4", "rejected", "0", "17");
-            //SendPasportVerificationQiwi("5", "rejected", "0", "1");
-            //SendPasportVerificationQiwi("6", null, null, null);
+           
         }
+        
 
     }
+
     class ChangePhoneCupis : FonbetWebProgram
     {
         public static CustomProgram FabricateChangePhoneCupis()
