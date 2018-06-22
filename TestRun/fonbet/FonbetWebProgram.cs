@@ -926,7 +926,7 @@ namespace TestRun
                 throw new Exception("Неверная обработка ошибки");
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
         }
-        public static bool waitTillElementisDisplayed(IWebDriver driver, string xpath, int timeoutInSeconds)
+        protected static bool waitTillElementisDisplayed(IWebDriver driver, string xpath, int timeoutInSeconds)
         {
             bool elementDisplayed = false;
 

@@ -259,4 +259,5 @@ namespace TestRun.fonbet
                 throw new Exception("Не верно отображается сумма фрибета в истории");
         }
     }
+   
 }

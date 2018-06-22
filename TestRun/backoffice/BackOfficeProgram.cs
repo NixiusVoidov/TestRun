@@ -96,7 +96,73 @@ namespace TestRun.backoffice
                 return false;
             }
         }
+         protected static bool waitTillElementisDisplayed(IWebDriver driver, string xpath, int timeoutInSeconds)
+        {
+            bool elementDisplayed = false;
 
+            for (int i = 0; i < timeoutInSeconds; i++)
+            {
+                try
+                {
+                    if (timeoutInSeconds > 0)
+                    {
+                        var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutInSeconds));
+                        wait.Until(drv => drv.FindElement(By.XPath(xpath)));
+                    }
+                    elementDisplayed = driver.FindElement(By.XPath(xpath)).Displayed;
+                }
+                catch
+                { }
+            }
+            return elementDisplayed;
+
+        }
+        
+        protected void ContentApplicationsFilter()
+        {
+            Dictionary<int, int> menu = new Dictionary<int, int>()
+            {
+                {1, 4 },
+                {2, 6 },
+                {3, 3 },
+                {4, 5 },
+                {5, 1 },
+                {6, 7 },
+                {7, 2 },
+                {8, 9 },
+                {9, 8 },
+                
+            };
+            foreach (KeyValuePair<int, int> item in menu)
+            {
+                ClickWebElement(".//*[@id='js-toolbar']/div[2]/div/div[2]", "Фильтр Приложения", "фильтра Приложения");
+                ClickWebElement(".//*[@class='ui-dropdown__items']/div["+item.Key+"]", "Строка приложения", "строки  приложения");
+                ClickWebElement(".//*[@id='curtain']/div/div[2]//li[1]", "Строка из выпадающего списка", "строки из выпадающего списка");
+                ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[2]", "Вкладка Область видимости", "вкладки Область видимости");
+                IWebElement checkbox = GetWebElement(".//*[@class='role-form__inner']/div[1]//*[@class='ui__list-node right-list__row'][" + item.Value + "]//input", "Нет чекбокса");
+                var checkboxClass = checkbox.GetAttribute("class");
+                if (!checkboxClass.Contains("checked"))
+                    throw new Exception("Не работает фильтр приложений");
+               
+            }
+            ClickWebElement(".//*[@id='js-toolbar']/div[2]/div/div[2]//i", "Крестик Сбросить фильтр", "крестика Сбросить фильтр");
+        }
+        protected void ContentCategoriessFilter()
+        {
+            
+            for(int i=1; i<5;i++)
+            {
+                ClickWebElement(".//*[@id='js-toolbar']/div[2]/div/div[3]", "Фильтр Приложения", "фильтра Приложения");
+                ClickWebElement(".//*[@class='ui-dropdown__items']/div["+i+"]", "Строка категории", "строки категории");
+                ClickWebElement(".//*[@id='curtain']/div/div[2]//li[1]", "Строка из выпадающего списка", "строка из выпадающего списка");
+                ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[2]", "Вкладка Область видимости", "вкладки Область видимости");
+                IWebElement checkbox = GetWebElement(".//*[@class='role-form__inner']/div[2]//*[@class='ui__list-node right-list__row'][" + i + "]//input", "Нет чекбокса");
+                var checkboxClass = checkbox.GetAttribute("class");
+                if (!checkboxClass.Contains("checked"))
+                    throw new Exception("Не работает фильтр приложений");
+            }
+
+        }
         protected void GeneralTab()
         {
             LogStage("Проверка работы Общей вкладки");
