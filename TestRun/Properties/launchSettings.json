@@ -2,7 +2,7 @@
   "profiles": {
     "TestRun": {
       "commandName": "Project",
-      "commandLineArgs": "fonbet_verificationcupisbk"
+      "commandLineArgs": "backoffice_contentgeneraltab"
     }
   }
 }
