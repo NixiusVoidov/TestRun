@@ -1176,6 +1176,11 @@ namespace TestRun
         public override void BeforeRun()
         {
             base.BeforeRun();
+            // Подтверждение куки при необходимости
+            if (WebElementExist(".//*[@class='modal-window']"))
+                ClickWebElement(".//*[@class='modal-window']/div[2]/a", "Кнопка Согласен с куки", "кнопки Согласен с куки");
+
+
             // Смена языка при необходимости
             IWebElement langSetElement = FindWebElement(".//*[@class='header__lang-set']");
             if ((langSetElement != null) && driver.Title.Contains("Home"))

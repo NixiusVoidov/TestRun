@@ -20,12 +20,12 @@ namespace TestRun.backoffice
             ClickWebElement(".//*[@class='menu']//*[@href='#/explorer/content']", "Меню Управление клиентом", "меню Управление клиентом");
             ClickWebElement(".//*[@class='curtain__list']/li[1]", "Строка Блог", "Строки Блог");
             // IList<IWebElement> testData = driver.FindElements(By.XPath(".//*[@class='curtain__list']//*[text()='Тестовый заголовок']")); 
-            IEnumerable<IWebElement> testData2 = driver.FindElements(By.XPath(".//*[@class='curtain _state_expanded']/div[2]//li")).Take(10);
-            var huy2 = testData2.Where(n => n.Text.Contains("Тестовый заголовок")).ToArray();
+            IEnumerable<IWebElement> testData = driver.FindElements(By.XPath(".//*[@class='curtain _state_expanded']/div[2]//li")).Take(10);
+            var dataArray = testData.Where(n => n.Text.Contains("Тестовый заголовок")).ToArray();
 
-            while (huy2.Count() > 0)
+            while (dataArray.Count() > 0)
             {
-                huy2[0].Click();
+                dataArray[0].Click();
                 ClickWebElement(".//*[@id='js-toolbar']/div/div[7]//button", "Кнопка Удалить", "кнопки Удалить");
                 ClickWebElement(".//*[@class='modal__foot']/div[2]/a", "Кнопка Ок всплывающего окна", "кнопки Ок всплывающего окна");
             }
@@ -129,9 +129,6 @@ namespace TestRun.backoffice
             ClickWebElement("//*[@id='js-toolbar']/div[2]/div/div[last()]//button", "Кнопка Подробная информация", "кнопка Подробная информация");
             if(!WebElementExist("//*[@class='curtain__sub-title _type_news']"))
                 throw new Exception("Не работает кнопка Подробной информации");
-
-
-
 
         }
        

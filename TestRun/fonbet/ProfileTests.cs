@@ -325,7 +325,7 @@ namespace TestRun.fonbet
         }
     }
 
-    class RegistrationV4 : FonbetWebProgram //нужно доделать
+    class RegistrationV4 : FonbetWebProgram 
     {
         public static CustomProgram FabricateRegistrationV4()
         {
