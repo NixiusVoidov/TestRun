@@ -66,7 +66,8 @@ namespace TestRun
             CustomProgram.Register("backoffice_clientcontrol", backoffice.СlientControl.FabricateСlientControl);
             CustomProgram.Register("backoffice_contentblog", backoffice.ContentBlog.FabricateContentBlog);
             CustomProgram.Register("backoffice_contentgeneraltab", backoffice.ContentGeneralTab.FabricateContentGeneralTab);
-            CustomProgram.Register("backoffice_contentbetday", backoffice.ContentBetOfTheDay.FabricateContentBetOfTheDay);
+            //CustomProgram.Register("backoffice_contentbetday", backoffice.ContentBetOfTheDay.FabricateContentBetOfTheDay);
+            CustomProgram.Register("backoffice_contentbanner", backoffice.ContentBanner.FabricateContentBanner);
 
         }
 

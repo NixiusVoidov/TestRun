@@ -117,7 +117,23 @@ namespace TestRun.backoffice
             return elementDisplayed;
 
         }
-        
+       
+
+        protected void SetupVisualSettings()
+        {
+            LogStage("Установка области видимости");
+            
+            ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[2]", "Вкладка Область видимости", "вкладки Область видимости");
+            var website = GetWebElement(".//*[@class='role-form__inner']/div[1]/div[1]//input", "Нет чекбокса Веб-сайт");
+            var websiteClass = website.GetAttribute("class");
+            if (!websiteClass.Contains("state_checked"))
+                ClickWebElement(".//*[@class='role-form__inner']/div[1]//*[@class='ui__list-node right-list__row'][1]//input", "Чекбокс Веб-сайт", "чекбокса Веб-сайт");
+                ClickWebElement("//*[@class='ui__list role-list__body _style-height-auto'][last()]/div[2]//input", "Чекбокс Fonbet русский", "чекбокса Fonbet русский");
+                ClickWebElement("//*[@class='ui__list role-list__body _style-height-auto'][last()]/div[3]//input", "Чекбокс Fonbet английский", "чекбокса Fonbet английский");
+                ClickWebElement("//*[@class='ui__list role-list__body _style-height-auto'][last()]/div[5]//input", "Чекбокс ЦУПИС", "чекбокса ЦУПИС");
+            
+        }
+
         protected void ContentApplicationsFilter()
         {
             for(int i=1;i<10;i++)
