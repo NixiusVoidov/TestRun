@@ -22,8 +22,34 @@ namespace TestRun.fonbet
             LogStage("Установка настроек по умолчанию");
             ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
             ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
+            ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
+
+            LogStage("Проверка работы ставки пари с предыщушей ставки");
+            //Выбор ставки из грида
+            SwitchPageToBets();
+            IList<IWebElement> events = driver.FindElements(By.XPath(".//*[@class='table']/tbody//td[5]"));
+            events[3].Click();
+            waitTillElementisDisplayed(driver,".//*[@class='coupon__foot-sum']/input",1);
+            driver.FindElement(By.XPath(".//*[@class='coupon__foot-sum']/input")).Clear();
+            SendKeysToWebElement(".//*[@class='coupon__foot-sum']/input", "99", "поле ввода значения ставки", "поля ввода значения ставки");
+            ClickWebElement(".//*[@class='coupon__foot']/a", "Кнопка сделать ставку", "кнопки сделать ставку");
+            events[4].Click();
+            if (driver.FindElement(By.XPath(".//*[@class='coupon__foot-sum']/input")).GetAttribute("value") != "99")
+                throw new Exception("Сумма предыдущего пари не подставляется");
+            ClickWebElement(".//*[@class='coupon__head _new_coupon']/a", "Крестик закрыть купон", "крестика закрыть купон");
+
+            ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
+            ClickWebElement(".//*[@class='settings__content']/div[1]//*[@class='settings__rows']/div[2]//input", "Чекбокс Подставлять сумму предыщудего пари", "чекбокса Подставлять сумму предыщудего пари");
+            ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
+            events[6].Click();
+            if (!driver.FindElement(By.XPath(".//*[@class='coupon__foot-sum']/input")).GetAttribute("class").Contains("state_error"))
+                throw new Exception("Поле в сумме не пустое");
+
 
             LogStage("Установка быстрого пари в 100 руб");
+            ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
+            ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
+
             ClickWebElement(".//*[@class='settings__section'][1]/div/div[1]//*[@class='header-ui__checkbox-label']/input", "Чекбокс быстрое пари", "чекбокса быстрое пари");
             driver.FindElement(By.XPath(".//*[@class='settings__section'][1]/div/div//*[@class='settings__row']//input")).Clear(); //Очистить поле для ввода суммы быстрой ставки
             SendKeysToWebElement(".//*[@class='settings__section'][1]/div/div//*[@class='settings__row']//input","100","поле ввода значения быстрой ставки", "поля ввода значения быстрой ставки");
@@ -37,6 +63,9 @@ namespace TestRun.fonbet
             ClickWebElement("//*[@class='settings__section'][1]/div/div[7]//input", "Чекбокс принимать пари с измененными коэффициентами", "чекбокса принимать пари с измененными коэффициентами");
             ClickWebElement("//*[@class='settings__section'][1]/div/div[9]//input", "Чекбокс принимать пари с измененными тоталами / форами", "чекбокса принимать пари с измененными тоталами / форами");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
+
+            
+
 
             LogStage("Проверка работы быстрой ставки");
             IWebElement fastBet = GetWebElement(".//*[@class='oneClickSum on']", "Не найдено поле с суммой быстрой ставки");
@@ -60,7 +89,7 @@ namespace TestRun.fonbet
 
             LogStage("Проверка расчета значения ставки в 50% от депозита");
             ClickWebElement(".//*[@class='oneClickSwitch on']", "Кнопка быстрой ставки", "кнопки быстрой ставки");
-            ClickWebElement(".//*[@class='line__inner'][2]/a", "Кнопка перехода в меню Линия с панели слева", "кнопки перехода в меню Линия с панели слева");
+           // ClickWebElement(".//*[@class='line__inner'][2]/a", "Кнопка перехода в меню Линия с панели слева", "кнопки перехода в меню Линия с панели слева");
             //Выбор ставки из грида
             IList<IWebElement> grid = driver.FindElements(By.XPath(".//*[@class='table']/tbody//td[5]"));
             grid[3].Click();

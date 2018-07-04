@@ -58,6 +58,22 @@ namespace TestRun
             CustomProgram.Register("fonbet_howtoplay", fonbet.HowToPlay.FabricateHowToPlay); //Проверка работы функционала модуля "Как делать ставки" на главной странице (видно только для неавторизованных пользователей)
             CustomProgram.Register("fonbet_slider", fonbet.Slider.FabricateSlider); //Проверка работы функционала слайдера на главной странице (видно только для неавторизованных пользователей)
             CustomProgram.Register("fonbet_newsandwinners", fonbet.NewsAndWinnerClub.FabricateNewsAndWinnerClub); //Проверка работы функционала модуля Новости на главной странице (видно только для неавторизованных пользователей)
+            CustomProgram.Register("fonbet_pwdrecovery", fonbet.PwdRecovery.FabricatePwdRecovery); //Проверка работы функционала восстановление пароля по тестовому сценарию
+            CustomProgram.Register("fonbet_emailconfirm", fonbet.EmailConfirm.FabricateEmailConfirm); //Проверка работы процесса подтверждения email по тестовому сценарию
+            CustomProgram.Register("fonbet_registrationv4", fonbet.RegistrationV4.FabricateRegistrationV4); //Проверка работы процесса супер-регистрации(v4) по тестовому сценарию
+            CustomProgram.Register("fonbet_verificationcupisqiwi", fonbet.VerificationCupisQiwi.FabricateVerificationCupisQiwi); //Проверка работы процесса верификации через КИВИ по тестовому сценарию
+            CustomProgram.Register("fonbet_changephonecupis", fonbet.ChangePhoneCupis.FabricateChangePhoneCupis); //Проверка работы процесса изменения номера телефона по тестовому сценарию
+            CustomProgram.Register("fonbet_verificationcupisbk", fonbet.VerificationCupisBk.FabricateVerificationCupisBk); //Проверка работы процесса верификации через BK по тестовому сценарию
+            CustomProgram.Register("cyprus_registration", fonbet.cyprus.RegistrationCypr.FabricateRegistrationCypr); //Проверка работы процесса регистрации кипра по тестовому сценарию
+
+
+            CustomProgram.Register("backoffice_clientcontrol", backoffice.СlientControl.FabricateСlientControl);
+            CustomProgram.Register("backoffice_contentblog", backoffice.ContentBlog.FabricateContentBlog);
+            CustomProgram.Register("backoffice_contentgeneraltab", backoffice.ContentGeneralTab.FabricateContentGeneralTab);
+            //CustomProgram.Register("backoffice_contentbetday", backoffice.ContentBetOfTheDay.FabricateContentBetOfTheDay);
+            CustomProgram.Register("backoffice_contentbanner", backoffice.ContentBanner.FabricateContentBanner);
+            CustomProgram.Register("backoffice_contentbannerlifetime", backoffice.ContentBannerLifeTime.FabricateContentBannerLifeTime);
+
         }
 
         static void ApplyParams(CustomProgram program, string[] args)

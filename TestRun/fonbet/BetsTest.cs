@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using System.Threading;
 
 namespace TestRun.fonbet
 {
@@ -260,4 +259,5 @@ namespace TestRun.fonbet
                 throw new Exception("Не верно отображается сумма фрибета в истории");
         }
     }
+   
 }

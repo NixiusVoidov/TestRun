@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using OpenQA.Selenium;
 
 namespace TestRun.fonbet
@@ -154,4 +152,6 @@ namespace TestRun.fonbet
                 throw new Exception("Тайтл не соответсвует странице");
         }
     }
+
+    
 }
