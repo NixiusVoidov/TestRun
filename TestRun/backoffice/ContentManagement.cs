@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Threading;
 using OpenQA.Selenium.Remote;
@@ -295,4 +296,41 @@ namespace TestRun.backoffice
                 throw new Exception("Не отображается баннер в лайве");
         }
     }
+    class ContentBannerLifeTime : BackOfficeProgram
+    {
+        public static CustomProgram FabricateContentBannerLifeTime()
+        {
+            return new ContentBannerLifeTime();
+        }
+
+        public override void Run()
+        {
+            base.Run();
+            LogStage("Установка времени отображения баннера");
+            ClickWebElement(".//*[@class='menu']//*[@href='#/explorer/content']", "Меню Управление клиентом", "меню Управление клиентом");
+            ClickWebElement(".//*[@class='curtain__list']/li[3]", "Строка Баннер", "строки Баннер");
+            ClickWebElement(".//*[@class='curtain _state_expanded']/div[2]//*[@class='curtain__list']/li[1]", "Строка 1ого баннера в списке", "строки 1ого баннера в списке");
+            if (!driver.FindElement(By.XPath(".//*[@class='ui__checkbox-item']//input")).GetAttribute("class")
+                .Contains("state_checked"))
+            {
+                ClickWebElement(".//*[@class='ui__checkbox-item']//input", "Чекбокс Опубликовано", "чекбокса Опубликовано");
+                ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Сохранить", "кнопки Сохранить");
+            }
+            Thread.Sleep(1000);
+            ClickWebElement(".//*[@class='form__fields']/label[2]//time/i/a[2]", "Кнопка сброса даты", "кнопки сброса даты");
+            ClickWebElement(".//*[@class='form__fields']/label[2]//time/i[3]/a[1]", "Иконка Установить текущую дату", "иконки тановить текущую дату");
+            driver.FindElement(By.XPath(".//*[@class='form__fields']/label[2]//time/span[4]/span[2]")).Click();
+            driver.FindElement(By.XPath(".//*[@class='form__fields']/label[2]//time/i[3]/i/a[1]")).Click();
+            ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Сохранить", "кнопки Сохранить");
+
+            Thread.Sleep(60000);
+            ClickWebElement(".//*[@id='js-toolbar']/div/div[5]//button", "Кнопка Обновить", "кнопки обновить");
+            var indicator = GetWebElement(".//*[@class='curtain _state_expanded']/div[2]//*[@class='curtain__list']/li[1]/div/span[1]","Нет кружка индикатора");
+            var indicatorClass = indicator.GetAttribute("style");
+            if (indicatorClass.Contains("green"))
+                throw new Exception("Не снимается банер после окончания срока");
+           
+        }
+    }
+
 }
