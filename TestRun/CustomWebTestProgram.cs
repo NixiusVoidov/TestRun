@@ -33,6 +33,13 @@ namespace TestRun
             HomeURL = prm.HomeURL;
         }
 
+        public override void ReadParameters(TestTaskResponseBody prm)
+        {
+            base.ReadParameters(prm);
+            Browser = prm.browser;
+            HomeURL = prm.url;
+        }
+
         public override void ReadParamsFromJson(string jsonText)
         {
             WebTestProgramParameters prm = JsonConvert.DeserializeObject<WebTestProgramParameters>(jsonText);

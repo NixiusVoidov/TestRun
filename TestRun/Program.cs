@@ -1,12 +1,16 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
 
 namespace TestRun
 {
+
     class Program
     {
+
         static void RegisterPrograms()
         {
             CustomProgram.Register("custom", CustomProgram.FabricateCustomProgram);
@@ -87,24 +91,112 @@ namespace TestRun
         }
 
 
-        static void SendResult(string URL, string resultText)
+        static void TryExecuteTask(TestTaskResponseBody data)
         {
-            WebRequest request = WebRequest.Create(URL);
-            request.Method = "POST";
-            byte[] postBody = Encoding.UTF8.GetBytes(resultText);
-            request.ContentType = "application/json";
-            request.ContentLength = postBody.Length;
-            Stream dataStream = request.GetRequestStream();
-            dataStream.Write(postBody, 0, postBody.Length);
-            dataStream.Close();
-            WebResponse response = request.GetResponse();
-            response.Close();
+            FabricateProgram programFabric = CustomProgram.FindProgram(data.program);
+            try
+            {
+                if (programFabric == null)
+                    throw new Exception(String.Format("Программа {0} не найдена", data.program));
+                CustomProgram program = programFabric();
 
+                // Читаем настройки по-умолчанию
+                string jsonText = File.ReadAllText(@"default.settings", System.Text.Encoding.UTF8);
+                program.ReadParamsFromJson(jsonText);
+                // Читаем параметры из тест-задачи
+                program.ReadParameters(data);
+
+                // Предварительная инициализация
+                program.VerifyParameters();
+                program.WriteParametersToReport();
+                // Если на этом этапе все ок - отправляем серверу ПМ подтсверждение - что автотестировщик переходит в режим выполнения теста
+                if (ProjectManagerWebClient.ConfirmTask(data.task))
+                {
+                    // Если подтверждение принято - начинаем тестирование
+                    try
+                    {
+                        program.Report.ProgramName = data.program;
+                        program.Report.StartTime = DateTime.UtcNow;
+
+                        program.BeforeRun();
+                        program.Run();
+                        program.Report.Success = true;
+                    }
+                    catch (Exception e)
+                    {
+                        
+                        program.Report.Success = false;
+                        program.Report.ErrorText = e.Message;
+                        program.OnError(e);
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            program.AfterRun();
+                        }
+                        finally
+                        {
+                            program.Report.FinishTime = DateTime.UtcNow;
+                            ProjectManagerWebClient.SendReport(program.Report);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                ProjectManagerWebClient.RejectTestTask(data.task, e.Message);
+            }
+        }
+
+        static void RequestTestTask()
+        {
+            try
+            {
+                TestTaskResponseBody responsedTask = ProjectManagerWebClient.RequestTestTask();
+                if (responsedTask == null)
+                    Thread.Sleep(20000);
+                else
+                    TryExecuteTask(responsedTask);
+            }
+            catch (Exception)
+            {
+                Thread.Sleep(60000);
+            }
+        }
+
+        static void MainLooped(string[] args)
+        {
+            ProjectManagerWebClient.LoadSettings("auto.settings");
+            try
+            {
+                while (true)
+                {
+                    RequestTestTask();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.Write("\n\n [!] ");
+                Console.ResetColor();
+                Console.WriteLine(" Ошибка выполнения - {0}", e.Message);
+            }
+            finally
+            {
+                Console.ResetColor();
+            }
         }
 
         static void Main(string[] args)
         {
             RegisterPrograms();
+            if ((args.Length == 1) && (args[0] == "auto"))
+            {
+                MainLooped(args);
+            }
+            else
             try
             {
                 // Понять какой тест запускать
@@ -112,6 +204,7 @@ namespace TestRun
                     throw new Exception("Неуказана программа первым параметром командной строки.");
 
                 string programName = args[0];
+
                 Console.Write("\nИнициализация программы {0}...", programName);
 
                 FabricateProgram programFabric = CustomProgram.FindProgram(programName);
@@ -163,7 +256,7 @@ namespace TestRun
                         try
                         {
                             Console.WriteLine("Отправка отчета");
-                            SendResult(program.ResultURI, report);
+                            ProjectManagerWebClient.SendReport(program.Report);
                         } catch (Exception)
                         {
                             // stub

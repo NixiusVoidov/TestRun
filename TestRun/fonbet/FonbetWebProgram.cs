@@ -34,6 +34,13 @@ namespace TestRun
             Password = parameters.Password;
         }
 
+        public override void ReadParameters(TestTaskResponseBody prm)
+        {
+            base.ReadParameters(prm);
+            Login = prm.user;
+            Password = prm.password;
+        }
+
         public override void ReadParamsFromJson(string jsonText)
         {
             FonbetWebProgramParameters prm = JsonConvert.DeserializeObject<FonbetWebProgramParameters>(jsonText);

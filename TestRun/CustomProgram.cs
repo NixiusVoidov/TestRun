@@ -38,6 +38,7 @@ namespace TestRun
         public List<ProgramStepReport> Steps = new List<ProgramStepReport>();
         public Boolean? Success = null;
         public string ErrorText = null;
+        public Int64 Task = 0;
     }
 
     class CustomProgram
@@ -45,6 +46,7 @@ namespace TestRun
         public string ResultURI = ""; 
         public string AgentId = "";
         public string Actor = "";
+        public Int64 TaskId;
 
         private static Dictionary<string, FabricateProgram> programList = new Dictionary<string, FabricateProgram>();
 
@@ -91,6 +93,11 @@ namespace TestRun
             ReadParameters(prm);
         }
 
+        public virtual void ReadParameters(TestTaskResponseBody prm)
+        {
+            TaskId = prm.task;
+        }
+
         public virtual void SetFromString(string paramName, string paramValue)
         {
             if (paramName.Equals("ResultURI"))
@@ -114,6 +121,7 @@ namespace TestRun
         {
             Report.AgentId = AgentId;
             Report.Actor = Actor;
+            Report.Task = TaskId;
             Report.Conditions.Add("ResultURI", ResultURI);
         }
 
