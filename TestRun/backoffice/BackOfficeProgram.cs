@@ -153,6 +153,27 @@ namespace TestRun.backoffice
             }
         }
 
+        protected void RemoveDuplicates(string xpath, string content, string eventName, string listXpath)
+        {
+            LogStage("Удаление дублей");
+            ClickWebElement(".//*[@class='menu']//*[@href='#/explorer/content']", "Меню Управление клиентом", "меню Управление клиентом");
+            ClickWebElement(xpath, "Строка "+ content, "строки " + content);
+            ShowOnlyActive();
+            IList<IWebElement> testData = driver.FindElements(By.XPath(listXpath));
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            for (int i = testData.Count - 1;i>=0; i--)
+            {
+                waitTillElementisDisplayed(driver, ".//*[@class='form__title']", 2);
+                js.ExecuteScript("arguments[0].click()", testData[i]);
+                if (testData[i].Text.Contains(eventName))
+                {
+                    ClickWebElement(".//*[@id='js-toolbar']/div/div[7]//button", "Кнопка Удалить", "кнопки Удалить");
+                    waitTillElementisDisplayed(driver, ".//*[@class='modal__foot']/div[2]/a", 2);
+                    ClickWebElement(".//*[@class='modal__foot']/div[2]/a", "Кнопка Ок всплывающего окна", "кнопки Ок всплывающего окна");
+                }
+            }
+        }
+
         protected void ContentApplicationsFilter()
         {
             for(int i=1;i<10;i++)
