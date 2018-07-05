@@ -74,6 +74,12 @@ namespace TestRun
             Settings = JsonConvert.DeserializeObject<ProjectManagerWebClientSettings>(jsonText);
         }
 
+        public static void ApplyParamsToProgram(CustomProgram program)
+        {
+            program.Actor = Settings.Actor;
+            program.AgentId = Settings.Agent;
+        }
+
         static protected string PerformPostRequest(string URL, string postText)
         {
             WebRequest request = WebRequest.Create(URL);
@@ -95,7 +101,7 @@ namespace TestRun
 
         static void LogWebError(string operationName, ErrorResponse error)
         {
-            Console.WriteLine("{0} - Ошибка с кодом {0} - {1} [{2}]", operationName, error.response.errorCode, error.response.errorText, error.response.errorValue);
+            Console.WriteLine("{0} - Ошибка с кодом {1} - {2} [{3}]", operationName, error.response.errorCode, error.response.errorText, error.response.errorValue);
         }
 
         static void CheckWebError(string operationName, ProjectManagerServerResponse response)

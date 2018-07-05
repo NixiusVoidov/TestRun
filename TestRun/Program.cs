@@ -119,8 +119,10 @@ namespace TestRun
                 // Читаем настройки по-умолчанию
                 string jsonText = File.ReadAllText(@"default.settings", System.Text.Encoding.UTF8);
                 program.ReadParamsFromJson(jsonText);
+
                 // Читаем параметры из тест-задачи
                 program.ReadParameters(data);
+                ProjectManagerWebClient.ApplyParamsToProgram(program);
 
                 // Предварительная инициализация
                 program.VerifyParameters();
