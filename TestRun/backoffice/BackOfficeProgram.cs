@@ -131,7 +131,26 @@ namespace TestRun.backoffice
                 ClickWebElement("//*[@class='ui__list role-list__body _style-height-auto'][last()]/div[2]//input", "Чекбокс Fonbet русский", "чекбокса Fonbet русский");
                 ClickWebElement("//*[@class='ui__list role-list__body _style-height-auto'][last()]/div[3]//input", "Чекбокс Fonbet английский", "чекбокса Fonbet английский");
                 ClickWebElement("//*[@class='ui__list role-list__body _style-height-auto'][last()]/div[5]//input", "Чекбокс ЦУПИС", "чекбокса ЦУПИС");
-            
+        }
+
+        protected void SwitchToPreView()
+        {
+            LogStage("Проверка отображения картинки");
+            ClickWebElement(".//*[@class='form__preview-links-item'][last()]/a", "Ссылка на созданный блог", "ссылки на созданый блог");
+            LogStage("Проверка что новость открывается в новом окне");
+            var popup = driver.WindowHandles[1];
+            if (string.IsNullOrEmpty(popup))
+                throw new Exception("Не открылась запись в новом окне");
+            driver.SwitchTo().Window(driver.WindowHandles[0]);
+            driver.SwitchTo().Window(driver.WindowHandles[1]);
+            // Смена языка при необходимости
+            IWebElement langSetElement = FindWebElement(".//*[@class='header__lang-set']");
+            if (langSetElement != null)
+            {
+                LogStage("Смена языка на русский");
+                ClickWebElement(".//*[@class='header__lang-set']", "Кнопка выбора языка", "кнопки выбора языка");
+                ClickWebElement(".//*[@class='header__lang-item']//*[text()='Русский']", "Кнопка выбора русского языка", "кнопки выбора русского языка");
+            }
         }
 
         protected void ContentApplicationsFilter()
@@ -270,6 +289,15 @@ namespace TestRun.backoffice
             if(beforeCount==afterCount)
                 throw new Exception("Не работает кнопка показать удаленные");
 
+        }
+
+        protected void ShowOnlyActive()
+        {
+            waitTillElementisDisplayed(driver, ".//*[@id='js-toolbar']/div[2]/div/div[1]", 5);
+            var stateChecked = GetWebElement(".//*[@id='js-toolbar']/div[2]/div/div[1]//button", "Нет кнопки показать только актвиные");
+            var stateCheckedClass = stateChecked.GetAttribute("class");
+            if (!stateCheckedClass.Contains("state_checked"))
+                ClickWebElement(".//*[@id='js-toolbar']/div[2]/div/div[1]", "Кнопка Показывать только активные", "кнопки Показывать только активные");
         }
     }
     

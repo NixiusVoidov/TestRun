@@ -37,11 +37,7 @@ namespace TestRun.backoffice
            // ClickWebElement(".//*[@class='menu']//*[@href='#/explorer/content']", "Меню Управление клиентом", "меню Управление клиентом");
             ClickWebElement(".//*[@id='js-toolbar']/div[1]/div[1]", "Кнопка Добавить", "кнопки Добавить");
             ClickWebElement(".//*[@class='toolbar__drop-down _state_visible']/div[1]", "Строка Блог", "строки Блог");
-            LogStage("Установка области видимости");
-            ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[2]", "Вкладка Область видимости", "вкладки Область видимости");
-            ClickWebElement(".//*[@class='role-form__inner']/div[3]//*[@class='ui__list-node right-list__row'][1]//input", "Чекбокс Fonbet русский", "чекбокса Fonbet русский");
-            ClickWebElement(".//*[@class='role-form__inner']/div[3]//*[@class='ui__list-node right-list__row'][2]//input", "Чекбокс Fonbet английский", "чекбокса Fonbet английский");
-            ClickWebElement(".//*[@class='role-form__inner']/div[3]//*[@class='ui__list-node right-list__row'][3]//input", "Чекбокс ЦУПИС", "чекбокса ЦУПИС");
+            SetupVisualSettings();
             ClickWebElement(".//*[@class='role-form__inner']/div[2]//*[@class='ui__list-node right-list__row'][3]//input", "Чекбокс Новости Фонбет", "чекбокса Новости Фонбет");
             LogStage("Заполнение вкладки Содержимое");
             ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[3]", "Вкладка Содержимое", "вкладки Содержимое");
@@ -54,24 +50,8 @@ namespace TestRun.backoffice
             ClickWebElement(".//*[@class='ui__checkbox-item']//input", "Чекбокс Опубликовано", "чекбокса Опубликовано");
             ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Добавить", "кнопки Добавить");
 
-            LogStage("Проверка отображения картинки");
-            ClickWebElement(".//*[@class='role-form__inner']/div[last()]/a", "Ссылка на созданный блог", "ссылки на созданый блог");
-
-            LogStage("Проверка что новость открывается в новом окне");
-            var popup = driver.WindowHandles[1];
-            if (string.IsNullOrEmpty(popup))
-                throw new Exception("Не открылась запись в новом окне");
-            driver.SwitchTo().Window(driver.WindowHandles[0]);
-            driver.SwitchTo().Window(driver.WindowHandles[1]);
-            // Смена языка при необходимости
-            IWebElement langSetElement = FindWebElement(".//*[@class='header__lang-set']");
-            if (langSetElement != null)
-            {
-                LogStage("Смена языка на русский");
-                ClickWebElement(".//*[@class='header__lang-set']", "Кнопка выбора языка", "кнопки выбора языка");
-                ClickWebElement(".//*[@class='header__lang-item']//*[text()='Русский']", "Кнопка выбора русского языка", "кнопки выбора русского языка");
-            }
-            if(!WebElementExist(".//*[@class='content-list__big-image-inner']"))
+            SwitchToPreView();
+            if (!WebElementExist(".//*[@class='content-list__big-image-inner']"))
                 throw new Exception("Не отображается большая картинка");
             ClickWebElement(".//*[@class='content-page__categories']/li[2]", "Вкладка Спорт с Фонбет", "вкладки Спорт с Фонбет");
             if (!WebElementExist(" .//*[@class='content-list']/article[1]//*[@class='content-list__image']"))
@@ -136,49 +116,106 @@ namespace TestRun.backoffice
         }
        
     }
-    //class ContentBetOfTheDay : BackOfficeProgram
-    //{
-    //    public static CustomProgram FabricateContentBetOfTheDay()
-    //    {
-    //        return new ContentBetOfTheDay();
-    //    }
+    class ContentBetOfTheDay : BackOfficeProgram
+    {
+        public static CustomProgram FabricateContentBetOfTheDay()
+        {
+            return new ContentBetOfTheDay();
+        }
 
-    //    public override void Run()
-    //    {
-    //        base.Run();
-    //        LogStage("Добавление новой Ставки дня в Меню управление клиентом");
-    //        ClickWebElement(".//*[@class='menu']//*[@href='#/explorer/content']", "Меню Управление клиентом", "меню Управление клиентом");
-    //        ClickWebElement(".//*[@id='js-toolbar']/div[1]/div[1]", "Кнопка Добавить", "кнопки Добавить");
-    //        ClickWebElement(".//*[@class='toolbar__drop-down _state_visible']/div[2]", "Строка Ставка дня", "строки Ставка дня");
+        public override void Run()
+        {
+            base.Run();
 
-    //        LogStage("Установка области видимости");
-    //        ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[2]", "Вкладка Область видимости", "вкладки Область видимости");
-    //        ClickWebElement(".//*[@class='role-form__inner']/div[2]//*[@class='ui__list-node right-list__row'][1]//input", "Чекбокс Fonbet русский", "чекбокса Fonbet русский");
-    //        ClickWebElement(".//*[@class='role-form__inner']/div[2]//*[@class='ui__list-node right-list__row'][2]//input", "Чекбокс Fonbet английский", "чекбокса Fonbet английский");
-    //        ClickWebElement(".//*[@class='role-form__inner']/div[2]//*[@class='ui__list-node right-list__row'][3]//input", "Чекбокс ЦУПИС", "чекбокса ЦУПИС");
+            LogStage("Удаление дублей");
+            ClickWebElement(".//*[@class='menu']//*[@href='#/explorer/content']", "Меню Управление клиентом", "меню Управление клиентом");
+            ClickWebElement(".//*[@class='curtain__list']/li[2]", "Строка Ставка дня", "строки Ставка дня");
+            ShowOnlyActive();
+            IList<IWebElement> testData = driver.FindElements(By.XPath(".//*[@class='curtain _state_expanded']/div[2]//li//*[@class='curtain__news-title-inner']"));
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            for (int i = testData.Count - 1; i >= 0; i--)
+            {
+                waitTillElementisDisplayed(driver, ".//*[@class='form__title']", 2);
+                js.ExecuteScript("arguments[0].click()", testData[i]);
+                if (testData[i].Text.Contains("Англия — Германия"))
+                {
+                    ClickWebElement(".//*[@id='js-toolbar']/div/div[7]//button", "Кнопка Удалить", "кнопки Удалить");
+                    waitTillElementisDisplayed(driver, ".//*[@class='modal__foot']/div[2]/a", 2);
+                    ClickWebElement(".//*[@class='modal__foot']/div[2]/a", "Кнопка Ок всплывающего окна", "кнопки Ок всплывающего окна");
+                }
+            }
 
+            LogStage("Добавление новой Ставки дня в Меню управление клиентом");
+            ClickWebElement(".//*[@class='menu']//*[@href='#/explorer/content']", "Меню Управление клиентом", "меню Управление клиентом");
+            ShowOnlyActive();
+            ClickWebElement(".//*[@id='js-toolbar']/div[1]/div[1]", "Кнопка Добавить", "кнопки Добавить");
+            ClickWebElement(".//*[@class='toolbar__drop-down _state_visible']/div[2]", "Строка Ставка дня", "строки Ставка дня");
 
-    //        LogStage("Выбор события");
-    //        ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[1]", "Вкладка Общее", "вкладки Общее");
-    //        ClickWebElement(".//*[@id='popup-event']//a", "Вкладка Событие", "вкладки Событие");
-    //        ClickWebElement(".//*[@id='popup-event']//a/../div[last()]//span", "Разворот события", "разворота события");
-    //        ClickWebElement(".//*[@id='popup-event']//a/../div[last()]//*[@class='ui-dropdown__items']/div[3]/span", "Разворот события Чемпионат мира", "разворота события Чемпионат мира");
-    //        ClickWebElement(".//*[@id='popup-event']//a/../div[last()]//*[@class='ui-dropdown__items']/div[4]/span", "Конечное событие Англия-Германия", "конечного события Англия-Германия");
+            SetupVisualSettings();
 
-    //        LogStage("Выбор Котировки");
-    //        ClickWebElement(".//*[@id='popup-Fon.Ora.Factor']//a", "Котировка 1", "котировки 1");
-    //        ClickWebElement(".//*[@class='ui-dropdown__items']/div[1]", "Строка Основные ставки", "строки Основные ставки");
-    //        ClickWebElement(".//*[@class='ui-dropdown__items']/div[2]", "Строка Итоги", "строки Итоги");
-    //        ClickWebElement(".//*[@class='ui-dropdown__items']/div[3]", "Строка Поб1", "строки Поб1");
-    //        ClickWebElement(".//*[@class='form__row _gaps-bottom_150']/div[5]/div/div[1]//a", "Котировка 2", "котировки 2");
-    //        ClickWebElement(".//*[@class='form__row _gaps-bottom_150']/div[5]/div/div[1]//a/../div[2]//*[@class='ui-dropdown__item'][1]", "Строка Ничья", "строки Ничья");
-    //        ClickWebElement(".//*[@class='ui-dropdown__items']/div[2]", "Строка Итоги", "строки Итоги");
-    //        ClickWebElement(".//*[@class='ui-dropdown__items']/div[3]", "Строка Поб1", "строки Поб1");
+            LogStage("Заполнение вкладки Изображение");
+            ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[3]", "Вкладка Изображение", "вкладки Изображение");
+            SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']/div[1]//input", "/Content/BetsOfDay/soccer.jpg", "Поле Изображение", "поля Изображение");
+            driver.FindElement(By.XPath(".//*[@class='tabs__content-inner _state_visible']/div[1]//input")).SendKeys(Keys.Backspace);
+            Thread.Sleep(500);
+            driver.FindElement(By.XPath(".//*[@class='tabs__content-inner _state_visible']/div[1]//input")).SendKeys("g");
+            SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']/label//input", "Тестовое фото", "Поле Подпись к фото", "поля Подпись к фото");
+            SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']/div[2]//input", "/Content/CompetitionLogo/AFL_Shield.png", "Поле Логотип(поверх)", "поля Логотип(поверх)");
+            driver.FindElement(By.XPath(".//*[@class='tabs__content-inner _state_visible']/div[2]//input")).SendKeys(Keys.Backspace);
+            Thread.Sleep(500);
+            driver.FindElement(By.XPath(".//*[@class='tabs__content-inner _state_visible']/div[2]//input")).SendKeys("g");
 
+            SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']/div[4]/div[1]//input", "/Content/TeamLogo/barcelona.svg", "Поле Логотип 1", "поля Логотип 1");
+            driver.FindElement(By.XPath(".//*[@class='tabs__content-inner _state_visible']/div[4]/div[1]//input")).SendKeys(Keys.Backspace);
+            Thread.Sleep(500);
+            driver.FindElement(By.XPath(".//*[@class='tabs__content-inner _state_visible']/div[4]/div[1]//input")).SendKeys("g");
 
-    //  }
+            SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']/div[4]/div[2]//input", "/Content/TeamLogo/psg.png", "Поле Логотип 2", "поля Логотип 2");
+            driver.FindElement(By.XPath(".//*[@class='tabs__content-inner _state_visible']/div[4]/div[2]//input")).SendKeys(Keys.Backspace);
+            Thread.Sleep(500);
+            driver.FindElement(By.XPath(".//*[@class='tabs__content-inner _state_visible']/div[4]/div[2]//input")).SendKeys("g");
 
-    // }
+            LogStage("Выбор события");
+            ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[1]", "Вкладка Общее", "вкладки Общее");
+            ClickWebElement(".//*[@id='popup-event']//a", "Вкладка Событие", "вкладки Событие");
+            waitTillElementisDisplayed(driver, ".//*[@id='popup-event']//a/../div[last()]//span", 5);
+            Thread.Sleep(500);
+            ClickWebElement(".//*[@id='popup-event']//a/../div[last()]//span", "Разворот события", "разворота события");
+            waitTillElementisDisplayed(driver,".//*[@id='popup-event']//a/../div[last()]//*[@class='ui-dropdown__items']/div[3]/span",5);
+            ClickWebElement(".//*[@id='popup-event']//a/../div[last()]//*[@class='ui-dropdown__items']/div[3]/span", "Разворот события Чемпионат мира", "разворота события Чемпионат мира");
+            ClickWebElement(".//*[@id='popup-event']//a/../div[last()]//*[@class='ui-dropdown__items']/div[4]/span", "Конечное событие Англия-Германия", "конечного события Англия-Германия");
+
+            LogStage("Выбор Котировки");
+            ClickWebElement(".//*[@id='popup-Fon.Ora.Factor']//a", "Котировка 1", "котировки 1");
+            waitTillElementisDisplayed(driver, ".//*[@class='ui-dropdown__items']/div[1]", 5);
+            ClickWebElement(".//*[@class='ui-dropdown__items']/div[1]", "Строка Основные ставки", "строки Основные ставки");
+            ClickWebElement(".//*[@class='ui-dropdown__items']/div[2]", "Строка Итоги", "строки Итоги");
+            ClickWebElement(".//*[@class='ui-dropdown__items']/div[3]", "Строка Поб1", "строки Поб1");
+            ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Добавить", "кнопки Добавить");
+            waitTillElementisDisplayed(driver, "//*[@class='form__row _gaps-bottom_150']/div[5]/div/div[1]//a", 5);
+            ClickWebElement(".//*[@class='form__row _gaps-bottom_150']/div[5]/div/div[1]//a", "Котировка 2", "котировки 2");
+            ClickWebElement(".//*[@class='form__row _gaps-bottom_150']/div[5]/div/div[1]//a/../div[2]//*[@class='ui-dropdown__item'][1]", "Строка Ничья", "строки Ничья");
+            ClickWebElement(".//*[@class='form__row _gaps-bottom_150']/div[6]/div/div[1]//a", "Котировка 3", "котировки 3");
+            ClickWebElement(".//*[@class='form__row _gaps-bottom_150']/div[6]/div/div[1]//a/../div[2]//*[@class='ui-dropdown__item'][1]", "Строка Поб2", "строки Поб2");
+            ClickWebElement(".//*[@class='ui__checkbox-item']//input", "Чекбокс Опубликовано", "чекбокса Опубликовано");
+            ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Добавить", "кнопки Добавить");
+            Thread.Sleep(2000);
+            SwitchToPreView();
+            LogStage("Проверка что все элементы ставки дня отображаются на сайте");
+            if (!WebElementExist(".//*[@href='#!/bets/football/12532/9639759']"))
+                throw new Exception("Не отображается баннер ставки дня");
+            if (!WebElementExist(".//*[@class='home-slider__photo-caption']"))
+                throw new Exception("Не отображается подпись к фото");
+            if (!WebElementExist(".//*[@class='home-slider__extra-logo']"))
+                throw new Exception("Не отображается экстра лого");
+            if (driver.FindElements(By.XPath(".//*[@class='home-slider__logo-wrap']/div")).Count!=2)
+                throw new Exception("Не отображаются лого команд");
+            driver.SwitchTo().Window(driver.WindowHandles[0]);
+            ClickWebElement(".//*[@class='ui__checkbox-item']//input", "Чекбокс Опубликовано", "чекбокса Опубликовано");
+            ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Сохранить", "кнопки Сохранить");
+        }
+
+    }
 
     class ContentBanner : BackOfficeProgram
     {
@@ -193,11 +230,12 @@ namespace TestRun.backoffice
             LogStage("Удаление дублей");
             ClickWebElement(".//*[@class='menu']//*[@href='#/explorer/content']", "Меню Управление клиентом", "меню Управление клиентом");
             ClickWebElement(".//*[@class='curtain__list']/li[3]", "Строка Баннер", "строки Баннер");
-            ClickWebElement(".//*[@id='js-toolbar']/div[2]/div/div[1]", "Кнопка Показывать только активные", "кнопки Показывать только активные");
+            ShowOnlyActive();
             IList<IWebElement> testData = driver.FindElements(By.XPath(".//*[@class='curtain _state_expanded']/div[2]//li//*[@class='curtain__news-caption-inner']"));
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
             for (int i=testData.Count-1;i>=0;i--)
             {
+                //клик нужен чтобы ловить события которые не попали в экран
                 waitTillElementisDisplayed(driver, ".//*[@class='form__title']", 2);
                 js.ExecuteScript("arguments[0].click()", testData[i]);
                 if (testData[i].Text.Contains("Тестовый Заголовок"))
@@ -323,7 +361,7 @@ namespace TestRun.backoffice
             driver.FindElement(By.XPath(".//*[@class='form__fields']/label[2]//time/i[3]/i/a[1]")).Click();
             ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Сохранить", "кнопки Сохранить");
 
-            Thread.Sleep(60000);
+            Thread.Sleep(65000);
             ClickWebElement(".//*[@id='js-toolbar']/div/div[5]//button", "Кнопка Обновить", "кнопки обновить");
             var indicator = GetWebElement(".//*[@class='curtain _state_expanded']/div[2]//*[@class='curtain__list']/li[1]/div/span[1]","Нет кружка индикатора");
             var indicatorClass = indicator.GetAttribute("style");
