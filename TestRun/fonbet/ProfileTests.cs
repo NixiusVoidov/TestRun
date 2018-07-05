@@ -192,25 +192,25 @@ namespace TestRun.fonbet
             LogStage("Проверка плейсхолдера Номер счета");
             ClickWebElement(".//*[@class='header__login-head']/a", "Кнопка Войти", "кнопки Войти");
             SendKeysToWebElement(".//*[@class='login-form__form']/div[1]/input","11","Поле логина", "поля логина");
-            IWebElement loginPlace = GetWebElement(".//*[@class='login-form__form']/div[1]/input", "Нет поля логина");
-            var loginPlaceClass = loginPlace.GetAttribute("placeholder");
-            if (!loginPlaceClass.Contains("Номер счёта"))
+            IWebElement loginPlace = GetWebElement(".//*[@class='login-form__types-container']/div[2]", "Нет поля логина");
+            var loginPlaceClass = loginPlace.GetAttribute("class");
+            if (!loginPlaceClass.Contains("active"))
                 throw new Exception("Не переключается на placeholder с номером счета");
 
             LogStage("Проверка плейсхолдера Почты");
             driver.FindElement(By.XPath(".//*[@class='login-form__form']/div[1]/input")).Clear();
             SendKeysToWebElement(".//*[@class='login-form__form']/div[1]/input", "ya@ya.ru", "Поле логина", "поля логина");
-            IWebElement mailPlace = GetWebElement(".//*[@class='login-form__form']/div[1]/input", "Нет поля логина");
-            var mailPlaceClass = mailPlace.GetAttribute("placeholder");
-            if (!mailPlaceClass.Contains("example@domain.com"))
+            IWebElement mailPlace = GetWebElement(".//*[@class='login-form__types-container']/div[3]", "Нет поля логина");
+            var mailPlaceClass = mailPlace.GetAttribute("class");
+            if (!mailPlaceClass.Contains("active"))
                 throw new Exception("Не переключается на placeholder с почтой");
 
             LogStage("Проверка плейсхолдера Телефона");
             driver.FindElement(By.XPath(".//*[@class='login-form__form']/div[1]/input")).Clear();
             SendKeysToWebElement(".//*[@class='login-form__form']/div[1]/input", "+79991234567", "Поле логина", "поля логина");
-            IWebElement phonePlace = GetWebElement(".//*[@class='login-form__form']/div[1]/input", "Нет поля логина");
-            var phonePlaceClass = phonePlace.GetAttribute("placeholder");
-            if (!phonePlaceClass.Contains("+7 (999) 999-99-99"))
+            IWebElement phonePlace = GetWebElement(".//*[@class='login-form__types-container']/div[1]", "Нет поля логина");
+            var phonePlaceClass = phonePlace.GetAttribute("class");
+            if (!phonePlaceClass.Contains("active"))
                 throw new Exception("Не переключается на placeholder с телефоном");
 
             LogStage("Проверка ошибки входа");
