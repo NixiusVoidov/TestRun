@@ -74,6 +74,7 @@ namespace TestRun
             CustomProgram.Register("backoffice_contentbanner", backoffice.ContentBanner.FabricateContentBanner);
             CustomProgram.Register("backoffice_contentbannerlifetime", backoffice.ContentBannerLifeTime.FabricateContentBannerLifeTime);
             CustomProgram.Register("backoffice_contentwinnersclub", backoffice.ContentWinnersClub.FabricateContentWinnersClub);
+            CustomProgram.Register("backoffice_contentcompetitionlogos", backoffice.СontentCompetitonLogos.FabricateСontentCompetitonLogos);
 
         }
 

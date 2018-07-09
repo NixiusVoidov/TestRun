@@ -404,5 +404,85 @@ namespace TestRun.backoffice
                 throw new Exception("Не отображается большое изображение");
         }
     }
+    class СontentCompetitonLogos : BackOfficeProgram
+    {
+        public static CustomProgram FabricateСontentCompetitonLogos()
+        {
+            return new СontentCompetitonLogos();
+        }
 
+        public override void Run()
+        {
+            base.Run();
+           
+            LogStage("Переход в Логотипы соревнований");
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            js.ExecuteScript("arguments[0].click()", driver.FindElement(By.XPath(".//*[@href='#/explorer/contentCompetitionLogo']")));
+
+            LogStage("Создание нового логотипа");
+            ClickWebElement(".//*[@class='curtain__list']/li[1]", "Строка Футбол", "строки Футбол");
+            ClickWebElement(".//*[@id='js-toolbar']/div[1]/div[1]", "Кнопка Создать логотип", "кнопки Создать логотип");
+            ClickWebElement(".//*[@class='role-form__inner']/div[1]//a", "Дропдаун Выбор соревнований", "дропдауна Выбор соревнований");
+            ClickWebElement(".//*[@class='ui-dropdown__items']//div[1]", "Строка нужного соревнования", "строки нужного соревнования");
+            var competionID = GetWebElement("//*[@class='role-form__inner']/label[1]//input", "Нет строки с ID");
+            string competitonValue = competionID.GetAttribute("value");
+            ClickWebElement(".//*[@class='ui__checkbox-item']//input", "Чекбокс Опубликовано", "чекбокса Опубликовано");
+
+            SendKeysToWebElement(".//*[@class='form__row'][1]/label//input", "/Content/CompetitionLogo/fide-rating-logo.png", "Поле Маленький логотип", "поля Маленький логотип");
+            driver.FindElement(By.XPath(".//*[@class='form__row'][1]/label//input")).SendKeys(Keys.Backspace);
+            Thread.Sleep(500);
+            driver.FindElement(By.XPath(".//*[@class='form__row'][1]/label//input")).SendKeys("g");
+            SendKeysToWebElement(".//*[@class='form__row'][2]/label//input", "/Content/CompetitionLogo/NHL_logo_lr.png", "Поле Монохромный логотип", "поля Монохромный логотип");
+            driver.FindElement(By.XPath(".//*[@class='form__row'][2]/label//input")).SendKeys(Keys.Backspace);
+            Thread.Sleep(500);
+            driver.FindElement(By.XPath(".//*[@class='form__row'][2]/label//input")).SendKeys("g");
+            SendKeysToWebElement(".//*[@class='form__row'][3]/label//input", "/Content/Logo/Competition/australiaOpen.svg", "Поле Большой логотип", "поля Большой логотип");
+            driver.FindElement(By.XPath(".//*[@class='form__row'][3]/label//input")).SendKeys(Keys.Backspace);
+            Thread.Sleep(500);
+            driver.FindElement(By.XPath(".//*[@class='form__row'][3]/label//input")).SendKeys("g");
+            SetupVisualSettings();
+            ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Добавить", "кнопки Добавить");
+
+            LogStage("Проверка что все элементы ставки дня отображаются на сайте");
+            
+            js.ExecuteScript("window.open();");
+            driver.SwitchTo().Window(driver.WindowHandles[1]);
+            driver.Navigate().GoToUrl("http://fonred5051.dvt24.com/#!/");
+            // Смена языка при необходимости
+            IWebElement langSetElement = FindWebElement(".//*[@class='header__lang-set']");
+            if (langSetElement != null)
+            {
+                LogStage("Смена языка на русский");
+                ClickWebElement(".//*[@class='header__lang-set']", "Кнопка выбора языка", "кнопки выбора языка");
+                ClickWebElement(".//*[@class='header__lang-item']//*[text()='Русский']", "Кнопка выбора русского языка", "кнопки выбора русского языка");
+            }
+            
+            LogStage("Установка настроек по умолчанию");
+            ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
+            
+            LogStage("Перевод меню в отображение слева");
+            ClickWebElement(".//*[@class='header-ui__checkbox _type_radio'][@value='2']", "Радиобатон отображения меню слева", "радиобатона отображения меню слева");
+            ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
+            
+
+            LogStage("Переход в линию");
+            ClickWebElement(".//*[@href='/#!/bets']", "Вкладка \"Линия\"", "вкладки \"Линия\"");
+            ClickWebElement(".//*[@class='list-view-new__table-body']/tr[4]/td/div", "Разворот спорта футбол", "разворота спорта футбол");
+
+           
+            if (!WebElementExist(".//*[@href='#!/bets/football/"+ competitonValue+"']//*[@class='event-v-list__item-cell event-v-list__cell-image icon']"))
+                throw new Exception("Не отображается маленький логотип");
+            ClickWebElement(".//*[@href='#!/bets/football/" + competitonValue + "']", "Строка с маленьким логотип", "строки с маленьким логотипа");
+            if (!WebElementExist(".//*[@class='table__flag-icon icon _type_flag']"))
+                throw new Exception("Не отображается монохромный логотип");
+            ClickWebElement(".//*[@class='table']//tr[last()]/td[2]//a", "Строка ивентвью", "строки ивентвью");
+            if (!WebElementExist("//div[contains(@style,'australia')]"))
+                throw new Exception("Не отображается лого в ивентвью");
+
+            driver.SwitchTo().Window(driver.WindowHandles[0]);
+            ClickWebElement(".//*[@id='js-toolbar']/div/div[5]//button", "Кнопка Удалить", "кнопки Удалить");
+            waitTillElementisDisplayed(driver, ".//*[@class='modal__foot']/div[2]/a", 2);
+            ClickWebElement(".//*[@class='modal__foot']/div[2]/a", "Кнопка Ок всплывающего окна", "кнопки Ок всплывающего окна");
+        }
+    }
 }
