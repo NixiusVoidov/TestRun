@@ -424,8 +424,9 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@href='#!/account/verification/qiwi']", "Кнопка Верификации по киви",
                 "кнопки Верификации по киви");
             IWebElement inputData = GetWebElement(".//*[@class='ui__field-wrap-inner']//input", "Нет поля для ввода");
-
+            Thread.Sleep(1500);
             inputData.Clear();
+            Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "000000002", "Поле Номер телефона",
                 "поля Номер телефона");
             ClickWebElement(".//*[@id='rulesAgree']", "Чекбокс Соглашения с правилами",
@@ -456,14 +457,14 @@ namespace TestRun.fonbet
 
             driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).Clear();
             SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "7", "Поле Номер телефона", "поля Номер телефона");
+            Thread.Sleep(1000);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
 
-            LogStage("Проверка sendPassport по тестовому сценарию");
-            SendPasportVerificationQiwi("2", null, "2", null);
-            SendPasportVerificationQiwi("3", "waitForPassport", "10", null);
-            SendPasportVerificationQiwi("4", "rejected", "0", "17");
-            SendPasportVerificationQiwi("5", "rejected", "0", "1");
-            SendPasportVerificationQiwi("6", null, null, null);
+            SendPasportVerificationQiwi("2222222222", null, "2", null);
+            SendPasportVerificationQiwi("3333333333", "waitForPassport", "10", null);
+            SendPasportVerificationQiwi("4444444444", "rejected", "0", "17");
+            SendPasportVerificationQiwi("5555555555", "rejected", "0", "1");
+            SendPasportVerificationQiwi("6666666666", null, null, null);
         }
 
     }
@@ -492,7 +493,9 @@ namespace TestRun.fonbet
 
             inputData.Clear();
             SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[2]//input", "0000FFFF0002", "Поле Номера карты фонбет","поля Номера карты фонбет");
-            SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[1]//input", "2", "Поле Серия и номер паспорта", "поля Серия и номер паспорта");
+            Thread.Sleep(500);
+            SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[1]//input", "2222222222", "Поле Серия и номер паспорта", "поля Серия и номер паспорта");
+            Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[2]//input", "11112011", "Поле Дата выдачи", "поля Дата выдачи");
             ClickWebElement(".//*[@id='rulesAgree']", "Чекбокс Соглашения с правилами", "чекбокс Соглашения с правилами");
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
@@ -524,11 +527,7 @@ namespace TestRun.fonbet
             SendSmsVerificationBK("8", "rejected", "0", "1");
             SendSmsVerificationBK("0", null, null, null);
             SendSmsVerificationBK("9", null, null, null);
-
-           
         }
-        
-
     }
 
     class ChangePhoneCupis : FonbetWebProgram

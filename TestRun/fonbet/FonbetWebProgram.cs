@@ -89,6 +89,8 @@ namespace TestRun
             IWebElement errorElement = FindWebElement(".//*[@class='login-form__error']");
             if (errorElement != null)
                 throw new Exception(String.Format("Ошибка логина: {0}", errorElement.Text));
+            if(WebElementExist(".//*[@class='ident-instruction--3wvHY']"))
+                ClickWebElement(".//*[@class='ident-instruction__foot--2-EbX']/div[1]//a", "Кнопка закрыть", "кнопки закрыть");
             LogActionSuccess();
         }
 
@@ -961,16 +963,20 @@ namespace TestRun
             {
                 driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).Clear();
                 SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", smsValue, "Поле Код смс", "поля Код смс");
+                Thread.Sleep(1000);
                 ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
+                waitTillElementisDisplayed(driver, ".//*[@id='verification-bk-error']", 5);
                 var message = GetWebElement(".//*[@id='verification-bk-error']", "Нет модуля с ошибкой");
                 if (!(message.GetAttribute("data-errorcode").Equals(code)))
                     throw new Exception("Неверная обработка ошибки");
+                waitTillElementisDisplayed(driver, ".//*[@class='account-error__actions']//span", 5);
                 ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
                 return;
             }
            
             driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).Clear();
             SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", smsValue, "Поле Код смс", "поля Код смс");
+            Thread.Sleep(1000);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
             if (smsValue == "9")
             {
@@ -981,9 +987,10 @@ namespace TestRun
                     throw new Exception("Неверная обработка ошибки");
                 ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Подтвердить", "кнопки Подтвердить");
 
-                driver.FindElement(By.XPath(".//*[@class='verification__form-row']/label[1]//input")).SendKeys(Keys.Backspace);
+                driver.FindElement(By.XPath(".//*[@class='verification__form-row']/label[1]//input")).SendKeys(Keys.Home);
                 SendKeysToWebElement(".//*[@class='verification__form-row']/label[1]//input", "3", "Поле Серия и номер паспорта", "поля Серия и номер паспорта");
                 ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки Отправить");
+                waitTillElementisDisplayed(driver, ".//*[@class='account-error__actions']//span", 5);
                 var msg = GetWebElement(".//*[@id='verification-bk-error']", "Нет модуля с ошибкой");
                 if (!(msg.GetAttribute("data-errorcode").Equals("0") && msg.GetAttribute("data-processstate").Equals("rejected") && msg.GetAttribute("data-rejectioncode").Equals("18")))
                     throw new Exception("Неверная обработка ошибки");
@@ -991,35 +998,42 @@ namespace TestRun
 
                 ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
                 SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", smsValue, "Поле Код смс", "поля Код смс");
+                Thread.Sleep(500);
                 ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
+                driver.FindElement(By.XPath(".//*[@class='verification__form-row']/label[1]//input")).SendKeys(Keys.Home);
                 SendKeysToWebElement(".//*[@class='verification__form-row']/label[1]//input", "1", "Поле Серия и номер паспорта", "поля Серия и номер паспорта");
                 ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки Отправить");
-                waitTillElementisDisplayed(driver, ".//*[@class='verification']/div", 9);
+                waitTillElementisDisplayed(driver, ".//*[@classid='account-error__btn-inner']//a", 9);
                 if (!driver.FindElement(By.XPath(".//*[@class='verification']/div")).GetAttribute("class").Contains("success"))
                     throw new Exception("Неверная обработка ошибки");
-                ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Подтвердить", "кнопки Подтвердить");
+                ClickWebElement(".//*[@classid='account-error__btn-inner']//a", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;
             }
             if (smsValue == "0")
             {
                 
-                waitTillElementisDisplayed(driver, ".//*[@class='verification']/div", 5);
+                waitTillElementisDisplayed(driver, ".//*[@class='verification']//span", 10);
                 if (!driver.FindElement(By.XPath(".//*[@class='verification']/div")).GetAttribute("class").Contains("success"))
                     throw new Exception("Неверная обработка ошибки");
                 ClickWebElement(".//*[@class='verification']//span", "Кнопка Закрыть", "кнопки Закрыть");
                 ClickWebElement(".//*[@class='verification__notice-types-wrap']/a", "Кнопка Отменить процесс", "кнопки Отменить процесс");
                 ClickWebElement(".//*[@href='#!/account/verification/bk']", "Кнопка Верификации по БК","кнопки Верификации по БК");
                 SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[2]//input", "0000FFFF000", "Поле Номера карты фонбет", "поля Номера карты фонбет");
-                SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[1]//input", "2", "Поле Серия и номер паспорта", "поля Серия и номер паспорта");
+                Thread.Sleep(500);
+                SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[1]//input", "2222222222", "Поле Серия и номер паспорта", "поля Серия и номер паспорта");
+                Thread.Sleep(500);
                 SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[2]//input", "11112011", "Поле Дата выдачи", "поля Дата выдачи");
                 ClickWebElement(".//*[@id='rulesAgree']", "Чекбокс Соглашения с правилами", "чекбокс Соглашения с правилами");
                 ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;
             }
+            waitTillElementisDisplayed(driver, ".//*[@id='verification-bk-error']", 9);
             var messageData = GetWebElement(".//*[@id='verification-bk-error']", "Нет модуля с ошибкой");
             if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-processstate").Equals(process) && messageData.GetAttribute("data-rejectioncode").Equals(rejcode)))
                 throw new Exception("Неверная обработка ошибки");
+            waitTillElementisDisplayed(driver, ".//*[@class='account-error__actions']//span", 5);
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
+            waitTillElementisDisplayed(driver, ".//*[@class='toolbar__item']/button", 5);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
         }
         // Метод принимает на вход  ожидаемый номер телефона и  проверяет правильность работы createProcess по тестовому сценарию на тестовых данных для идентификации киви
@@ -1054,12 +1068,15 @@ namespace TestRun
             LogStage("Проверка SendSmsCode по тестовому сценарию");
             driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).Clear();
             SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", smsValue, "Поле Номер телефона", "поля Номер телефона");
+            Thread.Sleep(1000);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
-            
+            waitTillElementisDisplayed(driver, ".//*[@class='account-error__actions']//span", 5);
             var messageData = GetWebElement(".//*[@id='verification-qiwi-error']", "Нет модуля с ошибкой");
             if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-processstate").Equals(process) && messageData.GetAttribute("data-rejectioncode").Equals(rejcode)))
                 throw new Exception("Неверная обработка ошибки");
+            waitTillElementisDisplayed(driver, ".//*[@class='account-error__actions']//span", 5);
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
+            waitTillElementisDisplayed(driver, ".//*[@class='toolbar__item']/button", 5);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
         }
         protected void SendPasportVerificationQiwi(string pasportValue, string process, string code, string rejcode)
@@ -1067,33 +1084,38 @@ namespace TestRun
             LogStage("Проверка sendPassport по тестовому сценарию");
          
             
-            if (pasportValue == "2")
+            if (pasportValue == "2222222222")
             {
+                waitTillElementisDisplayed(driver, ".//*[@class='verification__form-row']/label[2]//input", 5);
                 SendKeysToWebElement(".//*[@class='verification__form-row']/label[1]//input", pasportValue, "Поле Серия и Номер паспорта", "поля Серия и Номер паспорта");
+                Thread.Sleep(800);
                 SendKeysToWebElement(".//*[@class='verification__form-row']/label[2]//input", "111120000", "Поле Дата выдачи", "поля Дата выдачи");
                 ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
+                waitTillElementisDisplayed(driver, ".//*[@class='account-error__actions']//span", 5);
                 var messageData = GetWebElement(".//*[@id='verification-qiwi-error']", "Нет модуля с ошибкой");
                 if (!(messageData.GetAttribute("data-errorcode").Equals(code)))
                     throw new Exception("Неверная обработка ошибки");
                 ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть", "кнопки Закрыть");
             }
-             else if (pasportValue == "3")
+             else if (pasportValue == "3333333333")
             {
-                driver.FindElement(By.XPath(".//*[@class='verification__form-row']/label[1]//input")).SendKeys(Keys.Backspace);
-                SendKeysToWebElement(".//*[@class='verification__form-row']/label[1]//input", pasportValue, "Поле Серия и Номер паспорта", "поля Серия и Номер паспорта");
+                driver.FindElement(By.XPath(".//*[@class='verification__form-row']/label[1]//input")).SendKeys(Keys.Home);
+                SendKeysToWebElement(".//*[@class='verification__form-row']/label[1]//input", "3", "Поле Серия и Номер паспорта", "поля Серия и Номер паспорта");
                 ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
+                waitTillElementisDisplayed(driver, ".//*[@class='account-error__actions']//span", 5);
                 var messageData = GetWebElement(".//*[@id='verification-qiwi-error']", "Нет модуля с ошибкой");
                 if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-processstate").Equals(process)))
                     throw new Exception("Неверная обработка ошибки");
                 ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть", "кнопки Закрыть");
             }
 
-            else if (pasportValue == "4")
+            else if (pasportValue == "4444444444")
             {
                 
-                driver.FindElement(By.XPath(".//*[@class='verification__form-row']/label[1]//input")).SendKeys(Keys.Backspace);
-                SendKeysToWebElement(".//*[@class='verification__form-row']/label[1]//input", pasportValue, "Поле Серия и Номер паспорта", "поля Серия и Номер паспорта");
+                driver.FindElement(By.XPath(".//*[@class='verification__form-row']/label[1]//input")).SendKeys(Keys.Home);
+                SendKeysToWebElement(".//*[@class='verification__form-row']/label[1]//input", "4", "Поле Серия и Номер паспорта", "поля Серия и Номер паспорта");
                 ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
+                waitTillElementisDisplayed(driver, ".//*[@class='account-error__actions']//span", 5);
                 var messageData = GetWebElement(".//*[@id='verification-qiwi-error']", "Нет модуля с ошибкой");
                 if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-processstate").Equals(process) && messageData.GetAttribute("data-rejectioncode").Equals(rejcode)))
                     throw new Exception("Неверная обработка ошибки");
@@ -1102,21 +1124,25 @@ namespace TestRun
             else
             {
                 ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
+                waitTillElementisDisplayed(driver, ".//*[@class='toolbar__item']/button", 5);
                 SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "7", "Поле Номер телефона", "поля Номер телефона");
+                Thread.Sleep(800);
                 ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
-                driver.FindElement(By.XPath(".//*[@class='verification__form-row']/label[1]//input")).SendKeys(Keys.Backspace);
+                driver.FindElement(By.XPath(".//*[@class='verification__form-row']/label[1]//input")).SendKeys(Keys.Home);
                 SendKeysToWebElement(".//*[@class='verification__form-row']/label[1]//input", pasportValue, "Поле Серия и Номер паспорта", "поля Серия и Номер паспорта");
                 ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
                 
-                if (pasportValue == "5")
+                if (pasportValue == "5555555555")
                 {
+                    waitTillElementisDisplayed(driver, ".//*[@class='account-error__actions']//span", 5);
                     var messageData = GetWebElement(".//*[@id='verification-qiwi-error']", "Нет модуля с ошибкой");
                     if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-processstate").Equals(process) && messageData.GetAttribute("data-rejectioncode").Equals(rejcode)))
                         throw new Exception("Неверная обработка ошибки");
                 }
                 else
                 {
-                   if(!driver.FindElement(By.XPath(".//*[@class='verification']/div")).GetAttribute("class").Contains("success"))
+                    waitTillElementisDisplayed(driver, ".//*[@class='account-error__actions']//span", 5);
+                    if (!driver.FindElement(By.XPath(".//*[@class='verification']/div")).GetAttribute("class").Contains("success"))
                     throw new Exception("Неверная обработка ошибки");
                     ClickWebElement(".//*[@classid='account-error__actions']//span", "Кнопка Закрыть", "кнопки Закрыть");
                     return;
