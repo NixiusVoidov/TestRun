@@ -4,6 +4,7 @@ using OpenQA.Selenium.Chrome;
 using System;
 using System.IO;
 using System.Reflection;
+using OpenQA.Selenium.Support.UI;
 
 namespace TestRun
 {
@@ -145,6 +146,8 @@ namespace TestRun
             {
                 LogStartAction(String.Format("Клик {0}", elementCaptionInGenitive));
                 IWebElement element = driver.FindElement(By.XPath(xPath));
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+                wait.Until(drv => drv.FindElement(By.XPath(xPath)));
                 element.Click();
                 LogActionSuccess();
 

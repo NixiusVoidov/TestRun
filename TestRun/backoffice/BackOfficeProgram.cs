@@ -133,6 +133,68 @@ namespace TestRun.backoffice
                 ClickWebElement("//*[@class='ui__list role-list__body _style-height-auto'][last()]/div[5]//input", "Чекбокс ЦУПИС", "чекбокса ЦУПИС");
         }
 
+        protected void DeleteButton()
+        {
+            ClickWebElement(".//*[@id='js-toolbar']/div//*[text()='Удалить']", "Кнопка Удалить", "кнопки Удалить");
+            waitTillElementisDisplayed(driver, ".//*[@class='modal__foot']/div[2]/a", 2);
+            ClickWebElement(".//*[@class='modal__foot']/div[2]/a", "Кнопка Ок всплывающего окна", "кнопки Ок всплывающего окна");
+        }
+
+        protected void WaitForPageLoad()
+        {
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+            wait.Until((wdriver) => (driver as IJavaScriptExecutor).ExecuteScript("return document.readyState").Equals("complete"));
+
+        }
+        protected void SwitchToWebsiteNewWindow(string url)
+        {
+            LogStage("Проверка что все элементы ставки дня отображаются на сайте");
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            js.ExecuteScript("window.open();");
+            driver.SwitchTo().Window(driver.WindowHandles[1]);
+            driver.Navigate().GoToUrl(url);
+            // Смена языка при необходимости
+            IWebElement langSetElement = FindWebElement(".//*[@class='header__lang-set']");
+            if ((langSetElement != null) && (!driver.FindElement(By.XPath(".//*[@class='header__lang-set']/a/i")).GetAttribute("class").Contains("icon_ru")))
+            {
+                LogStage("Смена языка на русский");
+                ClickWebElement(".//*[@class='header__lang-set']", "Кнопка выбора языка", "кнопки выбора языка");
+                ClickWebElement(".//*[@class='header__lang-item']//*[text()='Русский']", "Кнопка выбора русского языка", "кнопки выбора русского языка");
+            }
+        }
+        protected void TextBeforeAndAfterQuestions(int xpathPart, string describe, string position)
+        {
+            LogStage("Создание нового текста " + describe + "");
+            ClickWebElement(".//*[@id='js-toolbar']/div[1]/div[2]", "Кнопка Создать вопрос", "кнопки Создать вопрос");
+            SetupVisualSettings();
+            ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[1]", "Вкладка Общее", "вкладки Общее");
+            ClickWebElement(".//*[@class='tabs__content']//*[@class='ui-dropdown__fields']//a", "Дропдаун Тип параграфа",
+                "дропдауна Тип параграфа");
+            ClickWebElement(".//*[@class='ui-dropdown__items']/div[" + xpathPart + "]", "Строка Текст " + describe + "",
+                "строки Текст " + describe + "");
+            SendKeysToWebElement(".//*[@class='role-form__inner']/label[2]//textarea", "Тестовый Ответ", "Поле Ответ",
+                "поля Ответ");
+            LogStage("Добавление ссылки");
+            ClickWebElement(".//*[@class='form-table']//i", "Кнопка добавить ссылку", "кнопки добавить ссылку");
+            SendKeysToWebElement(".//*[@class='form-table__edit-form']/div/label[1]//input", "Яндекс", "Поле Заголовок",
+                "поля Заголовок");
+            SendKeysToWebElement(".//*[@class='form-table__edit-form']/div/label[2]//input", "https://ya.ru", "Поле URL",
+                "поля URL");
+            ClickWebElement(".//*[@class='form__row']/div[1]/a", "Кнопка Применить", "кнопки Применить");
+            ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Сохранить", "кнопки Сохранить");
+
+            SwitchToWebsiteNewWindow("http://fonred5051.dvt24.com/#!/faq");
+            WaitForPageLoad();
+            ExecuteJavaScript("window.location.reload()", "Дж скрипт тупит");
+            waitTillElementisDisplayed(driver, ".//*[@class='faq__top-text-inner']/*[@class='faq__top-text']", 5);
+            if (!WebElementExist(".//*[@class='faq__" + position + "-text-inner']/*[@class='faq__" + position + "-text']"))
+                throw new Exception("Не появился текст перед вопросом");
+            if (!WebElementExist(".//*[@class='faq__" + position + "-text-inner']/*[@class='faq__links']"))
+                throw new Exception("Не появились ссылки перед вопросом");
+            driver.Close();
+            driver.SwitchTo().Window(driver.WindowHandles[0]);
+            DeleteButton();
+        }
         protected void SwitchToPreView()
         {
             LogStage("Проверка отображения картинки");

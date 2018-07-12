@@ -29,10 +29,9 @@ namespace TestRun.backoffice
             {
                 waitTillElementisDisplayed(driver, ".//*[@class='form__title']", 2);
                 js.ExecuteScript("arguments[0].click()", dataArray[i]);
-                    ClickWebElement(".//*[@id='js-toolbar']/div/div[7]//button", "Кнопка Удалить", "кнопки Удалить");
-                    waitTillElementisDisplayed(driver, ".//*[@class='modal__foot']/div[2]/a", 2);
-                    ClickWebElement(".//*[@class='modal__foot']/div[2]/a", "Кнопка Ок всплывающего окна", "кнопки Ок всплывающего окна");
-                
+                DeleteButton();
+
+
             }
 
             LogStage("Добавление нового блога в Меню управление клиентом");
@@ -91,8 +90,7 @@ namespace TestRun.backoffice
 
             LogStage("Проверка функции Удаление");
             var count = driver.FindElements(By.XPath(".//*[@id='curtain']/div/div[2]//li")).Count;
-            ClickWebElement(".//*[@id='js-toolbar']/div/div[7]//button", "Кнопка Удалить", "кнопки Удалить");
-            ClickWebElement(".//*[@class='modal__foot']/div[2]/a", "Кнопка Ок всплывающего окна", "кнопки Ок всплывающего окна");
+            DeleteButton();
             if (driver.FindElements(By.XPath(".//*[@id='curtain']/div/div[2]//li")).Count == count)
                 throw new Exception("При удалении число блогов не изменилось");
 
@@ -142,24 +140,10 @@ namespace TestRun.backoffice
             LogStage("Заполнение вкладки Изображение");
             ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[3]", "Вкладка Изображение", "вкладки Изображение");
             SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']/div[1]//input", "/Content/BetsOfDay/soccer.jpg", "Поле Изображение", "поля Изображение");
-            driver.FindElement(By.XPath(".//*[@class='tabs__content-inner _state_visible']/div[1]//input")).SendKeys(Keys.Backspace);
-            Thread.Sleep(500);
-            driver.FindElement(By.XPath(".//*[@class='tabs__content-inner _state_visible']/div[1]//input")).SendKeys("g");
             SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']/label//input", "Тестовое фото", "Поле Подпись к фото", "поля Подпись к фото");
             SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']/div[2]//input", "/Content/CompetitionLogo/AFL_Shield.png", "Поле Логотип(поверх)", "поля Логотип(поверх)");
-            driver.FindElement(By.XPath(".//*[@class='tabs__content-inner _state_visible']/div[2]//input")).SendKeys(Keys.Backspace);
-            Thread.Sleep(500);
-            driver.FindElement(By.XPath(".//*[@class='tabs__content-inner _state_visible']/div[2]//input")).SendKeys("g");
-
             SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']/div[4]/div[1]//input", "/Content/TeamLogo/barcelona.svg", "Поле Логотип 1", "поля Логотип 1");
-            driver.FindElement(By.XPath(".//*[@class='tabs__content-inner _state_visible']/div[4]/div[1]//input")).SendKeys(Keys.Backspace);
-            Thread.Sleep(500);
-            driver.FindElement(By.XPath(".//*[@class='tabs__content-inner _state_visible']/div[4]/div[1]//input")).SendKeys("g");
-
             SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']/div[4]/div[2]//input", "/Content/TeamLogo/psg.png", "Поле Логотип 2", "поля Логотип 2");
-            driver.FindElement(By.XPath(".//*[@class='tabs__content-inner _state_visible']/div[4]/div[2]//input")).SendKeys(Keys.Backspace);
-            Thread.Sleep(500);
-            driver.FindElement(By.XPath(".//*[@class='tabs__content-inner _state_visible']/div[4]/div[2]//input")).SendKeys("g");
 
             LogStage("Выбор события");
             ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[1]", "Вкладка Общее", "вкладки Общее");
@@ -187,8 +171,9 @@ namespace TestRun.backoffice
             ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Добавить", "кнопки Добавить");
             Thread.Sleep(2000);
             SwitchToPreView();
+            WaitForPageLoad();
             LogStage("Проверка что все элементы ставки дня отображаются на сайте");
-            if (!WebElementExist(".//*[@href='#!/bets/football/12532/9639759']"))
+            if (!WebElementExist(".//*[@class='home-slider__content']//div[contains(@style,'soccer')]"))
                 throw new Exception("Не отображается баннер ставки дня");
             if (!WebElementExist(".//*[@class='home-slider__photo-caption']"))
                 throw new Exception("Не отображается подпись к фото");
@@ -252,9 +237,7 @@ namespace TestRun.backoffice
                 IList<IWebElement> sliderData = driver.FindElements(By.XPath(".//*[@class='curtain__col _pos_4 _state_focused']//ul/li//*[@class='curtain__news-title-inner']"));
                 for (int i = sliderData.Count - 1; i >= 0; i--)
                 {
-                    ClickWebElement(".//*[@id='js-toolbar']/div/div[7]//button", "Кнопка Удалить", "кнопки Удалить");
-                    waitTillElementisDisplayed(driver, ".//*[@class='modal__foot']/div[2]/a", 2);
-                    ClickWebElement(".//*[@class='modal__foot']/div[2]/a", "Кнопка Ок всплывающего окна", "кнопки Ок всплывающего окна");
+                    DeleteButton();
                 }
             }
 
@@ -282,16 +265,7 @@ namespace TestRun.backoffice
             }
             ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Добавить", "кнопки Добавить");
 
-            LogStage("Проверка что баннер виден на сайте");
-            driver.Navigate().GoToUrl("http://fonred5051.dvt24.com/#!/");
-            // Смена языка при необходимости
-            IWebElement langSetElement = FindWebElement(".//*[@class='header__lang-set']");
-            if (langSetElement != null)
-            {
-                LogStage("Смена языка на русский");
-                ClickWebElement(".//*[@class='header__lang-set']", "Кнопка выбора языка", "кнопки выбора языка");
-                ClickWebElement(".//*[@class='header__lang-item']//*[text()='Русский']", "Кнопка выбора русского языка", "кнопки выбора русского языка");
-            }
+            SwitchToWebsiteNewWindow("http://fonred5051.dvt24.com/#!/");
 
             ExecuteJavaScript("window.location.reload()", "Страницы не открылась");
             if (!WebElementExist(".//*[@src='//origin-test.bkfon-resource.ru/Content/Banners/RightBanners/First-deposit_red.jpg']"))
@@ -366,13 +340,7 @@ namespace TestRun.backoffice
             SendKeysToWebElement(".//*[@class='form__row']/label[3]//textarea", "Внимание Внимание", "Поле Анонс", "поля Анонс");
             SendKeysToWebElement(".//*[@class='form__row']/label[4]//textarea", "У нас есть победитель", "Поле Текст", "поля Текст");
             SendKeysToWebElement(".//*[@class='form__row']/div/div[2]//input", "/Content/RegistrationDocumentInstruction/date-chel-1.jpg", "Поле Маленькое изображ", "поля Маленькое изображ");
-            driver.FindElement(By.XPath(".//*[@class='form__row']/div/div[2]//input")).SendKeys(Keys.Backspace);
-            Thread.Sleep(500);
-            driver.FindElement(By.XPath(".//*[@class='form__row']/div/div[2]//input")).SendKeys("g");
             SendKeysToWebElement(".//*[@class='form__row']/div/div[3][@class='form__row']//input", "/Content/RegistrationDocumentInstruction/p_621746.jpg", "Поле Большое изображ", "поля Большое изображ");
-            driver.FindElement(By.XPath(".//*[@class='form__row']/div/div[3][@class='form__row']//input")).SendKeys(Keys.Backspace);
-            Thread.Sleep(500);
-            driver.FindElement(By.XPath(".//*[@class='form__row']/div/div[3][@class='form__row']//input")).SendKeys("g");
 
             LogStage("Заполнение вкладки Общее");
             ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[1]", "Вкладка Общее", "вкладки Общее");
@@ -381,18 +349,7 @@ namespace TestRun.backoffice
             ClickWebElement(".//*[@class='ui__checkbox-item']//input", "Чекбокс Опубликовано", "чекбокса Опубликовано");
             ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Добавить", "кнопки Добавить");
 
-           // SwitchToPreView();
-
-            LogStage("Проверка что все элементы ставки дня отображаются на сайте");
-            driver.Navigate().GoToUrl("http://fonred5051.dvt24.com/#!/");
-            // Смена языка при необходимости
-            IWebElement langSetElement = FindWebElement(".//*[@class='header__lang-set']");
-            if (langSetElement != null)
-            {
-                LogStage("Смена языка на русский");
-                ClickWebElement(".//*[@class='header__lang-set']", "Кнопка выбора языка", "кнопки выбора языка");
-                ClickWebElement(".//*[@class='header__lang-item']//*[text()='Русский']", "Кнопка выбора русского языка", "кнопки выбора русского языка");
-            }
+            SwitchToWebsiteNewWindow("http://fonred5051.dvt24.com/#!/");
 
             waitTillElementisDisplayed(driver, ".//*[text()='100500 тысяч японских йен']", 5);
             ClickWebElement(".//*[@class='top-win__head']/a", "Меню Клуб Победителей", "меню Клуб Победителей");
@@ -429,33 +386,12 @@ namespace TestRun.backoffice
             ClickWebElement(".//*[@class='ui__checkbox-item']//input", "Чекбокс Опубликовано", "чекбокса Опубликовано");
 
             SendKeysToWebElement(".//*[@class='form__row'][1]/label//input", "/Content/CompetitionLogo/fide-rating-logo.png", "Поле Маленький логотип", "поля Маленький логотип");
-            driver.FindElement(By.XPath(".//*[@class='form__row'][1]/label//input")).SendKeys(Keys.Backspace);
-            Thread.Sleep(500);
-            driver.FindElement(By.XPath(".//*[@class='form__row'][1]/label//input")).SendKeys("g");
             SendKeysToWebElement(".//*[@class='form__row'][2]/label//input", "/Content/CompetitionLogo/NHL_logo_lr.png", "Поле Монохромный логотип", "поля Монохромный логотип");
-            driver.FindElement(By.XPath(".//*[@class='form__row'][2]/label//input")).SendKeys(Keys.Backspace);
-            Thread.Sleep(500);
-            driver.FindElement(By.XPath(".//*[@class='form__row'][2]/label//input")).SendKeys("g");
             SendKeysToWebElement(".//*[@class='form__row'][3]/label//input", "/Content/Logo/Competition/australiaOpen.svg", "Поле Большой логотип", "поля Большой логотип");
-            driver.FindElement(By.XPath(".//*[@class='form__row'][3]/label//input")).SendKeys(Keys.Backspace);
-            Thread.Sleep(500);
-            driver.FindElement(By.XPath(".//*[@class='form__row'][3]/label//input")).SendKeys("g");
             SetupVisualSettings();
             ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Добавить", "кнопки Добавить");
 
-            LogStage("Проверка что все элементы ставки дня отображаются на сайте");
-            
-            js.ExecuteScript("window.open();");
-            driver.SwitchTo().Window(driver.WindowHandles[1]);
-            driver.Navigate().GoToUrl("http://fonred5051.dvt24.com/#!/");
-            // Смена языка при необходимости
-            IWebElement langSetElement = FindWebElement(".//*[@class='header__lang-set']");
-            if (langSetElement != null)
-            {
-                LogStage("Смена языка на русский");
-                ClickWebElement(".//*[@class='header__lang-set']", "Кнопка выбора языка", "кнопки выбора языка");
-                ClickWebElement(".//*[@class='header__lang-item']//*[text()='Русский']", "Кнопка выбора русского языка", "кнопки выбора русского языка");
-            }
+            SwitchToWebsiteNewWindow("http://fonred5051.dvt24.com/#!/");
             
             LogStage("Установка настроек по умолчанию");
             ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
@@ -480,9 +416,105 @@ namespace TestRun.backoffice
                 throw new Exception("Не отображается лого в ивентвью");
 
             driver.SwitchTo().Window(driver.WindowHandles[0]);
-            ClickWebElement(".//*[@id='js-toolbar']/div/div[5]//button", "Кнопка Удалить", "кнопки Удалить");
-            waitTillElementisDisplayed(driver, ".//*[@class='modal__foot']/div[2]/a", 2);
-            ClickWebElement(".//*[@class='modal__foot']/div[2]/a", "Кнопка Ок всплывающего окна", "кнопки Ок всплывающего окна");
+            DeleteButton();
+        }
+    }
+    class СontentFaqQuestions : BackOfficeProgram
+    {
+        public static CustomProgram FabricateСontentFaqQuestions()
+        {
+            return new СontentFaqQuestions();
+        }
+
+        public override void Run()
+        {
+            base.Run();
+
+            LogStage("Переход в Частые вопросы");
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            js.ExecuteScript("arguments[0].click()", driver.FindElement(By.XPath(".//*[@href='#/explorer/contentFaq']")));
+
+            LogStage("Создание нового заголовка");
+            ClickWebElement(".//*[@id='js-toolbar']/div[1]/div[2]", "Кнопка Создать вопрос", "кнопки Создать вопрос");
+            SetupVisualSettings();
+            ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[1]", "Вкладка Общее", "вкладки Общее");
+            ClickWebElement(".//*[@class='tabs__content']//*[@class='ui-dropdown__fields']//a", "Дропдаун Тип параграфа", "дропдауна Тип параграфа");
+            ClickWebElement(".//*[@class='ui-dropdown__items']/div[1]", "Строка Заголовок", "строки Заголовок");
+            SendKeysToWebElement(".//*[@class='role-form__inner']/label[2]//textarea", "Тестовый Ответ", "Поле Ответ", "поля Ответ");
+            ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Сохранить", "кнопки Сохранить");
+
+            SwitchToWebsiteNewWindow("http://fonred5051.dvt24.com/#!/faq");
+            WaitForPageLoad();
+            ExecuteJavaScript("window.location.reload()", "Дж скрипт тупит");
+            waitTillElementisDisplayed(driver, ".//*[@class='faq__title']", 5);
+            if (!driver.FindElement(By.XPath(".//*[@class='faq__title']")).Text.Contains("Тестовый Ответ"))
+                throw new Exception("Не поменялся заголовок");
+            driver.Close();
+            driver.SwitchTo().Window(driver.WindowHandles[0]);
+            DeleteButton();
+
+            TextBeforeAndAfterQuestions(2,"перед вопросами","top");
+            TextBeforeAndAfterQuestions(3, "послевопросов", "bottom");
+
+        }
+    }
+    class СontentFaqCategoriesAndQuestions : BackOfficeProgram
+    {
+        public static CustomProgram FabricateСontentFaqCategoriesAndQuestions()
+        {
+            return new СontentFaqCategoriesAndQuestions();
+        }
+
+        public override void Run()
+        {
+            base.Run();
+
+            LogStage("Переход в Частые вопросы");
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            js.ExecuteScript("arguments[0].click()", driver.FindElement(By.XPath(".//*[@href='#/explorer/contentFaq']")));
+
+            LogStage("Создание новой категории");
+            ClickWebElement(".//*[@id='js-toolbar']/div[1]/div[1]", "Кнопка Создать категорию", "кнопки Создать категорию");
+            SetupVisualSettings();
+            ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[1]", "Вкладка Общее", "вкладки Общее");
+            SendKeysToWebElement(".//*[@class='role-form__inner']/label[1]//input", "Тестовая категория", "Поле Заголовок", "поля Заголовок");
+            ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Добавить", "кнопки Добавить");
+            Thread.Sleep(500);
+            LogStage("Создание нового заголовка");
+            ClickWebElement(".//*[@id='js-toolbar']/div[1]/div[2]", "Кнопка Создать вопрос", "кнопки Создать вопрос");
+            SendKeysToWebElement(".//*[@class='role-form__inner']/label[1]//textarea", "Тестовый Вопрос", "Поле Вопрос", "поля Вопрос");
+            SendKeysToWebElement(".//*[@class='role-form__inner']/label[2]//textarea", "Тестовый Ответ", "Поле Ответ", "поля Ответ");
+            LogStage("Добавление ссылки");
+            ClickWebElement(".//*[@class='form-table']//i", "Кнопка добавить ссылку", "кнопки добавить ссылку");
+            SendKeysToWebElement(".//*[@class='form-table__edit-form']/div/label[1]//input", "Яндекс", "Поле Заголовок", "поля Заголовок");
+            SendKeysToWebElement(".//*[@class='form-table__edit-form']/div/label[2]//input", "https://ya.ru", "Поле URL", "поля URL");
+            ClickWebElement(".//*[@class='form__row']/div[1]/a", "Кнопка Применить", "кнопки Применить");
+            ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Сохранить", "кнопки Сохранить");
+            LogStage("Добавление изображения");
+            Thread.Sleep(500);
+            SendKeysToWebElement(".//*[@class='form__row']/label//input", "/Content/Banners/100_000_000_en.jpg", "Поле изображение", "поля изображение");
+            ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Сохранить", "кнопки Сохранить");
+
+            SwitchToWebsiteNewWindow("http://fonred5051.dvt24.com/#!/faq");
+            WaitForPageLoad();
+            ExecuteJavaScript("window.location.reload()", "Дж скрипт тупит");
+            waitTillElementisDisplayed(driver, ".//*[@class='faq__categories-column']/div[last()]/div", 5);
+            ClickWebElement(".//*[@class='faq__categories-column']/div[last()]/div", "Строка с добавленной категорией", "строки с добавленной категорией");
+            waitTillElementisDisplayed(driver, ".//*[@class='markdown__spoiler-title']", 5);
+            ClickWebElement(".//*[@class='markdown__spoiler-title']", "Стрелка тестового вопроса", "стрелки тестового вопроса");
+            waitTillElementisDisplayed(driver, ".//*[@class='markdown__spoiler-content']/div[1]/div[1]", 5);
+            if (!driver.FindElement(By.XPath(".//*[@class='markdown__spoiler-content']/div[1]/div[1]")).Text.Contains("Тестовый Ответ"))
+                throw new Exception("Неверный текст ответа");
+            if(!WebElementExist(".//*[@class='faq__image-inner']"))
+                throw new Exception("Нет картинки в ответе");
+            if (!WebElementExist(".//*[@class='markdown__spoiler-content']//*[@class='faq__links']"))
+                throw new Exception("Нет ссылки в ответе");
+
+            driver.Close();
+            driver.SwitchTo().Window(driver.WindowHandles[0]);
+            DeleteButton();
+            Thread.Sleep(1000);
+            DeleteButton();
         }
     }
 }
