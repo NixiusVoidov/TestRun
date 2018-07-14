@@ -190,7 +190,8 @@ namespace TestRun
 
         static public void SendReport(ProgramReport report)
         {
-            PerformPostRequest(SendReportURL(), JsonConvert.SerializeObject(report));
+            string responseText = PerformPostRequest(SendReportURL(), JsonConvert.SerializeObject(report));
+            Console.WriteLine("Результат отправки отчета: \n {0}", responseText);
         }
     }
 

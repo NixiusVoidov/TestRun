@@ -173,13 +173,13 @@ namespace TestRun
             {
                 TestTaskResponseBody responsedTask = ProjectManagerWebClient.RequestTestTask();
                 if (responsedTask == null)
-                    Thread.Sleep(20000);
+                    Thread.Sleep(5000);
                 else
                     TryExecuteTask(responsedTask);
             }
             catch (Exception)
             {
-                Thread.Sleep(60000);
+                Thread.Sleep(10000);
             }
         }
 
