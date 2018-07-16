@@ -260,8 +260,12 @@ namespace TestRun
             if (inputValue == 11 || inputValue == 12 || inputValue == 14 || inputValue == 5)
             {
                 SendKeysToWebElement(".//*[@name='THEDESCRIPTIONOFTHEPROBLEM']", "Test", "Поле описания проблемы", "поля описания проблемы");
+                waitTillElementisDisplayed(driver, ".//*[@name='AMOUNTRUB']", 5);
                 SendKeysToWebElement(".//*[@name='AMOUNTRUB']", "2409", "Поле Суммы(руб)", "поля Суммы(руб)");
+                waitTillElementisDisplayed(driver, "//*[@class='ui__label']/input", 5);
                 SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg","Поле Прикрепления файла", "поля Прикрепления файла");
+                waitTillElementisDisplayed(driver, ".//*[@class='toolbar__item account-form__button']/a/div", 5);
+                Thread.Sleep(1000);
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;
             }
@@ -383,6 +387,7 @@ namespace TestRun
         protected void CheckRequestFilter(string requestName)
         {
             LogStage("Проверка сообщения о создании заявки");
+            waitTillElementisDisplayed(driver, ".//*[@class='account-form__message _kind-top-notice _style-box']", 5);
             if (!WebElementExist(".//*[@class='account-form__message _kind-top-notice _style-box']"))
                 throw new Exception("Нет сообщения о создании заявки");
             IWebElement createResult = GetWebElement(".//*[@class='account-form__message _kind-top-notice _style-box']", "Нет сообщения о создании заявки");
@@ -391,9 +396,10 @@ namespace TestRun
             ClickWebElement(".//*[@class='toolbar__item account-form__button']/a//span", "Кнопка Закрыть", "кнопки Закрыть");
 
             LogStage("Проверка работы фильтра по статусу");
+            Thread.Sleep(500);
             ClickWebElement(".//*[@class='account-requests__form']//*[@class='ui__label']", "Кнопка разворота меню фильтра", "кнопки разворота меню фильтра");
             ClickWebElement(".//*[@class='ui-dropdown__items']/div[2]", "Строка Отвеченный", "строки Отвеченный");
-            ClickWebElement(".//*[@class='ui-dropdown__items']/div[3]", "Строка В Облработке", "строки В Облработке");
+            ClickWebElement(".//*[@class='ui-dropdown__items']/div[3]", "Строка В Обработке", "строки В Обработке");
             ClickWebElement(".//*[@class='ui__field-inner']//*[@class='toolbar__icon _caret-up']", "Стрелка фильтра по статусу", "стрелки фильтра по статусу");
             IList<IWebElement> gridNumber = driver.FindElements(By.XPath(".//*[@class='wrap']")); //все строки
             if (gridNumber.Count < 2)
@@ -404,6 +410,7 @@ namespace TestRun
             ClickWebElement(".//*[@class='ui-dropdown__items']/div[2]", "Строка Отвеченный", "строки Отвеченный");
             ClickWebElement(".//*[@class='ui-dropdown__items']/div[3]", "Строка В Обработке", "строки В Обработке");
             SendKeysToWebElement(".//*[@class='account-requests__form']//*[@class='ui__field-inner']//input", createResultTextConvert, "Поле Номер запроса", "поля Номер запроса");
+            Thread.Sleep(500);
             IList<IWebElement> myRequest = driver.FindElements(By.XPath(".//*[@class='wrap']/div/div[1]"));
             if (myRequest.Count != 1)
                 throw new Exception("Есть два одинаковых номера запроса");
@@ -415,7 +422,9 @@ namespace TestRun
 
             LogStage("Закрытие готовой заявки");
             ClickWebElement(".//*[@class='requests-list__data']/div[1]", "Строка с последней созданной заявкой", "строки с последней созданной заявкой");
+            waitTillElementisDisplayed(driver, ".//*[@class='request-details']//*[@class='toolbar__item']", 5);
             ClickWebElement(".//*[@class='request-details']//*[@class='toolbar__item']", "Кнопка закрыть заявку", "кнопки закрыть заявку");
+            Thread.Sleep(1000);
             IWebElement requestCell = GetWebElement(".//*[@class='requests-list__data']/div[1]/div", "Нет строк с заявками");
             var requestCellClass = requestCell.GetAttribute("class");
             if (requestCellClass.Contains("new"))
@@ -429,6 +438,7 @@ namespace TestRun
             ClickWebElement(".//*[@class='requests-list__data']/div[1]", "Строка с последней созданной заявкой", "строки с последней созданной заявкой");
             SendKeysToWebElement(".//*[@class='ui__field _message']", "Test", "Поле для ввода нового сообщения", "поля для ввода нового сообщения");
             ClickWebElement(".//*[@class='request-details__form-wrap']//button", "Кнопка отправки нового сообщения", "кнопки отправки нового сообщения");
+            Thread.Sleep(2500);
             IWebElement newStatus = GetWebElement(".//*[@class='requests-list__data']/div[1]//*[@class='column column-4']", "Нет колонки Статус");
             string newStatussText = newStatus.Text;
             if (newStatussText != "Неотвеченный")

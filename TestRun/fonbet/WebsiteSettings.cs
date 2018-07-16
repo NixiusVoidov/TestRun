@@ -197,16 +197,18 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
             ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
 
-            LogStage("Установка чекбоксов меню Вид");
+           // LogStage("Установка чекбоксов меню Вид");
+            LogStartAction("Установка чекбоксов меню Вид");
             for (var i = 1; i <= 7; i++)
             {
                 string nameTofind = string.Format("//*[@class='settings__section'][5]/div/div[{0}]//input", i);
                 var element = driver.FindElement(By.XPath(nameTofind));
                 element.Click();
             }
+            LogActionSuccess();
 
             LogStage("Перевод меню в отображение слева");
-            ClickWebElement(".//*[@class='settings__section']//span[text()='слева']/../input", "Радиобатон отображения меню слева", "радиобатона отображения меню слева");
+            ClickWebElement(".//*[@class='settings__section']//span[text()='Слева']/../input", "Радиобатон отображения меню слева", "радиобатона отображения меню слева");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
 
             LogStage("Проверка отображения номеров");
@@ -219,11 +221,11 @@ namespace TestRun.fonbet
             if (couponLableClass.Contains("style_colored"))
                 throw new Exception("Не работает отображения статусов купонов цветом");
 
-            LogStage("Проверка компактного режима отображения купонов");
-            IWebElement couponWide = GetWebElement(".//*[@class='page__right']/div[1]", "Пропала лента купонов");
+            LogStage("Проверка режима ширины ленты купонов");
+            IWebElement couponWide = GetWebElement(".//*[@id='coupons__inner']", "Пропала лента купонов");
             var couponWideClass = couponWide.GetAttribute("class");
-            if (!couponWideClass.Contains("type_compact"))
-                throw new Exception("Не работает компактный режим отображения купонов");
+            if (couponWideClass.Contains("type_wide"))
+                throw new Exception("Не работает узкая лента купонов");
 
             LogStage("Проверка компактного отображения меню в личном кабинете");
             ClickWebElement(".//*[@class='header__login-item'][1]", "Имя пользователя в шапке", "имени пользователя в шапке");
@@ -260,6 +262,7 @@ namespace TestRun.fonbet
             allBets[4].Click();
             allBets[5].Click();
             ClickWebElement(".//*[@class='coupons']/div[1]//*[@class='coupon__foot-btn']", "Кнопка заключить пари", "кнопки заключить пари");
+            waitTillElementisDisplayed(driver, ".//*[@class='coupons__list-inner']/div[1]/article[1]/div/i", 5);
             IWebElement couponArrow = GetWebElement(".//*[@class='coupons__list-inner']/div[1]/article[1]/div/i", "Нет стрелки разворота у купона");
             var couponArrowClass = couponArrow.GetAttribute("class");
             if (!couponArrowClass.Contains("expanded"))
@@ -292,9 +295,10 @@ namespace TestRun.fonbet
             Thread.Sleep(62000);
             LogStage("Проверка выхода из сессии");
             ClickWebElement(".//*[@class='session-dialog__buttons']/div[1]", "Кнопка Выход в диалоговом окне", "кнопки  Выход в диалоговом окне");
+            waitTillElementisDisplayed(driver, ".//*[@class='header__login-head']/a", 5);
             IWebElement loginStatus = GetWebElement(".//*[@class='header__login-head']/a", "Нет кнопки Войти");
-            string loginStatusText = loginStatus.Text.ToLower();
-            if (!loginStatusText.Contains("войти"))
+            string loginStatusText = loginStatus.GetAttribute("class");
+            if (!loginStatusText.Contains("header__link"))
                 throw new Exception("Кнопка называется иначе чем Войти");
         }
     }
@@ -319,7 +323,7 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
             ClickWebElement(".//*[@class='settings__rows']/div[1]//input", "Чекбокс отображать номера событий", "чекбокса отображать номера событий");
             ClickWebElement(".//*[@class='settings__rows']/div[2]//input", "Чекбокс компактный режим отображения подвала", "чекбокса компактный режим отображения подвала");
-            ClickWebElement(".//*[@class='settings__section']//span[text()='слева']/../input", "Радиобатон отображения меню слева", "радиобатона отображения меню слева");
+            ClickWebElement(".//*[@class='settings__section']//span[text()='Слева']/../input", "Радиобатон отображения меню слева", "радиобатона отображения меню слева");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
 
             LogStage("Проверка отображения номеров");
@@ -334,7 +338,7 @@ namespace TestRun.fonbet
                 throw new Exception("Не работает компактный режим отображения подвала сайта");
 
             LogStage("Проверка меню слева");
-            IWebElement menuBar = GetWebElement(".//*[@class='page__main']/div/div[1]", "Нет фильтр меню");
+            IWebElement menuBar = GetWebElement(".//*[@class='line-filter-layout__menu--3YfDq']/div", "Нет фильтр меню");
             var menuBarClass = menuBar.GetAttribute("class");
             if (!menuBarClass.Contains("menu-left"))
                 throw new Exception("Не работает отображение меню слева");
@@ -358,7 +362,7 @@ namespace TestRun.fonbet
             LogStage("Проверка узкой ленты купонов");
             ClickWebElement(".//*[@class='coupons-toolbar']/div[1]", "Меню отображения списка ставок", "меню отображения списка ставок");
             ClickWebElement(".//*[@id='popupLineMenu']/li[1]", "Кнопка узкая лента купонов", "кнопки узкая ленты купонов");
-            IWebElement couponMenu = GetWebElement(".//*[@class='page__right']/div[1]", "Нет отображения всех купонов");
+            IWebElement couponMenu = GetWebElement(".//*[@id='coupons__inner']", "Нет отображения всех купонов");
             var couponMenuClass = couponMenu.GetAttribute("class");
             if (couponMenuClass.Contains("wide"))
                 throw new Exception("Не работает узкая лента купонов");
@@ -425,9 +429,9 @@ namespace TestRun.fonbet
                 LogStage("Проверка открытия/закрытия купона по событиям");
                 ClickWebElement(".//*[@class='coupons__list-inner']//article[1]/div[1]/a", "Кнопка Копировать купон", "кнопки Копировать купон");
                 IList<IWebElement> all = driver.FindElements(By.XPath("//*[@class='coupons__list-inner'][1]//article[1]/div[2]//tbody//td[1]"));
-                foreach (IWebElement element in all)
+                for(int i=0;i<all.Count;i++)
                 {
-                    element.Click();
+                    driver.FindElement(By.XPath("//*[@class='coupons__list-inner'][1]//article[1]//tbody[1]/tr/td[1]")).Click();
                 }
                 if (WebElementExist(".//*[@class='coupon__foot-btn']"))
                     throw new Exception("Не работает кнопка закрытия купона по событиям");

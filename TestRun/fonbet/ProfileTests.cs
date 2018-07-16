@@ -24,7 +24,7 @@ namespace TestRun.fonbet
             Dictionary<string,string> menu = new Dictionary<string,string>()
             {
                 {"profile", "Мой профиль" },
-                {"deposit","Пополнение баланса" },
+                {"deposit","Пополнение счёта" },
                 {"withdrawal","Получение выигрыша" },
                 {"history","История" },
             };
@@ -145,6 +145,7 @@ namespace TestRun.fonbet
                 string nameTofind = string.Format(".//*[@class='ui__checkboxes']/div[{0}]//*[@class='ui__checkbox-text']/span", i);
                 var element = driver.FindElement(By.XPath(nameTofind));
                 element.Click();
+                Thread.Sleep(200);
             }
 
             LogStage("Проверка работы всех фильтров в столбце \"Тип операции\"");
@@ -167,9 +168,9 @@ namespace TestRun.fonbet
             LogStage("Проверка развертки конкретной операции");
             ClickWebElement(".//*[@class='ui__checkbox-text']/*[text()='Заключено пари']", "Чекбокс заключено пари", "чекбокса заключено пари");
             ClickWebElement(".//*[@class='wrap'][1]//*[@class='operation-row _odd']/div[7]", "Стрелка разворота операции", "Стрелка разворота операции");
-            IWebElement betMark = GetWebElement(".//*[@class='bet-details _odd']//table//*[text()='Коэфф']", "Не отображается коэффициент в развернутом гриде");
+            IWebElement betMark = GetWebElement(".//*[@class='bet-details _odd']//table//*[text()='Коэффициент']", "Не отображается коэффициент в развернутом гриде");
             string betMarkText = betMark.Text;
-            if (!betMarkText.Equals("Коэфф"))
+            if (!betMarkText.Equals("Коэффициент"))
                 throw new Exception("Нет коэфф в развернутой операции");
         }
     }

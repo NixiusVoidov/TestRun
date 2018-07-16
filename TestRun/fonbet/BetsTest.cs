@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace TestRun.fonbet
 {
@@ -32,6 +33,8 @@ namespace TestRun.fonbet
                     throw new Exception("Не корректная продажа ставки");
                 }
             }
+            else LogHint("Нету ставок на продажу выше исходного");
+          
 
             SwitchPageToBets();
 
@@ -45,6 +48,7 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='coupons']/div[1]//*[@class='coupon__info-item-inner']/i", "Иконка Калькулятор", "иконка Калькулятор");
 
             LogStage("Проверка калькулятора");
+            Thread.Sleep(2000);
             IWebElement possibleWin = GetWebElement(".//*[@class='calculator__head']/div[3]", "Не отображается возможный выигрыш в калькуляторе");
             IWebElement firstBetfirstEv = GetWebElement("//*[@class='calculator__table _right']/tbody/tr[1]/td[1]", "Не отображается первая ставка первого события");
             IWebElement firstBetSecEv = GetWebElement("//*[@class='calculator__table _right']/tbody/tr[2]/td[1]", "Не отображается первая ставка второго события");
@@ -68,8 +72,8 @@ namespace TestRun.fonbet
             string finalResult = rgx.Replace(possibleWinText, replacement);
             double finalSum = Convert.ToDouble(finalResult);
 
-            if (Convert.ToDouble(firstBetfirstEvText, CultureInfo.GetCultureInfo("en-US").NumberFormat) *
-                Convert.ToDouble(firstBetSecEvText, CultureInfo.GetCultureInfo("en-US").NumberFormat) == Math.Round(
+            if (Math.Round(Convert.ToDouble(firstBetfirstEvText, CultureInfo.GetCultureInfo("en-US").NumberFormat) *
+                Convert.ToDouble(firstBetSecEvText, CultureInfo.GetCultureInfo("en-US").NumberFormat)) == Math.Round(
                     Convert.ToDouble(
                         driver.FindElement(By.XPath("//*[@class='calculator__table _right']/tbody/tr[6]/td[1]")).Text,
                         CultureInfo.GetCultureInfo("en-US").NumberFormat)))
