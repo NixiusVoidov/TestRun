@@ -211,17 +211,19 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='settings__section']//span[text()='Слева']/../input", "Радиобатон отображения меню слева", "радиобатона отображения меню слева");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
 
-            LogStage("Проверка отображения номеров");
+            LogStartAction("Проверка отображения номеров");
             if (!WebElementExist(".//*[@class='table__event-number']"))
                 throw new Exception("Не работает отображение номеров событий");
+            LogActionSuccess();
 
-            LogStage("Проверка отображения статусов купонов цветом");
+            LogStartAction("Проверка отображения статусов купонов цветом");
             IWebElement couponLable = GetWebElement(".//*[@class='coupon__info-head']/div[3]", "Нет результата купона");
             var couponLableClass = couponLable.GetAttribute("class");
             if (couponLableClass.Contains("style_colored"))
                 throw new Exception("Не работает отображения статусов купонов цветом");
+            LogActionSuccess();
 
-            LogStage("Проверка режима ширины ленты купонов");
+            LogStartAction("Проверка режима ширины ленты купонов");
             IWebElement couponWide = GetWebElement(".//*[@id='coupons__inner']", "Пропала лента купонов");
             var couponWideClass = couponWide.GetAttribute("class");
             if (couponWideClass.Contains("type_wide"))
@@ -235,14 +237,15 @@ namespace TestRun.fonbet
             if (!accountSidebarClass.Contains("compact"))
                 throw new Exception("Не работает компактный режим отображения меню в личном кабинете");
 
-            LogStage("Проверка компактного режима отображения подвала сайта");
+            LogStartAction("Проверка компактного режима отображения подвала сайта");
             IWebElement footerSidebar = GetWebElement(".//*[@id='footerContainer']//footer/div[1]", "Не сворачивается футер");
             var footerSidebarClass = footerSidebar.GetAttribute("class");
             if (!footerSidebarClass.Contains("compact"))
                 throw new Exception("Не работает компактный режим отображения подвала сайта");
 
-            LogStage("Проверка автосворачивания элементов в меню событий");
+            
             SwitchPageToBets();
+            LogStage("Проверка автосворачивания элементов в меню событий");
             ClickWebElement(".//*[@class='list-view-new__table-body']/tr[4]//a", "Строка ФУТБОЛ в меню спорта слева", "строки ФУТБОЛ в меню спорта слева");
             IWebElement footballArrow = GetWebElement(".//*[@class='list-view-new__table-body']/tr[4]//*[@class='event-v-list__cell-overlay']/div", "Нет стрекли разворота вида спорта");
             var footballArrowClass = footballArrow.GetAttribute("class");
@@ -326,18 +329,18 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='settings__section']//span[text()='Слева']/../input", "Радиобатон отображения меню слева", "радиобатона отображения меню слева");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
 
-            LogStage("Проверка отображения номеров");
             SwitchPageToBets();
+            LogStartAction("Проверка отображения номеров");
             if (!WebElementExist(".//*[@class='table__event-number']"))
                 throw new Exception("Не работает отображение номеров событий");
 
-            LogStage("Проверка сворачивание футера");
+            LogStartAction("Проверка сворачивание футера");
             IWebElement footerSidebar = GetWebElement(".//*[@id='footerContainer']//footer/div[1]", "Не сворачивается футер");
             var footerSidebarClass = footerSidebar.GetAttribute("class");
             if (!footerSidebarClass.Contains("compact"))
                 throw new Exception("Не работает компактный режим отображения подвала сайта");
 
-            LogStage("Проверка меню слева");
+            LogStartAction("Проверка меню слева");
             IWebElement menuBar = GetWebElement(".//*[@class='line-filter-layout__menu--3YfDq']/div", "Нет фильтр меню");
             var menuBarClass = menuBar.GetAttribute("class");
             if (!menuBarClass.Contains("menu-left"))
@@ -385,7 +388,7 @@ namespace TestRun.fonbet
             }
             IList<IWebElement> countArrow = driver.FindElements(By.XPath(".//*[@class='coupon__head _style_gray']/i"));
             if(betCount != countArrow.Count)
-                throw new Exception("Не кореектное кол-во стрелок у купонов");
+                throw new Exception("Не корректное кол-во стрелок у купонов");
             LogActionSuccess();
 
             IWebElement arrowMenu = GetWebElement(".//*[@class='coupon__head _style_gray']/i", "Нет стрелок у купонов");
@@ -437,7 +440,7 @@ namespace TestRun.fonbet
                     throw new Exception("Не работает кнопка закрытия купона по событиям");
             }
 
-            LogStage("Проверка быстрой ставки и копирования купонов"); 
+            LogStartAction("Проверка быстрой ставки и копирования купонов"); 
             ExecuteJavaScript("return (function(){var e = document.getElementsByClassName('oneClickSwitch off')[0];var hasOff = e.classList.contains('off');e.click();var hasOn = e.classList.contains('on');return hasOn == hasOff;})()", "Быстрая ставка не работает");
             if (WebElementExist(".//*[@class='coupons__list-inner']//article/div[1]/a"))
                 throw new Exception("Кнопка копирования ставки не исчезает при быстрой ставке");

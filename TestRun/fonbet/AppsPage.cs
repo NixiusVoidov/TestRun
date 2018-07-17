@@ -15,7 +15,7 @@ namespace TestRun.fonbet
         {
             base.Run();
 
-            LogStage("Переход в Приложения");
+            LogStage("Переход на страницу Приложения");
             ClickWebElement(".//*[@href='/#!/apps']", "Вкладка \"Приложения\"", "вкладки \"Приложения\"");
           
 
@@ -29,19 +29,21 @@ namespace TestRun.fonbet
            
             foreach (var key in data)
             {
-                LogStage("Проверка текстовых блоков");
+                LogStartAction("Проверка текстовых блоков "+ key);
                 string titleApp = String.Format(".//*[@id='{0}']//h2", key);
                 string titleAppText = driver.FindElement(By.XPath(titleApp)).Text.ToLower();
                 if(!titleAppText.Contains("приложение для " + key + ""))
                     throw new Exception("Отсутствует заголовок приложение для " + key + "");
+               
 
-                LogStage("Проверка графических блоков");
+                LogStartAction("Проверка графических блоков " + key);
                 string appBlock = String.Format(".//*[@id='{0}']//*[@class='appPage__os-body-wrap']/div[1]", key);
                 var appBlockClass = driver.FindElement(By.XPath(appBlock)).GetAttribute("class");
                 if(appBlockClass.Contains("_hidden"))
                     throw new Exception("По умолчанию стоит не тот переключатель");
 
-                LogStage("Проверка работы переключателя");
+
+                LogStartAction("Проверка работы переключателя " + key);
                 string switcher = String.Format(".//*[@id='{0}']//*[@class='appPage__head-switch']/span[2]", key);
                 if (WebElementExist(switcher)) //переключатель айфон/айпад или смартфон/планшет
                 {
@@ -56,6 +58,7 @@ namespace TestRun.fonbet
             string macTitleText = macTitle.Text.ToLower();
             if (!macTitleText.Contains("приложение для macos"))
                 throw new Exception("Отсутствует заголовок приложение для приложение для macos");
+           
         }
     }
 }

@@ -53,7 +53,7 @@ namespace TestRun
             CustomProgram.Register("fonbet_broadcast", fonbet.BroadCastCheck.FabricateBroadCastCheck); //Проверка отображения всех видов трансляций лайф событий 
             CustomProgram.Register("fonbet_atleasttwo", fonbet.AtLeastTwo.FabricateAtLeastTwo); //Проверка правильности работы ставки "Система 2/3"
             CustomProgram.Register("fonbet_correctbetshowing", fonbet.CorrectBetsShowing.FabricateCorrectBetsShowing); //Проверка соответствия отображения типа ставки в таблице событий и в ленте купонов (например поб 1, Ничья, Тотал..)
-            CustomProgram.Register("fonbet_appcheking", fonbet.AppChecking.FabricateAppChecking); //Проверка правильного отображения и работы функционала во вкладке "Приложения"
+            CustomProgram.Register("fonbet_appchecking", fonbet.AppChecking.FabricateAppChecking); //Проверка правильного отображения и работы функционала во вкладке "Приложения"
             CustomProgram.Register("fonbet_freebet", fonbet.FreeBet.FabricateFreeBet); //Проврека правильности работы со ставкой "Фрибет"
             CustomProgram.Register("fonbet_howtoplay", fonbet.HowToPlay.FabricateHowToPlay); //Проверка работы функционала модуля "Как делать ставки" на главной странице (видно только для неавторизованных пользователей)
             CustomProgram.Register("fonbet_slider", fonbet.Slider.FabricateSlider); //Проверка работы функционала слайдера на главной странице (видно только для неавторизованных пользователей)
