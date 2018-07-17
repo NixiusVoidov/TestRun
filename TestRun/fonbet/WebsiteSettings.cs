@@ -199,7 +199,7 @@ namespace TestRun.fonbet
 
            // LogStage("Установка чекбоксов меню Вид");
             LogStartAction("Установка чекбоксов меню Вид");
-            for (var i = 1; i <= 7; i++)
+            for (var i = 1; i <= 8; i++)
             {
                 string nameTofind = string.Format("//*[@class='settings__section'][5]/div/div[{0}]//input", i);
                 var element = driver.FindElement(By.XPath(nameTofind));
@@ -270,6 +270,10 @@ namespace TestRun.fonbet
             var couponArrowClass = couponArrow.GetAttribute("class");
             if (!couponArrowClass.Contains("expanded"))
                 throw new Exception("Не работает автосворачивание купонов");
+
+            LogStartAction("Проверка скрытия принятых купонов");
+            if (WebElementExist(".//*[@class='coupon__info']//*[text()='Принято']"))
+                throw new Exception("Не работает скрытие принятых купонов");
         }
 
     }
@@ -398,7 +402,7 @@ namespace TestRun.fonbet
 
             LogStage("Проверка функции Свернуть все купоны");
             ClickWebElement(".//*[@class='coupons-toolbar']/div[1]", "Меню отображения списка ставок", "меню отображения списка ставок");
-            ClickWebElement(".//*[@id='popupLineMenu']/li[3]", "Кнопка Свернуть все купоны", "кнопки Свернуть все купоны");
+            ClickWebElement(".//*[@id='popupLineMenu']/li[4]", "Кнопка Свернуть все купоны", "кнопки Свернуть все купоны");
             IWebElement menuArrow = GetWebElement(".//*[@class='coupon__head _style_gray']/i", "Нет стрелок у купонов");
             var menuArrowClass = menuArrow.GetAttribute("class");
             if (!menuArrowClass.Contains("expanded"))
@@ -406,20 +410,33 @@ namespace TestRun.fonbet
 
             LogStage("Проверка вкладки Нерасчитанные");
             ClickWebElement(".//*[@class='coupons-toolbar']/div[1]", "Меню отображения списка ставок", "меню отображения списка ставок");
-            ClickWebElement(".//*[@id='popupLineMenu']/li[2]", "Кнопка Развернуть все купоны", "кнопки Развернуть все купоны");
-            ClickWebElement(".//*[@class='coupons-toolbar']/div[3]", "Меню \"Нерасчитанные\"", "меню \"Нерасчитанные\"");
-            IList<IWebElement> list = driver.FindElements(By.XPath(".//*[@class='coupon _type_list']")); //общее кол-во купонов
-            IList<IWebElement> listAccept = driver.FindElements(By.XPath(".//*[@class='coupon__info-head']/div[3]")); //Ставка принято
+           
+                ClickWebElement(".//*[@id='popupLineMenu']/li[3]", "Кнопка Развернуть все купоны",
+                    "кнопки Развернуть все купоны");
+                ClickWebElement(".//*[@class='coupons-toolbar']/div[3]", "Меню \"Нерасчитанные\"",
+                    "меню \"Нерасчитанные\"");
+            if (WebElementExist(".//*[@class='coupon _type_list']"))
+            {
+                IList<IWebElement>
+                    list = driver.FindElements(By.XPath(".//*[@class='coupon _type_list']")); //общее кол-во купонов
+                IList<IWebElement>
+                    listAccept =
+                        driver.FindElements(By.XPath(".//*[@class='coupon__info-head']/div[3]")); //Ставка принято
 
-            if (list.Count != listAccept.Count)
-                throw new Exception("Проблемы с фильтром \"Нерассчитанные\"");
+                if (list.Count != listAccept.Count)
+                    throw new Exception("Проблемы с фильтром \"Нерассчитанные\"");
+            }
+            else LogHint("Нерасчитанных купонов нет");
 
             LogStage("Проверка вкладки На продажу");
+            if (WebElementExist(".//*[@class='coupon _type_list']")) { 
             ClickWebElement(".//*[@class='coupons-toolbar']/div[4]", "Меню \"На продажу\"", "меню \"На продажу\"");
             IList<IWebElement> grid = driver.FindElements(By.XPath(".//*[@class='coupon _type_list']")); //общее кол-во купонов
             IList<IWebElement> gridSell = driver.FindElements(By.XPath(".//*[@class='coupon__sell-button-area']")); //купоны которые можно продать
             if (grid.Count != gridSell.Count)
                 throw new Exception("Проблемы с фильтром \"На продажу\"");
+            }
+            else LogHint("Купонов на продажу нет");
 
             LogStage("Проверка открытия/закрытия купона целиком");
             if (!WebElementExist(".//*[@class='coupon__content-empty']")) // если купоны существуют

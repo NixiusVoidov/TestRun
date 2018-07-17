@@ -555,7 +555,7 @@ namespace TestRun
             if (rejectValue == "14")
                 errorText = "Исчерпан лимит на количество изменений адреса электронной почты";
             if (rejectValue == "13")
-                errorText = "Адрес электронной почты уже подтверждён";
+                errorText = "Адрес электронной почты уже подтвержден";
             if (rejectValue == "12")
                 errorText = "Адрес электронной почты занят";
 
@@ -570,7 +570,7 @@ namespace TestRun
         }
 
         // Метод принимает на вход  ожидаемый номер ошибки и почту и проверяет правильность работы функции подтверждения email по тестовому сценарию на тестовых данных
-        protected void SendEmailCodeChecker(string value, string emailValue)
+        protected void SendEmailCodeChecker(string value, string smsValue)
         {
             string errorText = "";
             if (value == "10")
@@ -578,8 +578,11 @@ namespace TestRun
             if (value == "1")
                 errorText = "Внутренняя ошибка";
             driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
-            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", emailValue, "Поле email", "поля email");
+            Thread.Sleep(1000);
+            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", smsValue, "Поле Код подтверждения", "поля Код подтверждения");
+            Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки отправить");
+            waitTillElementisDisplayed(driver, ".//*[@class='account-error__actions']//span", 5);
             var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
             if (!errorMessage.Text.Contains(errorText))
                 throw new Exception("Неверный текст ошибки");

@@ -313,10 +313,13 @@ namespace TestRun.fonbet
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "4@dev.dev", "Поле email", "поля email");
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
             driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
-            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "1234", "Поле email", "поля email");
+            Thread.Sleep(1000);
+            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "1234", "Поле ввода кода", "поля ввода кода");
+            Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки отправить");
+            waitTillElementisDisplayed(driver, ".//*[@classid='account-error__btn-inner']//span", 5);
             var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-            if (!errorMessage.Text.Contains("E-mail успешно подверждён"))
+            if (!errorMessage.Text.Contains("Поздравляем! Email-адрес подтвержден."))
                 throw new Exception("Неверный текст ошибки");
             ClickWebElement(".//*[@classid='account-error__btn-inner']//span", "Кнопка Вернуться к профилю", "кнопки Вернуться к профилю");
             var mainTab = GetWebElement(".//*[@class='account-tabs']/a[1]", "Нет вкладки Основные данные");
