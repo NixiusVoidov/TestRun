@@ -106,7 +106,7 @@ namespace TestRun
             if (driver != null)
             {
                 LogStartAction("Закрытие браузера");
-               // driver.Quit();
+                driver.Quit();
                 LogActionSuccess();
             }
             base.AfterRun();
