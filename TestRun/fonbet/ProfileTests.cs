@@ -236,23 +236,29 @@ namespace TestRun.fonbet
         public override void Run()
         {
             base.Run();
-
-            RejectPwdChecker("12", "000000001");
-            RejectPwdChecker("10", "000000002");
-            RejectPwdChecker("4", "000000003");
-            RejectPwdChecker("1", "000000004");
+           
+            RejectPwdChecker("000000001", "0","12");
+            RejectPwdChecker("000000002", "0","10");
+            RejectPwdChecker("000000003", "0","4");
+            RejectPwdChecker("000000004", "0","1");
 
             LogStage("Переход на страницу восстановление пароля");
             ClickWebElement(".//*[@href='/#!/account/restore-password']", "Кнопка Забыли пароль", "кнопки забыли пароль");
 
             LogStage("Проверка sendCode по тестовому сценарию на error 10");
+            waitTillElementisDisplayed(driver, "//*[@class='toolbar__item']//button", 5);
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[2]//input", "000000005", "Поле номер телефона", "поля номер телефона");
-            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[3]//input", "11", "Поле капча", "поля капчи");
+            Thread.Sleep(500);
+            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[3]//input", "1", "Поле капча", "поля капчи");
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
+            waitTillElementisDisplayed(driver, ".//*[@class='toolbar__item']//button", 5);
+            Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='ui__field']", "123123", "Поле Код подтверждения", "поля Код подтверждения");
+            Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
-            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-            if (!errorMessage.Text.Contains("Неверный код подтверждения"))
+            waitTillElementisDisplayed(driver, ".//*[@id='restore-password-error']", 5);
+            var errorMessage = GetWebElement(".//*[@id='restore-password-error']", "Нет сообщения об ошибке");
+            if (!errorMessage.GetAttribute("data-errorcode").Equals("10"))
                 throw new Exception("Неверный текст ошибки");
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
 
@@ -260,27 +266,36 @@ namespace TestRun.fonbet
             driver.FindElement(By.XPath(".//*[@class='ui__field']")).Clear();
             SendKeysToWebElement(".//*[@class='ui__field']", "123456", "Поле Код подтверждения", "поля Код подтверждения");
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
+            waitTillElementisDisplayed(driver, ".//*[@class='change-password__form-inner']/div/div[1]//input", 5);
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[1]//input", "1234567Q", "Поле Новый пароль", "поля Новый пароль");
+            Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[2]//input", "1234567Q", "Поле Повторите новый пароль", "поля Повторите новый пароль");
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
-            var errorText = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-            if (!errorText.Text.Contains("В процессе регистрации произошла неожиданная ошибка"))
+            var errorText = GetWebElement(".//*[@id='restore-password-error']", "Нет текста ошибки");
+            if (!errorText.GetAttribute("data-errorcode").Equals("0") && errorText.GetAttribute("data-rejectioncode").Equals("1"))
                 throw new Exception("Неверный текст ошибки");
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
 
             LogStage("Проверка sendPassword на complete");
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[2]//input", "000000005", "Поле номер телефона", "поля номер телефона");
-            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[3]//input", "11", "Поле капча", "поля капчи");
+            Thread.Sleep(500);
+            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[3]//input", "1", "Поле капча", "поля капчи");
+            Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
+            Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='ui__field']", "123456", "Поле Код подтверждения", "поля Код подтверждения");
+            Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
+            Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[1]//input", "!23qweQWE", "Поле Новый пароль", "поля Новый пароль");
+            Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[2]//input", "!23qweQWE", "Поле Повторите новый пароль", "поля Повторите новый пароль");
+            Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
             var message = GetWebElement(".//*[@class='account-error__title']", "Нет title ошибки");
             if (!WebElementExist(".//*[@class='account__content']//span"))
                 throw new Exception("Нет кнопки \"Войти на сайт\"");
-            if (!message.Text.Contains("Пароль успешно изменён"))
+            if (!message.Text.Contains("Пароль успешно изменен."))
                 throw new Exception("Тестовое восстановление пароля не удалось");
 
         }

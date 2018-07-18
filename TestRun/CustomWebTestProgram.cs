@@ -106,7 +106,7 @@ namespace TestRun
             if (driver != null)
             {
                 LogStartAction("Закрытие браузера");
-                driver.Quit();
+               // driver.Quit();
                 LogActionSuccess();
             }
             base.AfterRun();
@@ -182,6 +182,7 @@ namespace TestRun
                 LogStartAction(String.Format("Ввод \"{0}\" в {1}", keys, elementCaptionInNominative));
                 IWebElement element = driver.FindElement(By.XPath(xPath));
                 element.SendKeys(keys);
+                
                 LogActionSuccess();
             }
             catch (NoSuchElementException)

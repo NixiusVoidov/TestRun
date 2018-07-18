@@ -484,28 +484,21 @@ namespace TestRun
             }
         }
           // Метод принимает на вход  ожидаемый номер ошибки и нномер телефона и проверяет правильность работы функции восстановления пароля по тестовому сценарию на тестовых данных
-        protected void RejectPwdChecker(string rejectValue, string phoneValue)
+        protected void RejectPwdChecker(string phoneValue, string code, string rejcode)
         {
-            string errorText = "";
-            if (rejectValue == "12")
-                errorText = "Исчерпано количество попыток восстановления пароля";
-            if (rejectValue == "10")
-                errorText = "Клиент с указанными данными не найден";
-            if (rejectValue == "4")
-                errorText = "Предыдущий процесс не завершён";
-            if (rejectValue == "1")
-                errorText = "В процессе регистрации произошла неожиданная ошибка";
-
             LogStage("Переход на страницу восстановление пароля");
             ClickWebElement(".//*[@href='/#!/account/restore-password']", "Кнопка Забыли пароль", "кнопки забыли пароль");
 
-            LogStage("Проверка createProcessWithCaptcha по тестовому сценарию на rejected " + rejectValue + "");
+            LogStage("Проверка createProcessWithCaptcha по тестовому сценарию");
+            Thread.Sleep(800);
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[2]//input", phoneValue , "Поле номер телефона", "поля номер телефона");
-            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[3]//input", "11", "Поле капча", "поля капчи");
+            Thread.Sleep(1000);
+            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[3]//input", "1", "Поле капча", "поля капчи");
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки Отправить");
-            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-            if (!errorMessage.Text.Contains(errorText))
-                throw new Exception("Неверный код ошибки");
+            waitTillElementisDisplayed(driver, ".//*[@class='account__heading-close']", 5);
+            var messageData = GetWebElement(".//*[@id='restore-password-error']", "Нет модуля с ошибкой");
+            if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-rejectioncode").Equals(rejcode)))
+                throw new Exception("Неверная обработка ошибки");
             ClickWebElement(".//*[@class='account__heading-close']", "Крестик Закрыть окно", "Крестика Закрыть оно");
         }
 
@@ -960,6 +953,7 @@ namespace TestRun
                     {
                         var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutInSeconds));
                         wait.Until(drv => drv.FindElement(By.XPath(xpath)));
+
                     }
                     elementDisplayed = driver.FindElement(By.XPath(xpath)).Displayed;
                 }
