@@ -313,10 +313,10 @@ namespace TestRun.fonbet
 
             ClickOnAccount();
             ClickWebElement(".//*[@href='#!/account/profile/change-email']", "Вкладка Смена email", "вкладки смена email");
-
-            CreateProcessemailChecker("14", "1@dev.dev");
-            CreateProcessemailChecker("13", "2@dev.dev");
-            CreateProcessemailChecker("12", "3@dev.dev");
+           
+            CreateProcessemailChecker("1@dev.dev","rejected","0","14");
+            CreateProcessemailChecker("2@dev.dev", "rejected", "0", "13");
+            CreateProcessemailChecker("3@dev.dev", "rejected", "0", "12");
 
             LogStage("Проверка sendCode по тестовому сценарию");
             driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
@@ -564,25 +564,12 @@ namespace TestRun.fonbet
             ClickOnAccount();
             ClickWebElement(".//*[@href='#!/account/profile/change-phone']", "Вкладка Смена номера телефона", "вкладки Смена номера телефона");
             LogStage("Проверка createProcess по тестовому сценарию");
-            driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
-            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "000000000", "Поле Номер телефона", "поля Номер телефона");
-            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
-            if (!WebElementExist(".//*[@class='ui__field-inner']/input"))
-                throw new Exception("Нет поля для ввода кода подтверждения");
-            ClickWebElement(".//*[@href='#!/account/profile/main']", "Вкладка Основная", "вкладки Основная");
-            ClickWebElement(".//*[@href='#!/account/profile/change-phone']", "Вкладка Смена номера телефона", "вкладки Смена номера телефона");
-            CreateProcessPhoneChange("000000002");
-            CreateProcessPhoneChange("000000003");
-            CreateProcessPhoneChange("000000004");
-            ClickWebElement(".//*[@href='#!/account/profile/change-phone']", "Вкладка Смена номера телефона", "вкладки Смена номера телефона");
-            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "000000005", "Поле Номер телефона", "поля Номер телефона");
-            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
-
-            LogStage("Проверка sendSmsCode по тестовому сценарию");
-            SendSmsPhoneChange("2");
-            SendSmsPhoneChange("3");
-            SendSmsPhoneChange("4");
-            SendSmsPhoneChange("1");
+            CreateProcessPhoneChange("000000000",null,null,null);
+            CreateProcessPhoneChange("000000001", null, null, null);
+            CreateProcessPhoneChange("000000002", "rejected", "0","4");
+            CreateProcessPhoneChange("000000003", "rejected", "0", "11");
+            CreateProcessPhoneChange("000000004", null, "2", null);
+           
         }
     }
 }

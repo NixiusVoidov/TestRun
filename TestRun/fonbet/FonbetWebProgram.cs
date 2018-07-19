@@ -155,7 +155,7 @@ namespace TestRun
         {
             LogStage("Переход в Личный кабинет");
             ClickWebElement(".//*[@class='header__item header__login']/div/div[1]/span", "ФИО в шапке", "ФИО в шапке");
-            ClickWebElement(".//*[@id='popup']/li[1]", "Кнопка Личный кабинет", "кнопки Личный кабинет");
+            ClickWebElement(".//*[@id='popup']/li[2]", "Кнопка Личный кабинет", "кнопки Личный кабинет");
         }
 
         // Метод устанавливает настройки вебсайта по-умолчанию.
@@ -542,23 +542,18 @@ namespace TestRun
             }
         }
         // Метод принимает на вход  ожидаемый номер ошибки и почту и проверяет правильность работы функции подтверждения email по тестовому сценарию на тестовых данных
-        protected void CreateProcessemailChecker(string rejectValue, string emailValue)
+        protected void CreateProcessemailChecker(string emailValue, string process, string code, string rejcode)
         {
-            string errorText = "";
-            if (rejectValue == "14")
-                errorText = "Исчерпан лимит на количество изменений адреса электронной почты";
-            if (rejectValue == "13")
-                errorText = "Адрес электронной почты уже подтвержден";
-            if (rejectValue == "12")
-                errorText = "Адрес электронной почты занят";
-
-            LogStage("Проверка creatProcess по тестовому сценарию на rejected " + rejectValue + "");
+            LogStage("Проверка creatProcess по тестовому сценарию");
             driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
+            Thread.Sleep(1000);
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", emailValue, "Поле email", "поля email");
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            wait.Until(drv => drv.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).GetAttribute("value").Contains(emailValue));
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
-            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-            if (!errorMessage.Text.Contains(errorText))
-                throw new Exception("Неверный текст ошибки");
+            var messageData = GetWebElement(".//*[@id='set-email-error']", "Нет модуля с ошибкой");
+            if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-processstate").Equals(process) && messageData.GetAttribute("data-rejectioncode").Equals(rejcode)))
+                throw new Exception("Неверная обработка ошибки");
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
         }
 
@@ -1160,57 +1155,85 @@ namespace TestRun
 
            
         }
-        protected void CreateProcessPhoneChange(string phoneValue)
+        protected void CreateProcessPhoneChange(string phoneValue, string process, string code, string rejcode)
         {
-            string errorText = "";
-            if (phoneValue == "000000002")
-                errorText = "Предыдущий процесс не завершён";
-            if (phoneValue == "000000003")
-                errorText = "Указанный номер телефона уже установлен";
-            if (phoneValue == "000000004")
-                errorText = "В процессе подтверждения номера телефона произошла неожиданная ошибка. Приносим Вам свои извинения за эту неприятную ситуацию";
-
+            waitTillElementisDisplayed(driver, ".//*[@class='ui__field-inner']/input", 5);
+            Thread.Sleep(1000);
             driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
+            Thread.Sleep(1000);
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", phoneValue, "Поле Номер телефона", "поля Номер телефона");
+            Thread.Sleep(1000);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
-            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-            if (!errorMessage.Text.Contains(errorText))
-                throw new Exception("Неверный текст ошибки");
-            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
-        }
-
-        protected void SendSmsPhoneChange(string smsValue)
-        {
-            string errorText = "";
-            if (smsValue == "2")
-                errorText = "Паспортные данные нового номера телефона не совпадают с полученными от ЦУПИС";
-            if (smsValue == "3")
-                errorText = "Введён неверный код из смс";
-            if (smsValue == "4")
-                errorText = "Внутренняя ошибка";
-            if (smsValue == "1")
+           
+            if (phoneValue == "000000000")
             {
-
-                WaitForPageLoad();
-                SendKeysToWebElement(".//*[@class='ui__field-inner']/input", smsValue, "Поле Код смс", "поля Код смс");
+                string[,] array2Db = new string[3, 4] { { "2", "0","rejected","13" }, { "3", "0","rejected","12"},
+                    {"4", "0","rejected","1" } };
+                for (int i= 0;i<3;i++)
+                {
+                    waitTillElementisDisplayed(driver, ".//*[@class='ui__desc']", 5);
+                    Thread.Sleep(1000);
+                    SendKeysToWebElement(".//*[@class='ui__field-inner']/input", array2Db[i,0], "Поле код подтверждения", "поля код подтверждения");
+                    Thread.Sleep(1000);
+                    ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
+                    var error = GetWebElement(".//*[@id='change-phone-error']", "Нет модуля с ошибкой");
+                    if (!(error.GetAttribute("data-errorcode").Equals(array2Db[i, 1]) && error.GetAttribute("data-processstate").Equals(array2Db[i, 2]) && error.GetAttribute("data-rejectioncode").Equals(array2Db[i, 3])))
+                        throw new Exception("Неверная обработка ошибки");
+                    ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+                    ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки Отправить");
+                }
+                waitTillElementisDisplayed(driver, ".//*[@class='ui__desc']", 5);
+                SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "1", "Поле код подтверждения", "поля код подтверждения");
+                Thread.Sleep(1000);
                 ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
-                var message = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-                if (!message.Text.Contains("Номер телефона успешно подверждён."))
-                    throw new Exception("Неверный текст ошибки");
-                ClickWebElement(".//*[@class='account-profile__form-inner']//*[@class='toolbar__item']/a","Кнопка Вернуться к профилю", "кнопки Вернуться к профилю");
-                if(!WebElementExist(".//*[@class='account-profile__block']"))
-                    throw new Exception("Не вернулись к профилю");
+                waitTillElementisDisplayed(driver, ".//*[@class='toolbar__item']/*[@href='#!/account/profile']", 6);
+               if(!WebElementExist(".//*[@class='toolbar__item']/*[@href='#!/account/profile']"))
+                   throw new Exception("Неверная обработка смс кода");
+                ClickWebElement(".//*[@class='toolbar__item']/*[@href='#!/account/profile']", "Кнопка Вернуться в профиль", "кнопки Вернуться в профиль");
+                waitTillElementisDisplayed(driver, ".//*[@href='#!/account/profile/change-phone']", 5);
+                ClickWebElement(".//*[@href='#!/account/profile/change-phone']", "Вкладка Смена номера телефона", "вкладки Смена номера телефона");
                 return;
             }
-
-            WaitForPageLoad();
-            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", smsValue, "Поле Код смс", "поля Код смс");
-            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
-            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-            if (!errorMessage.Text.Contains(errorText))
-                throw new Exception("Неверный текст ошибки");
-            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
-            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
+            if (phoneValue == "000000001")
+            {
+                waitTillElementisDisplayed(driver, ".//*[@class='ui__desc']", 5);
+                Thread.Sleep(1000);
+                SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "2", "Поле код подтверждения", "поля код подтверждения");
+                Thread.Sleep(1000);
+                ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
+                var error = GetWebElement(".//*[@id='change-phone-error']", "Нет модуля с ошибкой");
+                if (!(error.GetAttribute("data-errorcode").Equals("0") && error.GetAttribute("data-processstate").Equals("rejected") && error.GetAttribute("data-rejectioncode").Equals("12")))
+                 throw new Exception("Неверная обработка ошибки");
+                ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+                ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки Отправить");
+                
+                waitTillElementisDisplayed(driver, ".//*[@class='ui__desc']", 5);
+                SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "1", "Поле код подтверждения", "поля код подтверждения");
+                Thread.Sleep(1000);
+                ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
+                waitTillElementisDisplayed(driver, ".//*[@class='ui__desc']", 6);
+                Thread.Sleep(1000);
+                if (!WebElementExist(".//*[@class='ui__desc']"))
+                    throw new Exception("Неверная обработка смс кода");
+                ClickWebElement(".//*[@href='#!/account/profile/main']", "Кнопка Основные данные", "кнопки Основные данные");
+                Thread.Sleep(1000);
+                ClickWebElement(".//*[@href='#!/account/profile/change-phone']", "Вкладка Смена номера телефона", "вкладки Смена номера телефона");
+                return;
+            }
+            if (phoneValue == "000000004")
+            {
+                var errormsg = GetWebElement(".//*[@id='change-phone-error']", "Нет модуля с ошибкой");
+                if (!(errormsg.GetAttribute("data-errorcode").Equals(code)))
+                    throw new Exception("Неверная обработка ошибки");
+                ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+            }
+            else
+            {
+                var errormsg = GetWebElement(".//*[@id='change-phone-error']", "Нет модуля с ошибкой");
+                if (!(errormsg.GetAttribute("data-errorcode").Equals(code) && errormsg.GetAttribute("data-processstate").Equals(process) && errormsg.GetAttribute("data-rejectioncode").Equals(rejcode)))
+                    throw new Exception("Неверная обработка ошибки");
+                ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+            }
         }
 
         public override void BeforeRun()
