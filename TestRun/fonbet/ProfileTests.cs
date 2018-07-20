@@ -359,7 +359,7 @@ namespace TestRun.fonbet
         {
             base.Run();
 
-            if(!WebElementExist(".//*[@href='/#!/account/registration/Reg4']"))
+            if (!WebElementExist(".//*[@href='/#!/account/registration/Reg4']"))
                 throw new Exception("На данном сайте нет супер-регистрации");
 
             LogStage("Переход на страницу регистрации");
@@ -384,6 +384,7 @@ namespace TestRun.fonbet
             SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input", "4000100@mail.ru", "Поле email", "поля email");
             if (!button.GetAttribute("class").Contains("state_disabled"))
                 throw new Exception("Возможно продолжить без телефона");
+            Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input", "000000001", "Поле Номер телефона", "поля Номер телефона");
             driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input")).Clear();
             driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input")).SendKeys("a");
@@ -391,6 +392,7 @@ namespace TestRun.fonbet
             if (!button.GetAttribute("class").Contains("state_disabled"))
                 throw new Exception("Возможно продолжить без почты");
             SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input", "4000100@mail.ru", "Поле email", "поля email");
+            Thread.Sleep(500);
             ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
             var errorMessage = GetWebElement(".//*[@id='registration-v4-error']", "Нет модуля с ошибкой");
             if (!errorMessage.GetAttribute("data-rejectioncode").Equals("4") && !errorMessage.GetAttribute("data-processstate").Equals("rejected"))
@@ -418,7 +420,7 @@ namespace TestRun.fonbet
             SendSmsCodeRegistration("8", null, null, null);
             SendSmsCodeRegistration("0", null, null, null);
             SendSmsCodeRegistration("9", null, null, null);
-           
+
 
         }
     }
