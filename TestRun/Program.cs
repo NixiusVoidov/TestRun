@@ -65,12 +65,14 @@ namespace TestRun
             CustomProgram.Register("fonbet_changephonecupis", fonbet.ChangePhoneCupis.FabricateChangePhoneCupis); //Проверка работы процесса изменения номера телефона по тестовому сценарию
             CustomProgram.Register("fonbet_verificationcupisbk", fonbet.VerificationCupisBk.FabricateVerificationCupisBk); //Проверка работы процесса верификации через BK по тестовому сценарию
             CustomProgram.Register("cyprus_registration", fonbet.cyprus.RegistrationCypr.FabricateRegistrationCypr); //Проверка работы процесса регистрации кипра по тестовому сценарию
+            CustomProgram.Register("fonbet_compressionmenu", fonbet.CompressionMenu.FabricateCompressionMenu); 
 
 
             CustomProgram.Register("backoffice_clientcontrol", backoffice.СlientControl.FabricateСlientControl);
             CustomProgram.Register("backoffice_contentblog", backoffice.ContentBlog.FabricateContentBlog);
             CustomProgram.Register("backoffice_contentgeneraltab", backoffice.ContentGeneralTab.FabricateContentGeneralTab);
             CustomProgram.Register("backoffice_contentbetday", backoffice.ContentBetOfTheDay.FabricateContentBetOfTheDay);
+            CustomProgram.Register("backoffice_contentsuperexpress", backoffice.ContentSuperexpress.FabricateContentSuperexpress);
             CustomProgram.Register("backoffice_contentbanner", backoffice.ContentBanner.FabricateContentBanner);
             CustomProgram.Register("backoffice_contentbannerlifetime", backoffice.ContentBannerLifeTime.FabricateContentBannerLifeTime);
             CustomProgram.Register("backoffice_contentwinnersclub", backoffice.ContentWinnersClub.FabricateContentWinnersClub);

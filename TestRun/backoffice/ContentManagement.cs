@@ -187,6 +187,53 @@ namespace TestRun.backoffice
         }
 
     }
+    class ContentSuperexpress : BackOfficeProgram
+    {
+        public static CustomProgram FabricateContentSuperexpress()
+        {
+            return new ContentSuperexpress();
+        }
+
+        public override void Run()
+        {
+            base.Run();
+            LogStage("Добавление новой Ставки дня в Меню управление клиентом");
+            ClickWebElement(".//*[@class='menu']//*[@href='#/explorer/content']", "Меню Управление клиентом", "меню Управление клиентом");
+            ShowOnlyActive();
+            ClickWebElement(".//*[@id='js-toolbar']/div[1]/div[1]", "Кнопка Добавить", "кнопки Добавить");
+            ClickWebElement(".//*[@class='toolbar__drop-down _state_visible']/div[2]", "Строка Ставка дня", "строки Ставка дня");
+
+            SetupVisualSettings();
+
+            LogStage("Заполнение вкладки Изображение");
+            ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[3]", "Вкладка Изображение", "вкладки Изображение");
+            SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']/div[1]//input", "/Content/BetsOfDay/soccer.jpg", "Поле Изображение", "поля Изображение");
+           
+            LogStage("Заполнение вкладки Общее");
+            ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[1]", "Вкладка Общее", "вкладки Общее");
+            ClickWebElement(".//*[@class='role-form__inner']/div[3]//input", "Чекбокс Опубликовано", "чекбокса Опубликовано");
+            ClickWebElement(".//*[@class='role-form__inner']/div[4]//input", "Чекбокс Суперэкспресс", "чекбокса Суперэкспресс");
+            Thread.Sleep(500);
+            SendKeysToWebElement(".//*[@class='ui__field-inner']/textarea", "Это тестовый Анонс", "Поле Анонс", "поля Анонс");
+            ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Добавить", "кнопки Добавить");
+            Thread.Sleep(2000);
+            SwitchToPreView();
+            WaitForPageLoad();
+            LogStage("Проверка что все элементы ставки дня отображаются на сайте");
+            if (!WebElementExist(".//*//div[contains(@style,'soccer.jpg')]"))
+                throw new Exception("Не отображается изображение суперэкспресса");
+            if (!WebElementExist(".//*[@class='home-slider__tote-text']"))
+                throw new Exception("Не отображается анонс суперэкспресса");
+            ClickWebElement(".//*[@class='home-slider__tote-bet-item']", "Кнопка Заключить пари", "кнопки Заключить пари");
+            WaitForPageLoad();
+            if(!WebElementExist(".//*[@class='bet-table']"))
+                throw new Exception("Не перешли на страницу суперэкспресса");
+            driver.SwitchTo().Window(driver.WindowHandles[0]);
+            DeleteButton();
+            
+        }
+
+    }
 
     class ContentBanner : BackOfficeProgram
     {
@@ -266,14 +313,19 @@ namespace TestRun.backoffice
             ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Добавить", "кнопки Добавить");
 
             SwitchToWebsiteNewWindow("http://fonred5051.dvt24.com/#!/");
-
+            Thread.Sleep(1000);
             ExecuteJavaScript("window.location.reload()", "Страницы не открылась");
+            Thread.Sleep(1000);
+            ExecuteJavaScript("window.location.reload()", "Страницы не открылась");
+            Thread.Sleep(1000);
             if (!WebElementExist(".//*[@src='//origin-test.bkfon-resource.ru/Content/Banners/RightBanners/First-deposit_red.jpg']"))
                 throw new Exception("Не отображается баннер на главной");
             ClickWebElement(".//*[@href='/#!/bets']", "Вкладка Линия", "вкладки Линия");
+            Thread.Sleep(1000);
             if (!WebElementExist(".//*[@src='//origin-test.bkfon-resource.ru/Content/Banners/RightBanners/First-deposit_red.jpg']"))
                 throw new Exception("Не отображается баннер в линии");
             ClickWebElement(".//*[@href='/#!/live']", "Вкладка Лайве", "вкладки Лайве");
+            Thread.Sleep(1000);
             if (!WebElementExist(".//*[@src='//origin-test.bkfon-resource.ru/Content/Banners/RightBanners/First-deposit_red.jpg']"))
                 throw new Exception("Не отображается баннер в лайве");
         }
@@ -404,12 +456,14 @@ namespace TestRun.backoffice
             LogStage("Переход в линию");
             ClickWebElement(".//*[@href='/#!/bets']", "Вкладка \"Линия\"", "вкладки \"Линия\"");
             ClickWebElement(".//*[@class='list-view-new__table-body']/tr[4]/td/div", "Разворот спорта футбол", "разворота спорта футбол");
-
-           
+            ExecuteJavaScript("window.location.reload()", "Страницы не открылась");
+            Thread.Sleep(1000);
+            ClickWebElement(".//*[@class='list-view-new__table-body']/tr[4]/td/div", "Разворот спорта футбол", "разворота спорта футбол");
             if (!WebElementExist(".//*[@href='#!/bets/football/"+ competitonValue+"']//*[@class='event-v-list__item-cell event-v-list__cell-image icon']"))
                 throw new Exception("Не отображается маленький логотип");
             ClickWebElement(".//*[@href='#!/bets/football/" + competitonValue + "']", "Строка с маленьким логотип", "строки с маленьким логотипа");
-            if (!WebElementExist(".//*[@class='table__flag-icon icon _type_flag']"))
+            Thread.Sleep(600);
+            if (!WebElementExist(".//*[@class='table__flag-icon icon']"))
                 throw new Exception("Не отображается монохромный логотип");
             ClickWebElement(".//*[@class='table']//tr[last()]/td[2]//a", "Строка ивентвью", "строки ивентвью");
             if (!WebElementExist("//div[contains(@style,'australia')]"))

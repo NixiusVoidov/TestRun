@@ -136,7 +136,7 @@ namespace TestRun.backoffice
         protected void DeleteButton()
         {
             ClickWebElement(".//*[@id='js-toolbar']/div//*[text()='Удалить']", "Кнопка Удалить", "кнопки Удалить");
-            waitTillElementisDisplayed(driver, ".//*[@class='modal__foot']/div[2]/a", 2);
+            waitTillElementisDisplayed(driver, ".//*[@class='modal__foot']/div[2]/a", 5);
             ClickWebElement(".//*[@class='modal__foot']/div[2]/a", "Кнопка Ок всплывающего окна", "кнопки Ок всплывающего окна");
         }
 
@@ -324,6 +324,7 @@ namespace TestRun.backoffice
             LogStage("Проверка работы вкладки Операции");
             ClickWebElement(".//*[@class='tabs__nav'][2]", "Вкладка Операции", "вкладки Операции");
             ClickWebElement(".//*[@class='toolbar__item']//*[text()='Загрузить ещё']", "Кнопка Загрузить еще", "кнопки Загрузить еще");
+            Thread.Sleep(1000);
             IWebElement countSearch= GetWebElement(".//*[@class='clients__operations-toolbar-row']/span/span","Не отображается число операций");
             if(!countSearch.Text.Contains("400"))
                 throw new Exception("Не работает кнопка Загрузить еще");
@@ -341,10 +342,11 @@ namespace TestRun.backoffice
             ClickWebElement(".//*[@class='ui-dropdown__items']/div[1]", "Строка Сделана ставка", "строка Сделана ставка");
             ClickWebElement(".//*[@class='ui__field-inner']//*[text()='Номер операции']", "Фильтр Тип операции", "фильтр Тип операции");
             ClickWebElement(".//*[@class='ui-dropdown _state_expanded']//tr[1]", "Первый номер из фильтра", "первый номер из фильтра");
+            Thread.Sleep(500);
             ClickWebElement(".//*[@class='fa fa-external-link-square']", "Ссылка на номер события", "ссылки на номер события");
 
             var imgage = driver.FindElement(By.XPath(".//*[@class='ui-lightbox__modal']"));
-
+            Thread.Sleep(1000);
             var action = new Actions(driver);
             action
                 .MoveToElement(imgage)
@@ -359,13 +361,18 @@ namespace TestRun.backoffice
         {
             LogStage("Проверка работы вкладки Фрибет");
             ClickWebElement(".//*[@class='tabs__nav'][4]", "Фильтр Фрибеты", "фильтр Фрибеты");
+            waitTillElementisDisplayed(driver, ".//*[@class='toolbar__item']//*[text()='Добавить']", 5);
             ClickWebElement(".//*[@class='toolbar__item']//*[text()='Добавить']", "Кнопка Добавить", "кнопка Добавить");
             SendKeysToWebElement(".//*[text()='СУММА']/..//input", "500", "Поле Сумма фрибета", "поля Сумма фрибета");
             SendKeysToWebElement(".//*[text()='Комментарий']/..//textarea", "test comment", "Поле Комменнтарий", "поля Сумма фрибета");
             ClickWebElement(".//*[text()='Добавить']", "Кнопка Добавить", "кнопка Добавить");
+            ElementIsClickable(By.XPath(".//*[@class='cl']/div[1]//*[text()='удалить']"));
+           
             ClickWebElement(".//*[@class='cl']/div[1]//*[text()='удалить']", "Кнопка Удалить", "кнопка Удалить");
+            Thread.Sleep(500);
             SendKeysToWebElement(".//*[text()='Комментарий']/..//textarea", "Don`t need", "Поле Комменнтарий", "поля Сумма фрибета");
-            ClickWebElement(".//*[@class='cl']/div[1]//*[text()='удалить']", "Кнопка Удалить", "кнопка Удалить");
+            Thread.Sleep(500);
+            ClickWebElement(".//*[@class='cl__cell-value cl__cell-edit']//a", "Кнопка Удалить", "кнопка Удалить");
             var beforeCount = driver.FindElements(By.XPath(".//*[@class='cl__body cl__row']")).Count;
             ClickWebElement(".//*[text()='Показать удаленные']", "Кнопка Показать удаленные", "кнопка Показать удаленные");
             var afterCount = driver.FindElements(By.XPath(".//*[@class='cl__body cl__row']")).Count;
@@ -381,6 +388,15 @@ namespace TestRun.backoffice
             var stateCheckedClass = stateChecked.GetAttribute("class");
             if (!stateCheckedClass.Contains("state_checked"))
                 ClickWebElement(".//*[@id='js-toolbar']/div[2]/div/div[1]", "Кнопка Показывать только активные", "кнопки Показывать только активные");
+        }
+
+        public static Func<IWebDriver, IWebElement> ElementIsClickable(By locator)
+        {
+            return driver =>
+            {
+                var element = driver.FindElement(locator);
+                return (element != null && element.Displayed && element.Enabled) ? element : null;
+            };
         }
     }
     

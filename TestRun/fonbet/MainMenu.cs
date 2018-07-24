@@ -151,6 +151,30 @@ namespace TestRun.fonbet
                 throw new Exception("Тайтл не соответсвует странице");
         }
     }
+    class CompressionMenu : FonbetWebProgram
+    {
+        public static CustomProgram FabricateCompressionMenu()
+        {
+            return new CompressionMenu();
+        }
 
-    
+        protected override bool NeedLogin()
+        {
+            return false;
+        }
+
+        public override void Run()
+        {
+            base.Run();
+            var windowSize = new System.Drawing.Size(1400,1100);
+            driver.Manage().Window.Size = windowSize;
+            LogStage("Проверка меню на компактность");
+            if (!WebElementExist(".//*[@class='menu__item _type_more']"))
+                throw new Exception("Не работает компактное меню");
+            ClickWebElement(".//*[@class='menu__item _type_more']", "Многоточие в меню", "многоточия в меню");
+            if (!driver.FindElement(By.XPath(".//*[@class='menu__item _type_more']/a/span")).GetAttribute("class").Contains("expanded"))
+                throw new Exception("Не разворачивается компактное меню");
+        }
+    }
+
 }
