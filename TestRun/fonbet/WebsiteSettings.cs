@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -27,13 +28,16 @@ namespace TestRun.fonbet
             LogStage("Проверка работы ставки пари с предыщушей ставки");
             //Выбор ставки из грида
             SwitchPageToBets();
+            waitTillElementisDisplayed(driver, ".//*[@class='table']", 10);
             IList<IWebElement> events = driver.FindElements(By.XPath(".//*[@class='table']/tbody//td[5]"));
             events[3].Click();
-            waitTillElementisDisplayed(driver,".//*[@class='coupon__foot-sum']/input",1);
-            driver.FindElement(By.XPath(".//*[@class='coupon__foot-sum']/input")).Clear();
+            waitTillElementisDisplayed(driver, ".//*[@class='coupon__foot-sum']/input", 5);
+            ClearBeforeInput(".//*[@class='coupon__foot-sum']/input");
             SendKeysToWebElement(".//*[@class='coupon__foot-sum']/input", "99", "поле ввода значения ставки", "поля ввода значения ставки");
+            Thread.Sleep(1000);
             ClickWebElement(".//*[@class='coupon__foot']/a", "Кнопка сделать ставку", "кнопки сделать ставку");
-            events[4].Click();
+            Thread.Sleep(1000);
+            events[14].Click();
             if (driver.FindElement(By.XPath(".//*[@class='coupon__foot-sum']/input")).GetAttribute("value") != "99")
                 throw new Exception("Сумма предыдущего пари не подставляется");
             ClickWebElement(".//*[@class='coupon__head _new_coupon']/a", "Крестик закрыть купон", "крестика закрыть купон");
@@ -45,14 +49,13 @@ namespace TestRun.fonbet
             if (!driver.FindElement(By.XPath(".//*[@class='coupon__foot-sum']/input")).GetAttribute("class").Contains("state_error"))
                 throw new Exception("Поле в сумме не пустое");
 
-
             LogStage("Установка быстрого пари в 100 руб");
             ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
             ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
-
+            Thread.Sleep(1000);
             ClickWebElement(".//*[@class='settings__section'][1]/div/div[1]//*[@class='header-ui__checkbox-label']/input", "Чекбокс быстрое пари", "чекбокса быстрое пари");
-            driver.FindElement(By.XPath(".//*[@class='settings__section'][1]/div/div//*[@class='settings__row']//input")).Clear(); //Очистить поле для ввода суммы быстрой ставки
-            SendKeysToWebElement(".//*[@class='settings__section'][1]/div/div//*[@class='settings__row']//input","100","поле ввода значения быстрой ставки", "поля ввода значения быстрой ставки");
+            ClearBeforeInput(".//*[@class='settings__section'][1]/div/div//*[@class='settings__row']//input");
+            SendKeysToWebElement(".//*[@class='settings__section'][1]/div/div//*[@class='settings__row']//input", "100", "поле ввода значения быстрой ставки", "поля ввода значения быстрой ставки");
 
             LogStage("Добавление любимого пари");
             ClickWebElement("//*[@class='settings__section'][1]/div/div//*[@value='showPercent']", "Радиобатон любимого пари в % от баланса", "радиобатона любимого пари в % от баланса");
@@ -64,70 +67,90 @@ namespace TestRun.fonbet
             ClickWebElement("//*[@class='settings__section'][1]/div/div[9]//input", "Чекбокс принимать пари с измененными тоталами / форами", "чекбокса принимать пари с измененными тоталами / форами");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
 
-            
-
-
-            LogStage("Проверка работы быстрой ставки");
+            LogStartAction("Проверка работы быстрой ставки");
             IWebElement fastBet = GetWebElement(".//*[@class='oneClickSum on']", "Не найдено поле с суммой быстрой ставки");
             var fastBetClass = fastBet.GetAttribute("title");
-            if (fastBetClass!="100")
-               throw new Exception("Поле с суммой быстрой ставки содержит неверное значение");
+            if (fastBetClass != "100")
+                throw new Exception("Поле с суммой быстрой ставки содержит неверное значение");
             IWebElement fastButton = GetWebElement(".//*[@class='oneClickSwitch on']", "Не найдена кнопка с быстрой ставкой");
             var fastButtonClass = fastButton.GetAttribute("class");
             if (!fastButtonClass.Contains("on"))
                 throw new Exception("Быстрое пари выключено");
+            LogActionSuccess();
 
             LogStage("Проверка работы приема любого пари");
             IWebElement betsOdd = GetWebElement(".//*[@class='coupons-toolbar__item _type_switchers']/div/div[1]", "Не найден элемент Принимать пари с измененными коэф.");
             var betsOddClass = betsOdd.GetAttribute("class");
             if (!betsOddClass.Contains("orange any"))
-               throw new Exception("Не работает прием пари с изменными коэффициентами");
+                throw new Exception("Не работает прием пари с изменными коэффициентами");
             IWebElement betsTotal = GetWebElement(".//*[@class='oneClickSwitch on']", "Не найдена кнопка с быстрой ставкой");
             var betsTotalClass = betsTotal.GetAttribute("class");
             if (!betsTotalClass.Contains("on"))
                 throw new Exception("Не работает прием пари с изменными тоталами / форами");
 
-            LogStage("Проверка расчета значения ставки в 50% от депозита");
+
             ClickWebElement(".//*[@class='oneClickSwitch on']", "Кнопка быстрой ставки", "кнопки быстрой ставки");
-           // ClickWebElement(".//*[@class='line__inner'][2]/a", "Кнопка перехода в меню Линия с панели слева", "кнопки перехода в меню Линия с панели слева");
-            //Выбор ставки из грида
+
+            //Выбор ставки из грида с кэф<2
             IList<IWebElement> grid = driver.FindElements(By.XPath(".//*[@class='table']/tbody//td[5]"));
-            grid[3].Click();
-            //Проверка рачета ставки
-             IWebElement newBetValue = GetWebElement(".//*[@class='coupon__foot-stakes']/a[4]", "Не найдена добавленная кнопка с ставкой в 1%");
-            double betValue = Convert.ToDouble(newBetValue.Text);
-            IWebElement accounBalance = GetWebElement(".//*[@class='header__login-item']//*[@class='header__login-balance']", "Не отображается баланс счета");
-            string input = accounBalance.Text;
-            string pattern = "\\s+";
-            string replacement = "";
-            Regex rgx = new Regex(pattern);
-            string result = rgx.Replace(input, replacement);
-            double balance = Convert.ToDouble(result, CultureInfo.GetCultureInfo("en-US").NumberFormat);
-            //Отнимаю 1 когда баланс не четный, т/к деление тогда получается дробным
-            if (betValue % 2 == 0)
+            for(int i=2;i< grid.Count; i++)
             {
-                if (Math.Round(balance / 2) != betValue)
+                var a = grid[i].Text;
+                double kef = Convert.ToDouble(a, CultureInfo.GetCultureInfo("en-US").NumberFormat);
+                var kef2 = Math.Round(kef);
+                if (kef2 <= 2)
                 {
-                    throw new Exception("Не корректные расчеты быстрой ставки");
+                    grid[i].Click();
+                    break;
                 }
+            }
+           
+           // //Проверка рачета ставки
+           //  IWebElement newBetValue = GetWebElement(".//*[@class='coupon__foot-stakes']/a[4]", "Не найдена добавленная кнопка с ставкой в 1%");
+           // double betValue = Convert.ToDouble(newBetValue.Text);
+           // IWebElement accounBalance = GetWebElement(".//*[@class='header__login-item']//*[@class='header__login-balance']", "Не отображается баланс счета");
+           // string input = accounBalance.Text;
+           // string pattern = "\\s+";
+           // string replacement = "";
+           // Regex rgx = new Regex(pattern);
+           // string result = rgx.Replace(input, replacement);
+           // double balance = Convert.ToDouble(result, CultureInfo.GetCultureInfo("en-US").NumberFormat);
+           // //Отнимаю 1 когда баланс не четный, т/к деление тогда получается дробным
+           // if (betValue % 2 == 0)
+           // {
+           //     if (Math.Round(balance / 2) != betValue)
+           //     {
+           //         throw new Exception("Не корректные расчеты быстрой ставки");
+           //     }
+           // }
+           // else
+           // {
+           //     if (Math.Round(balance / 2) != betValue - 1)
+           //     {
+           //         throw new Exception("Не корректные расчеты быстрой ставки");
+           //     }
+           // }
+
+            LogStage("Проверка ввода суммы больше чем баланс счета");
+            int balance = Convert.ToInt32(ClientBalance);
+            if (balance < 9999)
+            {
+                ClearBeforeInput(".//*[@class='coupon__foot-sum']/input");
+                SendKeysToWebElement(".//*[@class='coupon__foot-sum']/input", "" + balance + "9", "поле ввода значения ставки", "поля ввода значения ставки");
+                ClickWebElement(".//*[@class='coupon__foot']/a", "Кнопка заключить пари", "кнопки заключить пари");
+                if (!WebElementExist(".//*[@class='coupon__error-text']"))
+                    throw new Exception("Нет ошибки о нехватке средств");
             }
             else
             {
-                if (Math.Round(balance / 2) != betValue - 1)
-                {
-                    throw new Exception("Не корректные расчеты быстрой ставки");
-                }
+                SendKeysToWebElement(".//*[@class='coupon__foot-sum']/input", "999999", "поле ввода значения ставки", "поля ввода значения ставки");
+                IWebElement button = GetWebElement(".//*[@class='coupon__foot']/a", "Нет кнопки заключить пари");
+                
+                if (!button.GetAttribute("class").Contains("disabled"))
+                    throw new Exception("Кнопка ставки не блокируется");
             }
-
-            LogStage("Проверка ввода суммы больше чем баланс счета");
-            SendKeysToWebElement(".//*[@class='coupon__foot-sum']/input", "9999999999", "поле ввода значения ставки", "поля ввода значения ставки");
-            IWebElement placeBet = GetWebElement(".//*[@class='coupon__foot']/a", "Нет кнопки заключить пари");
-            var placeBetClass = placeBet.GetAttribute("class");
-            if (!placeBetClass.Contains("state_disabled"))
-                throw new Exception("Кнопка не блокируется если сумма ставки выше максимальной");
             ClickWebElement(".//*[@class='coupons__list-inner']//article[1]/div[1]/a[1]", "Кнопка закрытия окна нового пари", "кнопки закрытия окна нового пари");
         }
-        
     }
 
     class CashOutAndDialogsSettings : FonbetWebProgram
@@ -291,7 +314,7 @@ namespace TestRun.fonbet
             LogStage("Сброс настроек по умолчанию и установка самоограничения в 1 минуту");
             ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
             ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
-            driver.FindElement(By.XPath(".//*[text()='Самоограничения']/../div//input")).Clear();
+            ClearBeforeInput(".//*[text()='Самоограничения']/../div//input");
             SendKeysToWebElement(".//*[text()='Самоограничения']/../div//input", "1", "Поле Самоограничения", "поля Самоограничения");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
             LogStage("Ожидание минуты");

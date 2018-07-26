@@ -199,7 +199,7 @@ namespace TestRun.fonbet
                 throw new Exception("Не переключается на placeholder с номером счета");
 
             LogStage("Проверка плейсхолдера Почты");
-            driver.FindElement(By.XPath(".//*[@class='login-form__form']/div[1]/input")).Clear();
+            ClearBeforeInput(".//*[@class='login-form__form']/div[1]/input");
             SendKeysToWebElement(".//*[@class='login-form__form']/div[1]/input", "ya@ya.ru", "Поле логина", "поля логина");
             IWebElement mailPlace = GetWebElement(".//*[@class='login-form__types-container']/div[3]", "Нет поля логина");
             var mailPlaceClass = mailPlace.GetAttribute("class");
@@ -207,7 +207,7 @@ namespace TestRun.fonbet
                 throw new Exception("Не переключается на placeholder с почтой");
 
             LogStage("Проверка плейсхолдера Телефона");
-            driver.FindElement(By.XPath(".//*[@class='login-form__form']/div[1]/input")).Clear();
+            ClearBeforeInput(".//*[@class='login-form__form']/div[1]/input");
             SendKeysToWebElement(".//*[@class='login-form__form']/div[1]/input", "+79991234567", "Поле логина", "поля логина");
             IWebElement phonePlace = GetWebElement(".//*[@class='login-form__types-container']/div[1]", "Нет поля логина");
             var phonePlaceClass = phonePlace.GetAttribute("class");
@@ -263,7 +263,7 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
 
             LogStage("Проверка sendPassword на reject");
-            driver.FindElement(By.XPath(".//*[@class='ui__field']")).Clear();
+            ClearBeforeInput(".//*[@class='ui__field']");
             SendKeysToWebElement(".//*[@class='ui__field']", "123456", "Поле Код подтверждения", "поля Код подтверждения");
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
             waitTillElementisDisplayed(driver, ".//*[@class='change-password__form-inner']/div/div[1]//input", 5);
@@ -319,16 +319,15 @@ namespace TestRun.fonbet
             CreateProcessemailChecker("3@dev.dev", "rejected", "0", "12");
 
             LogStage("Проверка sendCode по тестовому сценарию");
-            driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
+            ClearBeforeInput(".//*[@class='ui__field-inner']/input");
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "4@dev.dev", "Поле email", "поля email");
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
             SendEmailCodeChecker("10", "1235");
             SendEmailCodeChecker("1", "9999");
-            driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
+            ClearBeforeInput(".//*[@class='ui__field-inner']/input");
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "4@dev.dev", "Поле email", "поля email");
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
-            driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
-            Thread.Sleep(1000);
+            ClearBeforeInput(".//*[@class='ui__field-inner']/input");
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "1234", "Поле ввода кода", "поля ввода кода");
             Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки отправить");
@@ -386,7 +385,7 @@ namespace TestRun.fonbet
                 throw new Exception("Возможно продолжить без телефона");
             Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input", "000000001", "Поле Номер телефона", "поля Номер телефона");
-            driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input")).Clear();
+            ClearBeforeInput(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input");
             driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input")).SendKeys("a");
             driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input")).SendKeys(Keys.Backspace);
             if (!button.GetAttribute("class").Contains("state_disabled"))
@@ -446,8 +445,7 @@ namespace TestRun.fonbet
                 "кнопки Верификации по киви");
             IWebElement inputData = GetWebElement(".//*[@class='ui__field-wrap-inner']//input", "Нет поля для ввода");
             Thread.Sleep(1500);
-            inputData.Clear();
-            Thread.Sleep(500);
+            ClearBeforeInput(".//*[@class='ui__field-wrap-inner']//input");
             SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "000000002", "Поле Номер телефона",
                 "поля Номер телефона");
             ClickWebElement(".//*[@id='rulesAgree']", "Чекбокс Соглашения с правилами",
@@ -476,7 +474,7 @@ namespace TestRun.fonbet
             SendSmsVerificationQiwi("5", "rejected", "0", "15");
             SendSmsVerificationQiwi("6", "rejected", "0", "1");
 
-            driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).Clear();
+            ClearBeforeInput(".//*[@class='ui__field-wrap-inner']//input");
             SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "7", "Поле Номер телефона", "поля Номер телефона");
             Thread.Sleep(1000);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
@@ -512,7 +510,7 @@ namespace TestRun.fonbet
                 "кнопки Верификации по БК");
             IWebElement inputData = GetWebElement(".//*[@class='verification__form-inner']/div/div[2]//input", "Нет поля номера карты фонбет");
 
-            inputData.Clear();
+            ClearBeforeInput(".//*[@class='verification__form-inner']/div/div[2]//input");
             SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[2]//input", "0000FFFF0002", "Поле Номера карты фонбет","поля Номера карты фонбет");
             Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[1]//input", "2222222222", "Поле Серия и номер паспорта", "поля Серия и номер паспорта");

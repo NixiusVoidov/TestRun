@@ -89,6 +89,7 @@ namespace TestRun
             {
                 driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
             }
+
             else
                 throw new Exception(String.Format("Неизвестный тип браузера: '{0}'", Browser));
 

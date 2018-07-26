@@ -67,7 +67,6 @@ namespace TestRun
             CustomProgram.Register("cyprus_registration", fonbet.cyprus.RegistrationCypr.FabricateRegistrationCypr); //Проверка работы процесса регистрации кипра по тестовому сценарию
             CustomProgram.Register("fonbet_compressionmenu", fonbet.CompressionMenu.FabricateCompressionMenu); 
 
-
             CustomProgram.Register("backoffice_clientcontrol", backoffice.СlientControl.FabricateСlientControl);
             CustomProgram.Register("backoffice_contentblog", backoffice.ContentBlog.FabricateContentBlog);
             CustomProgram.Register("backoffice_contentgeneraltab", backoffice.ContentGeneralTab.FabricateContentGeneralTab);
@@ -79,6 +78,7 @@ namespace TestRun
             CustomProgram.Register("backoffice_contentcompetitionlogos", backoffice.СontentCompetitonLogos.FabricateСontentCompetitonLogos);
             CustomProgram.Register("backoffice_contentfaqquestions", backoffice.СontentFaqQuestions.FabricateСontentFaqQuestions);
             CustomProgram.Register("backoffice_contentfaqcategoriesandquestions", backoffice.СontentFaqCategoriesAndQuestions.FabricateСontentFaqCategoriesAndQuestions);
+            CustomProgram.Register("backoffice_contentfooter", backoffice.ContentFooter.FabricateContentFooter);
 
         }
 

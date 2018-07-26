@@ -123,7 +123,7 @@ namespace TestRun.backoffice
         {
             LogStage("Установка области видимости");
             
-            ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[2]", "Вкладка Область видимости", "вкладки Область видимости");
+            ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[text()='Область видимости']", "Вкладка Область видимости", "вкладки Область видимости");
             var website = GetWebElement(".//*[@class='role-form__inner']/div[1]/div[1]//input", "Нет чекбокса Веб-сайт");
             var websiteClass = website.GetAttribute("class");
             if (!websiteClass.Contains("state_checked"))
@@ -132,7 +132,12 @@ namespace TestRun.backoffice
                 ClickWebElement("//*[@class='ui__list role-list__body _style-height-auto'][last()]/div[3]//input", "Чекбокс Fonbet английский", "чекбокса Fonbet английский");
                 ClickWebElement("//*[@class='ui__list role-list__body _style-height-auto'][last()]/div[5]//input", "Чекбокс ЦУПИС", "чекбокса ЦУПИС");
         }
-
+        protected void ClearBeforeInput(string xpath)
+        {
+            driver.FindElement(By.XPath(xpath)).Clear();
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            wait.Until(drv => drv.FindElement(By.XPath(xpath))).GetAttribute("value").Equals("");
+        }
         protected void DeleteButton()
         {
             ClickWebElement(".//*[@id='js-toolbar']/div//*[text()='Удалить']", "Кнопка Удалить", "кнопки Удалить");

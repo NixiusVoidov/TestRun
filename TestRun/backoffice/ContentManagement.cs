@@ -571,4 +571,71 @@ namespace TestRun.backoffice
             DeleteButton();
         }
     }
+    class ContentFooter : BackOfficeProgram
+    {
+        public static CustomProgram FabricateContentFooter()
+        {
+            return new ContentFooter();
+        }
+
+        public override void Run()
+        {
+            base.Run();
+            LogStage("Переход в меню Управления футером");
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            js.ExecuteScript("arguments[0].click()", driver.FindElement(By.XPath(".//*[@href='#/explorer/contentFooter']")));
+            ClickWebElement(".//*[@id='js-toolbar']/div[1]/div[1]", "Кнопка Создать футер", "кнопки Создать футер");
+
+            SetupVisualSettings();
+
+            LogStage("Заполнение вкладки Общее");
+            ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[1]", "Вкладка Общее", "вкладки Общее");
+
+            Dictionary<int, string> text = new Dictionary<int, string>()
+            {
+                { 1, "Текст 1" },
+                { 2, "Текст 2" },
+                { 3, "Текст 3" },
+            };
+            foreach (KeyValuePair<int, string> item in text)
+                SendKeysToWebElement(".//*[@class='role-form__inner']/label["+item.Key+"]//textarea", item.Value, "Поле " + item.Value+"", "поля " + item.Value+"");
+            SendKeysToWebElement(".//*[@class='role-form__inner']/label[4]//input", "Тестовая электронная почта", "Поле электронная почта", "поля электронная почта");
+            SendKeysToWebElement(".//*[@class='role-form__inner']/label[5]//input", "Тестовый телефон", "Поле телефон", "поля телефон");
+
+            LogStage("Заполнение вкладки Ссылки");
+            ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[2]", "Вкладка Ссылки", "вкладки Ссылки");
+            LogStage("Заполнение Верхнее меню Колонка 1");
+            for(int i = 0; i < 5; i++)
+            {
+                ClickWebElement(".//*[@class='tabs__content']/div/div[2]//*[@class='role-form__inner']/table[1]//a", "Кнопка Добавить ссылку", "кнопки Добавить ссылку");
+                SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[1]//input", "Правила", "Поле Заголовок", "поля Заголовок");
+                SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[2]//input", "/#!/rules", "Поле Url", "поля Url");
+                ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*//*[@class='form__row']/div[1]/a", "Кнопка Применить", "кнопки Применить");
+                i++;
+            }
+            
+
+
+            //SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[1]//input", "Правила", "Поле Заголовок", "поля Заголовок");
+            //SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[1]//input", "Правила", "Поле Заголовок", "поля Заголовок");
+
+            //Thread.Sleep(500);
+            //SendKeysToWebElement(".//*[@class='ui__field-inner']/textarea", "Это тестовый Анонс", "Поле Анонс", "поля Анонс");
+            //ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*//*[@class='form__row']/div[1]/a", "Кнопка Применить", "кнопки Применить");
+            //Thread.Sleep(2000);
+            //SwitchToPreView();
+            //WaitForPageLoad();
+            //LogStage("Проверка что все элементы ставки дня отображаются на сайте");
+            //if (!WebElementExist(".//*//div[contains(@style,'soccer.jpg')]"))
+            //    throw new Exception("Не отображается изображение суперэкспресса");
+            //if (!WebElementExist(".//*[@class='home-slider__tote-text']"))
+            //    throw new Exception("Не отображается анонс суперэкспресса");
+            //ClickWebElement(".//*[@class='home-slider__tote-bet-item']", "Кнопка Заключить пари", "кнопки Заключить пари");
+            //WaitForPageLoad();
+            //if (!WebElementExist(".//*[@class='bet-table']"))
+            //    throw new Exception("Не перешли на страницу суперэкспресса");
+            //driver.SwitchTo().Window(driver.WindowHandles[0]);
+            //DeleteButton();
+        }
+    }
 }

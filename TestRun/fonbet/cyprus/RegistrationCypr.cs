@@ -42,7 +42,7 @@ namespace TestRun.fonbet.cyprus
             if (!(msg.GetAttribute("data-processstate").Equals("waitForVerificationCode") && msg.GetAttribute("data-errorcode").Equals("10")))
                 throw new Exception("Неверная обработка ошибки");
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Подтвердить", "кнопки Подтвердить");
-            driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).Clear();
+            ClearBeforeInput(".//*[@class='ui__field-wrap-inner']//input");
             SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "1234", "Поле Код смс", "поля  Код смс");
 
             SendKeysToWebElement(".//*[@class='registration__password-fields']/div[1]//input", "123qwe123", "Поле Пароль", "поля Пароль");
