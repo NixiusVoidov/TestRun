@@ -605,23 +605,47 @@ namespace TestRun.backoffice
             LogStage("Заполнение вкладки Ссылки");
             ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[2]", "Вкладка Ссылки", "вкладки Ссылки");
             LogStage("Заполнение Верхнее меню Колонка 1");
-            for(int i = 0; i < 5; i++)
-            {
-                ClickWebElement(".//*[@class='tabs__content']/div/div[2]//*[@class='role-form__inner']/table[1]//a", "Кнопка Добавить ссылку", "кнопки Добавить ссылку");
-                SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[1]//input", "Правила", "Поле Заголовок", "поля Заголовок");
-                SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[2]//input", "/#!/rules", "Поле Url", "поля Url");
+            for(int i = 0; i < 4; i++)
+            { //.//*[@class='tabs__content']/div/div[2]//*[@class='role-form__inner']/div[1]//table/tfoot//a
+                string[,] array = new string[4, 2] { { "Правила", "/#!/rules" }, { "Частые вопросы", "/#!/faq" }, { "Мобильный сайт", "/mobile/#/" }, { "TEST", "/#!/test" } };
+                ClickWebElement("//.//*[@class='tabs__content']/div/div[2]//*[@class='role-form__inner']/div[1]//table/tfoot//a", "Кнопка Добавить ссылку", "кнопки Добавить ссылку");
+                SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[1]//input", array[i, 0], "Поле Заголовок", "поля Заголовок");
+                SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[2]//input", array[i, 1], "Поле Url", "поля Url");
                 ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*//*[@class='form__row']/div[1]/a", "Кнопка Применить", "кнопки Применить");
-                i++;
+              
             }
-            
+            LogStage("Проверка редактирования");
+            ClickWebElement(".//*[@class='tabs__content-inner _state_visible']/div/table[1]/tbody/*[@class='form-table__body-row'][last()]/td[last()]/div[1]/a", "Кнопка Редактировать", "кнопки Редактировать");
+            SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[1]//input","1", "Поле Заголовок", "поля Заголовок");
+            ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*//*[@class='form__row']/div[1]/a", "Кнопка Применить", "кнопки Применить");
 
+            if (!driver.FindElement(By.XPath("//*[@class='tabs__content-inner _state_visible']/div/table[1]/tbody/*[@class='form-table__body-row'][last()]/td[1]")).Text.Contains("TEST1"))
+                throw new Exception("Не сработало редактирование");
 
+            LogStage("Проверка удаления");
+            ClickWebElement(".//*[@class='tabs__content-inner _state_visible']/div/table[1]/tbody/*[@class='form-table__body-row'][last()]/td[last()]/div[2]/a", "Кнопка Удаления", "кнопки Удаления");
+            if(driver.FindElements(By.XPath("//*[@class='tabs__content-inner _state_visible']/div/table[1]/tbody/*[@class='form-table__body-row']")).Count!=3)
+                throw new Exception("Не сработало удаление");
+
+            LogStage("Заполнение Верхнее меню Колонка 2");
+            for (int i = 0; i < 3; i++)
+            {
+                string[,] array = new string[3, 2] { { "Вакансии", "/#!/pages/vacancies" }, { "Акции", "/#!/pages/promo" }, { "О компании", "/#!/pages/about-us" }};
+                ClickWebElement(".//*[@class='tabs__content']/div/div[2]//*[@class='role-form__inner']/table[2]//a", "Кнопка Добавить ссылку", "кнопки Добавить ссылку");
+                SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[1]//input", array[i, 0], "Поле Заголовок", "поля Заголовок");
+                SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[2]//input", array[i, 1], "Поле Url", "поля Url");
+                ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*//*[@class='form__row']/div[1]/a", "Кнопка Применить", "кнопки Применить");
+            }
+
+            LogStage("Проверка приоритета");
+            ClickWebElement(".//*[@class='tabs__content-inner _state_visible']/div/table[2]/tbody/*[@class='form-table__body-row'][1]/td/div[1]/a", "Кнопка Редактировать", "кнопки Редактировать");
+            SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[4]//input", "2", "Поле Заголовок", "поля Заголовок");
+            ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*//*[@class='form__row']/div[1]/a", "Кнопка Применить", "кнопки Применить");
             //SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[1]//input", "Правила", "Поле Заголовок", "поля Заголовок");
             //SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[1]//input", "Правила", "Поле Заголовок", "поля Заголовок");
-
             //Thread.Sleep(500);
             //SendKeysToWebElement(".//*[@class='ui__field-inner']/textarea", "Это тестовый Анонс", "Поле Анонс", "поля Анонс");
-            //ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*//*[@class='form__row']/div[1]/a", "Кнопка Применить", "кнопки Применить");
+            //ClickWebElement(".//*[@class='tabs__content-inner _state_visible']/div/table[1]/tbody/tr[5]/td[last()]/div[1]/a", "Кнопка Редактировать", "кнопки Редактировать");
             //Thread.Sleep(2000);
             //SwitchToPreView();
             //WaitForPageLoad();
