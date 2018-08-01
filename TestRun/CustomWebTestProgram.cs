@@ -89,23 +89,24 @@ namespace TestRun
             base.BeforeRun();
             LogStartAction("Инициализация браузера");
             Console.WriteLine("");
+
             if (Browser.Equals("CHROME", StringComparison.InvariantCultureIgnoreCase))
             {
                 driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
             }
-            else  if (Browser.Equals("safari", StringComparison.InvariantCultureIgnoreCase))
+            else  if (Browser.Equals("SAFARI", StringComparison.InvariantCultureIgnoreCase))
             {
                 driver = new SafariDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
             }
-            else if (Browser.Equals("firefox", StringComparison.InvariantCultureIgnoreCase))
+            else if (Browser.Equals("FIREFOX", StringComparison.InvariantCultureIgnoreCase))
             {
                 driver = new FirefoxDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
             }
-            else if (Browser.Equals("opera", StringComparison.InvariantCultureIgnoreCase))
+            else if (Browser.Equals("OPERA", StringComparison.InvariantCultureIgnoreCase))
             {
                 driver = new OperaDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
             }
-            else if (Browser.Equals("ie", StringComparison.InvariantCultureIgnoreCase))
+            else if (Browser.Equals("IE", StringComparison.InvariantCultureIgnoreCase))
             {
                 driver = new InternetExplorerDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
             }
