@@ -199,7 +199,7 @@ namespace TestRun.fonbet
                 throw new Exception("Не переключается на placeholder с номером счета");
 
             LogStage("Проверка плейсхолдера Почты");
-            driver.FindElement(By.XPath(".//*[@class='login-form__form']/div[1]/input")).Clear();
+            ClearBeforeInput(".//*[@class='login-form__form']/div[1]/input");
             SendKeysToWebElement(".//*[@class='login-form__form']/div[1]/input", "ya@ya.ru", "Поле логина", "поля логина");
             IWebElement mailPlace = GetWebElement(".//*[@class='login-form__types-container']/div[3]", "Нет поля логина");
             var mailPlaceClass = mailPlace.GetAttribute("class");
@@ -207,7 +207,7 @@ namespace TestRun.fonbet
                 throw new Exception("Не переключается на placeholder с почтой");
 
             LogStage("Проверка плейсхолдера Телефона");
-            driver.FindElement(By.XPath(".//*[@class='login-form__form']/div[1]/input")).Clear();
+            ClearBeforeInput(".//*[@class='login-form__form']/div[1]/input");
             SendKeysToWebElement(".//*[@class='login-form__form']/div[1]/input", "+79991234567", "Поле логина", "поля логина");
             IWebElement phonePlace = GetWebElement(".//*[@class='login-form__types-container']/div[1]", "Нет поля логина");
             var phonePlaceClass = phonePlace.GetAttribute("class");
@@ -236,51 +236,66 @@ namespace TestRun.fonbet
         public override void Run()
         {
             base.Run();
-
-            RejectPwdChecker("12", "000000001");
-            RejectPwdChecker("10", "000000002");
-            RejectPwdChecker("4", "000000003");
-            RejectPwdChecker("1", "000000004");
+           
+            RejectPwdChecker("000000001", "0","12");
+            RejectPwdChecker("000000002", "0","10");
+            RejectPwdChecker("000000003", "0","4");
+            RejectPwdChecker("000000004", "0","1");
 
             LogStage("Переход на страницу восстановление пароля");
             ClickWebElement(".//*[@href='/#!/account/restore-password']", "Кнопка Забыли пароль", "кнопки забыли пароль");
 
             LogStage("Проверка sendCode по тестовому сценарию на error 10");
+            waitTillElementisDisplayed(driver, "//*[@class='toolbar__item']//button", 5);
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[2]//input", "000000005", "Поле номер телефона", "поля номер телефона");
-            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[3]//input", "11", "Поле капча", "поля капчи");
+            Thread.Sleep(500);
+            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[3]//input", "1", "Поле капча", "поля капчи");
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
+            waitTillElementisDisplayed(driver, ".//*[@class='toolbar__item']//button", 5);
+            Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='ui__field']", "123123", "Поле Код подтверждения", "поля Код подтверждения");
+            Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
-            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-            if (!errorMessage.Text.Contains("Неверный код подтверждения"))
+            waitTillElementisDisplayed(driver, ".//*[@id='restore-password-error']", 5);
+            var errorMessage = GetWebElement(".//*[@id='restore-password-error']", "Нет сообщения об ошибке");
+            if (!errorMessage.GetAttribute("data-errorcode").Equals("10"))
                 throw new Exception("Неверный текст ошибки");
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
 
             LogStage("Проверка sendPassword на reject");
-            driver.FindElement(By.XPath(".//*[@class='ui__field']")).Clear();
+            ClearBeforeInput(".//*[@class='ui__field']");
             SendKeysToWebElement(".//*[@class='ui__field']", "123456", "Поле Код подтверждения", "поля Код подтверждения");
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
+            waitTillElementisDisplayed(driver, ".//*[@class='change-password__form-inner']/div/div[1]//input", 5);
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[1]//input", "1234567Q", "Поле Новый пароль", "поля Новый пароль");
+            Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[2]//input", "1234567Q", "Поле Повторите новый пароль", "поля Повторите новый пароль");
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
-            var errorText = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-            if (!errorText.Text.Contains("В процессе регистрации произошла неожиданная ошибка"))
+            var errorText = GetWebElement(".//*[@id='restore-password-error']", "Нет текста ошибки");
+            if (!errorText.GetAttribute("data-errorcode").Equals("0") && errorText.GetAttribute("data-rejectioncode").Equals("1"))
                 throw new Exception("Неверный текст ошибки");
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
 
             LogStage("Проверка sendPassword на complete");
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[2]//input", "000000005", "Поле номер телефона", "поля номер телефона");
-            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[3]//input", "11", "Поле капча", "поля капчи");
+            Thread.Sleep(500);
+            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[3]//input", "1", "Поле капча", "поля капчи");
+            Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
+            Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='ui__field']", "123456", "Поле Код подтверждения", "поля Код подтверждения");
+            Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
+            Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[1]//input", "!23qweQWE", "Поле Новый пароль", "поля Новый пароль");
+            Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[2]//input", "!23qweQWE", "Поле Повторите новый пароль", "поля Повторите новый пароль");
+            Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
             var message = GetWebElement(".//*[@class='account-error__title']", "Нет title ошибки");
             if (!WebElementExist(".//*[@class='account__content']//span"))
                 throw new Exception("Нет кнопки \"Войти на сайт\"");
-            if (!message.Text.Contains("Пароль успешно изменён"))
+            if (!message.Text.Contains("Пароль успешно изменен."))
                 throw new Exception("Тестовое восстановление пароля не удалось");
 
         }
@@ -298,25 +313,27 @@ namespace TestRun.fonbet
 
             ClickOnAccount();
             ClickWebElement(".//*[@href='#!/account/profile/change-email']", "Вкладка Смена email", "вкладки смена email");
-
-            CreateProcessemailChecker("14", "1@dev.dev");
-            CreateProcessemailChecker("13", "2@dev.dev");
-            CreateProcessemailChecker("12", "3@dev.dev");
+           
+            CreateProcessemailChecker("1@dev.dev","rejected","0","14");
+            CreateProcessemailChecker("2@dev.dev", "rejected", "0", "13");
+            CreateProcessemailChecker("3@dev.dev", "rejected", "0", "12");
 
             LogStage("Проверка sendCode по тестовому сценарию");
-            driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
+            ClearBeforeInput(".//*[@class='ui__field-inner']/input");
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "4@dev.dev", "Поле email", "поля email");
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
             SendEmailCodeChecker("10", "1235");
             SendEmailCodeChecker("1", "9999");
-            driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
+            ClearBeforeInput(".//*[@class='ui__field-inner']/input");
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "4@dev.dev", "Поле email", "поля email");
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
-            driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
-            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "1234", "Поле email", "поля email");
+            ClearBeforeInput(".//*[@class='ui__field-inner']/input");
+            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "1234", "Поле ввода кода", "поля ввода кода");
+            Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки отправить");
+            waitTillElementisDisplayed(driver, ".//*[@classid='account-error__btn-inner']//span", 5);
             var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-            if (!errorMessage.Text.Contains("E-mail успешно подверждён"))
+            if (!errorMessage.Text.Contains("Поздравляем! Email-адрес подтвержден."))
                 throw new Exception("Неверный текст ошибки");
             ClickWebElement(".//*[@classid='account-error__btn-inner']//span", "Кнопка Вернуться к профилю", "кнопки Вернуться к профилю");
             var mainTab = GetWebElement(".//*[@class='account-tabs']/a[1]", "Нет вкладки Основные данные");
@@ -341,7 +358,7 @@ namespace TestRun.fonbet
         {
             base.Run();
 
-            if(!WebElementExist(".//*[@href='/#!/account/registration/Reg4']"))
+            if (!WebElementExist(".//*[@href='/#!/account/registration/Reg4']"))
                 throw new Exception("На данном сайте нет супер-регистрации");
 
             LogStage("Переход на страницу регистрации");
@@ -366,13 +383,15 @@ namespace TestRun.fonbet
             SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input", "4000100@mail.ru", "Поле email", "поля email");
             if (!button.GetAttribute("class").Contains("state_disabled"))
                 throw new Exception("Возможно продолжить без телефона");
+            Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input", "000000001", "Поле Номер телефона", "поля Номер телефона");
-            driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input")).Clear();
+            ClearBeforeInput(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input");
             driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input")).SendKeys("a");
             driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input")).SendKeys(Keys.Backspace);
             if (!button.GetAttribute("class").Contains("state_disabled"))
                 throw new Exception("Возможно продолжить без почты");
             SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input", "4000100@mail.ru", "Поле email", "поля email");
+            Thread.Sleep(500);
             ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
             var errorMessage = GetWebElement(".//*[@id='registration-v4-error']", "Нет модуля с ошибкой");
             if (!errorMessage.GetAttribute("data-rejectioncode").Equals("4") && !errorMessage.GetAttribute("data-processstate").Equals("rejected"))
@@ -400,7 +419,7 @@ namespace TestRun.fonbet
             SendSmsCodeRegistration("8", null, null, null);
             SendSmsCodeRegistration("0", null, null, null);
             SendSmsCodeRegistration("9", null, null, null);
-           
+
 
         }
     }
@@ -426,8 +445,7 @@ namespace TestRun.fonbet
                 "кнопки Верификации по киви");
             IWebElement inputData = GetWebElement(".//*[@class='ui__field-wrap-inner']//input", "Нет поля для ввода");
             Thread.Sleep(1500);
-            inputData.Clear();
-            Thread.Sleep(500);
+            ClearBeforeInput(".//*[@class='ui__field-wrap-inner']//input");
             SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "000000002", "Поле Номер телефона",
                 "поля Номер телефона");
             ClickWebElement(".//*[@id='rulesAgree']", "Чекбокс Соглашения с правилами",
@@ -456,7 +474,7 @@ namespace TestRun.fonbet
             SendSmsVerificationQiwi("5", "rejected", "0", "15");
             SendSmsVerificationQiwi("6", "rejected", "0", "1");
 
-            driver.FindElement(By.XPath(".//*[@class='ui__field-wrap-inner']//input")).Clear();
+            ClearBeforeInput(".//*[@class='ui__field-wrap-inner']//input");
             SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "7", "Поле Номер телефона", "поля Номер телефона");
             Thread.Sleep(1000);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
@@ -492,7 +510,7 @@ namespace TestRun.fonbet
                 "кнопки Верификации по БК");
             IWebElement inputData = GetWebElement(".//*[@class='verification__form-inner']/div/div[2]//input", "Нет поля номера карты фонбет");
 
-            inputData.Clear();
+            ClearBeforeInput(".//*[@class='verification__form-inner']/div/div[2]//input");
             SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[2]//input", "0000FFFF0002", "Поле Номера карты фонбет","поля Номера карты фонбет");
             Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[1]//input", "2222222222", "Поле Серия и номер паспорта", "поля Серия и номер паспорта");
@@ -546,25 +564,12 @@ namespace TestRun.fonbet
             ClickOnAccount();
             ClickWebElement(".//*[@href='#!/account/profile/change-phone']", "Вкладка Смена номера телефона", "вкладки Смена номера телефона");
             LogStage("Проверка createProcess по тестовому сценарию");
-            driver.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).Clear();
-            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "000000000", "Поле Номер телефона", "поля Номер телефона");
-            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
-            if (!WebElementExist(".//*[@class='ui__field-inner']/input"))
-                throw new Exception("Нет поля для ввода кода подтверждения");
-            ClickWebElement(".//*[@href='#!/account/profile/main']", "Вкладка Основная", "вкладки Основная");
-            ClickWebElement(".//*[@href='#!/account/profile/change-phone']", "Вкладка Смена номера телефона", "вкладки Смена номера телефона");
-            CreateProcessPhoneChange("000000002");
-            CreateProcessPhoneChange("000000003");
-            CreateProcessPhoneChange("000000004");
-            ClickWebElement(".//*[@href='#!/account/profile/change-phone']", "Вкладка Смена номера телефона", "вкладки Смена номера телефона");
-            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "000000005", "Поле Номер телефона", "поля Номер телефона");
-            ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
-
-            LogStage("Проверка sendSmsCode по тестовому сценарию");
-            SendSmsPhoneChange("2");
-            SendSmsPhoneChange("3");
-            SendSmsPhoneChange("4");
-            SendSmsPhoneChange("1");
+            CreateProcessPhoneChange("000000000",null,null,null);
+            CreateProcessPhoneChange("000000001", null, null, null);
+            CreateProcessPhoneChange("000000002", "rejected", "0","4");
+            CreateProcessPhoneChange("000000003", "rejected", "0", "11");
+            CreateProcessPhoneChange("000000004", null, "2", null);
+           
         }
     }
 }

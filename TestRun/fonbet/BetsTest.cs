@@ -215,7 +215,7 @@ namespace TestRun.fonbet
                 throw new Exception("Отсутсвтуют фрибеты на аккаунте");
             ClickWebElement(".//*[@class='coupon__freebet-switcher-head']", "Кнопка использовать фрибет", "кнопки использовать фрибет");
             IWebElement titleBet = GetWebElement(".//*[@class='coupons']/div[1]//*[@class='coupon__title']", "Не отображается title купона");
-            if(titleBet.Text!="Новый фрибет")
+            if(titleBet.Text!="Новое пари Фрибет")
                 throw new Exception("Не верный тайтл у фрибета");
             IList<IWebElement> fbButton = driver.FindElements(By.XPath(".//*[@class='coupon__foot-freebet-button-list']/div/span[2]")); //все кнопки с фрибетами
             int basicCount = fbButton.Count;

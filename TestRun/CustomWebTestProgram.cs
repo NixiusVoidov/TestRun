@@ -5,6 +5,10 @@ using System;
 using System.IO;
 using System.Reflection;
 using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium.Safari;
+using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Opera;
+using OpenQA.Selenium.IE;
 
 namespace TestRun
 {
@@ -88,6 +92,22 @@ namespace TestRun
             if (Browser.Equals("CHROME", StringComparison.InvariantCultureIgnoreCase))
             {
                 driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            }
+            else  if (Browser.Equals("safari", StringComparison.InvariantCultureIgnoreCase))
+            {
+                driver = new SafariDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            }
+            else if (Browser.Equals("firefox", StringComparison.InvariantCultureIgnoreCase))
+            {
+                driver = new FirefoxDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            }
+            else if (Browser.Equals("opera", StringComparison.InvariantCultureIgnoreCase))
+            {
+                driver = new OperaDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            }
+            else if (Browser.Equals("ie", StringComparison.InvariantCultureIgnoreCase))
+            {
+                driver = new InternetExplorerDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
             }
             else
                 throw new Exception(String.Format("Неизвестный тип браузера: '{0}'", Browser));
@@ -182,6 +202,7 @@ namespace TestRun
                 LogStartAction(String.Format("Ввод \"{0}\" в {1}", keys, elementCaptionInNominative));
                 IWebElement element = driver.FindElement(By.XPath(xPath));
                 element.SendKeys(keys);
+                
                 LogActionSuccess();
             }
             catch (NoSuchElementException)

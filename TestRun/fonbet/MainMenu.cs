@@ -24,21 +24,20 @@ namespace TestRun.fonbet
 
             LogStage("Проверка работы всех разделов меню \"Я хочу заключать пари в интернете\"");
             ClickWebElement(".//*[@class='how2play__help-steps']/div[1]","Кнопка как заключать пари в интернете", "кнопки как заключать пари в интернете");
-            ClickWebElement(".//*[@class='how2play__stepout _visible']/div[1]","Раздел удаленная идентификация","раздела удаленная идентификация");
-            if(!WebElementExist(".//*[@class='how2play__stepout _visible']/div[1]//*[@href='#!/account/registration/RemoteVerification2']"))
-                throw new Exception("Нет ссылки на удаленную верификацию");
+            if(!WebElementExist(".//*[@class='how2play__stepout _visible']/div[1]//*[@href='#!/account/registration']"))
+                throw new Exception("Нет ссылки на быструю регистрацию");
 
-            ClickWebElement(".//*[@class='how2play__stepout _visible']/div[2]", "Раздел карты Фонбет","раздела карты Фонбет");
-            if (!WebElementExist(".//*[@class='how2play__stepout _visible']/div[2]//*[@href='#!/account/registration/Bk']"))
-                throw new Exception("Нет ссылки на регистрацию БК");
+            //ClickWebElement(".//*[@class='how2play__stepout _visible']/div[2]", "Раздел карты Фонбет","раздела карты Фонбет");
+            //if (!WebElementExist(".//*[@class='how2play__stepout _visible']/div[2]//*[@href='#!/account/registration/Bk']"))
+            //    throw new Exception("Нет ссылки на регистрацию БК");
 
-            ClickWebElement(".//*[@class='how2play__stepout _visible']/div[3]", "Раздел кошелек Киви", "раздела кошелек Киви");
-            if (!WebElementExist(".//*[@class='how2play__stepout _visible']/div[3]//*[@href='#!/account/registration/Qiwi']"))
-                throw new Exception("Нет ссылки на регистрацию Киви");
+            //ClickWebElement(".//*[@class='how2play__stepout _visible']/div[3]", "Раздел кошелек Киви", "раздела кошелек Киви");
+            //if (!WebElementExist(".//*[@class='how2play__stepout _visible']/div[3]//*[@href='#!/account/registration/Qiwi']"))
+            //    throw new Exception("Нет ссылки на регистрацию Киви");
 
-            ClickWebElement(".//*[@class='how2play__stepout _visible']/div[4]", "Раздел без карты и без киви", "раздела без карты и без киви");
-            if (!WebElementExist(".//*[@class='how2play__stepout _visible']/div[4]//*[@href='#!/account/how2Register']"))
-                throw new Exception("Нет ссылки на  ИНУЮ регистрацию");
+            //ClickWebElement(".//*[@class='how2play__stepout _visible']/div[4]", "Раздел без карты и без киви", "раздела без карты и без киви");
+            //if (!WebElementExist(".//*[@class='how2play__stepout _visible']/div[4]//*[@href='#!/account/how2Register']"))
+            //    throw new Exception("Нет ссылки на  ИНУЮ регистрацию");
 
             LogStage("Проверка работы всех разделов меню \"Я хочу заключать пари в клубах\"");
             ClickWebElement(".//*[@class='how2play__help-steps']/div[2]", "Кнопка как заключать пари в клубах", "кнопки как заключать пари в клубах");
@@ -152,6 +151,30 @@ namespace TestRun.fonbet
                 throw new Exception("Тайтл не соответсвует странице");
         }
     }
+    class CompressionMenu : FonbetWebProgram
+    {
+        public static CustomProgram FabricateCompressionMenu()
+        {
+            return new CompressionMenu();
+        }
 
-    
+        protected override bool NeedLogin()
+        {
+            return false;
+        }
+
+        public override void Run()
+        {
+            base.Run();
+            var windowSize = new System.Drawing.Size(1400,1100);
+            driver.Manage().Window.Size = windowSize;
+            LogStage("Проверка меню на компактность");
+            if (!WebElementExist(".//*[@class='menu__item _type_more']"))
+                throw new Exception("Не работает компактное меню");
+            ClickWebElement(".//*[@class='menu__item _type_more']", "Многоточие в меню", "многоточия в меню");
+            if (!driver.FindElement(By.XPath(".//*[@class='menu__item _type_more']/a/span")).GetAttribute("class").Contains("expanded"))
+                throw new Exception("Не разворачивается компактное меню");
+        }
+    }
+
 }
