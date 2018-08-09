@@ -54,4 +54,77 @@ namespace TestRun.fonbet
              }
         }
     }
+    class EventViewLive : FonbetWebProgram
+    {
+        public static CustomProgram FabricateEventViewLive()
+        {
+            return new EventViewLive();
+        }
+
+        public override void Run()
+        {
+            base.Run();
+
+            MakeDefaultSettings();
+
+            LogStage("Переход в Лайв");
+            ClickWebElement(".//*[@href='/#!/live']", "Вкладка \"Лайв\"", "вкладки \"Лайв\"");
+            ClickWebElement(".//*[@class='events__head _page_live']/div/span", "сендвич \"меню\"", "сендвича \"меню\"");
+            ClickWebElement(".//*[@id='popup']/li[1]", "Меню слева", "Меню слева");
+
+            LogStartAction("Открываем Eventview");
+            IList<IWebElement> columns = driver.FindElements(By.XPath(".//span[contains(@class, 'flag')]/ancestor::tbody[contains(@class, 'table__body')]//div[contains(@class, '_state_expanded')]/ancestor::tr[contains(@class, 'table__row')]//a[contains(@class, 'table__match-title-text')]")); // Все строки  c флагом и стрелкой
+            columns[0].Click();
+
+            LogStartAction("Проверяем на флаги, таймер и комментарии");
+            if (!WebElementExist(".//*[@class='ev-scoreboard__event-logo--3hMJr']"))
+            {
+                if (!WebElementExist(".//*[@class='ev-scoreboard__event-logo--3hMJr _no-timer--2jUtY']")) // при отсутствии времени
+                    throw new Exception("Не оборажается флаг турнира в ивент вью");
+                else
+                    throw new Exception("Не оборажается флаг турнира в ивент вью");
+            }
+            if (WebElementExist(".//*[@class='ev-scoreboard__event-logo--3hMJr']"))
+            {
+                if (!WebElementExist(".//*[@class='ev-scoreboard__timer-text--3Ulee']"))
+                    throw new Exception("Не оборажается таймер события в ивент вью");
+            }
+           
+            if (!WebElementExist(".//*[@class='ev-scoreboard__comment--3u2eF']"))
+                throw new Exception("Не оборажается поле комментария в ивент вью");
+            LogActionSuccess();
+
+            LogStartAction("Проверяем переключение табов");
+            var tabs = driver.FindElements(By.XPath(".//*[@class='ev-tabs__item--NcTxT']"));
+            tabs[0].Click();
+           
+            if(!tabs[0].GetAttribute("class").Contains("state_select"))
+                throw new Exception("Непереключается таб");
+            LogActionSuccess();
+
+            LogStartAction("Проверяем видео фрейм и избранное");
+            IWebElement star = GetWebElement(".//*[@class='ev-scoreboard__favorite-icon--27rCl']", "Звездочка в событии");
+            ClickWebElement(".//*[@class='ev-scoreboard__favorite-icon--27rCl']", "Звездочка в ивентвью", "звездочки в ивентвью");
+            if (!star.GetAttribute("class").Contains("state_on"))
+                throw new Exception("Звездочка не нажимается");
+            ClickWebElement(".//*[@href='#!/live/favorites']", "Меню Избранное", "меню Избранное");
+            IList<IWebElement> events = driver.FindElements(By.XPath(".//*[@class='table']/tbody"));
+            if(events.Count!=1)
+                throw new Exception("Событие не добавилось в избранное");
+            ClickWebElement(".//*[@href='#!/live/broadcast']", "Меню Трансляция", "меню Трансляция");
+            ClickWebElement(".//*[@class='table__match-title-text']", "Событие из грида", "события из грида");
+            ClickWebElement("//div[contains(@class, 'ev-scoreboard__channel--2wTx7')]", "Кнопка трансляции", "кнопки трансляции");
+            if (!WebElementExist(".//*[@class='tv']"))
+                throw new Exception("Событие не добавилось в избранное");
+            LogActionSuccess();
+
+            LogStartAction("Проверяем возврат на предыдущий шаг");
+            ClickWebElement(".//*[@class='ev-scoreboard__back-button--4V1iz']", "Кнопка \"Назад\"", "кнопки \"Назад\"");
+            string url = driver.Url;
+            if (!url.Contains("/#!/live/broadcast"))
+                throw new Exception("Не рабоатет кнопка назад из ивентвью");
+            LogActionSuccess();
+
+        }
+    }
 }

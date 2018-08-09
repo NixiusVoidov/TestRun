@@ -962,6 +962,7 @@ namespace TestRun
             driver.FindElement(By.XPath(xpath)).Clear();
             var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
             wait.Until(drv => drv.FindElement(By.XPath(xpath))).GetAttribute("value").Equals("");
+           
         }
         protected static bool waitTillElementisDisplayed(IWebDriver driver, string xpath, int timeoutInSeconds)
         {

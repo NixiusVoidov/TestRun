@@ -253,6 +253,11 @@ namespace TestRun.fonbet
                 throw new Exception("Не работает отображение номеров событий");
             LogActionSuccess();
 
+            LogStartAction("Проверка скрытия купонов на вкладке \"Недавняя\"");
+            if (WebElementExist(".//*[@class='coupon__content']"))
+                throw new Exception("Не работает скрытие принятых купонов");
+            LogActionSuccess();
+
             LogStartAction("Проверка отображения статусов купонов цветом");
             ClickWebElement(".//*[@class='coupons-toolbar']/div[3]", "Меню \"Нерасчитанные\"",
                    "меню \"Нерасчитанные\"");
@@ -309,9 +314,7 @@ namespace TestRun.fonbet
             if (!couponArrowClass.Contains("expanded"))
                 throw new Exception("Не работает автосворачивание купонов");
 
-            LogStartAction("Проверка скрытия принятых купонов");
-            if (WebElementExist(".//*[@class='coupon__info']//*[text()='Принято']"))
-                throw new Exception("Не работает скрытие принятых купонов");
+           
         }
 
     }
@@ -388,7 +391,7 @@ namespace TestRun.fonbet
             IWebElement footballArrow = GetWebElement(".//*[@class='list-view-new__table-body']/tr[4]/td[1]/div[1]//*[@class='event-v-list__cell-overlay']/div", "Нет стрекли разворота вида спорта");
             ClickWebElement(".//*[@href='#!/bets/hockey']", "Строка Хоккей в меню спорта слева", "строки Хоккей в меню спорта слева");
             var footballArrowClass = footballArrow.GetAttribute("class");
-            if (!footballArrowClass.Contains("state_opened"))
+            if (footballArrowClass.Contains("state_opened"))
                 throw new Exception("Не работает автосворачивание элементов в меню событий");
 
             LogStartAction("Проверка меню слева");
