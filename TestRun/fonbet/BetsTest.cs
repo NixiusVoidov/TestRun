@@ -162,12 +162,12 @@ namespace TestRun.fonbet
             string foraText = fora[2].Text;
 
             string[] data = {
-                "Поб 1",
-                "Ничья",
-                "Поб 2",
-                "1X",
-                "12",
-                "X2",
+                "Поб 1 (осн. время)",
+                "Ничья (осн. время)",
+                "Поб 2 (осн. время)",
+                "1X (осн. время)",
+                "12 (осн. время)",
+                "X2 (осн. время)",
                 "1",
                 "2",
                 "> "+foraText+"",
@@ -210,7 +210,7 @@ namespace TestRun.fonbet
             LogStage("Выбираю событие для купона");
             IList<IWebElement> grid = driver.FindElements(By.XPath(".//*[@class='table']/tbody//td[5]")); //все ставки из одного столбца грида событий
             grid[6].Click();
-
+            WaitForPageLoad();
             if(!WebElementExist(".//*[@class='coupon__freebet-switcher-head']"))
                 throw new Exception("Отсутсвтуют фрибеты на аккаунте");
             ClickWebElement(".//*[@class='coupon__freebet-switcher-head']", "Кнопка использовать фрибет", "кнопки использовать фрибет");
@@ -250,7 +250,7 @@ namespace TestRun.fonbet
                 throw new Exception("Фрибет не пропал после ставки");
 
             LogStage("Проверяю что фрибет правильно отображается в истории ставок");
-            ClickWebElement(".//*[@class='header__login-item'][1]", "ФИО в шапке", "ФИО в шапке");
+            ClickWebElement(".//*[@class='header__login-head']/div[1]", "Кнопка Аккаунт", "кнопки Аккаунт");
             ClickWebElement(".//*[@id='popup']/li[1]", "Кнопка Личный кабинет", "кнопки Личный кабинет");
             ClickWebElement(".//*[@href='#!/account/history']", "Меню \"История\"", "меню \"История\"");
             IWebElement betType = GetWebElement(".//*[@class='bets-list__data']/div[1]//*[@class='column column-4']", "Не отображается тип пари");

@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
-
+using System.Threading;
 
 namespace TestRun.fonbet
 {
@@ -91,7 +91,9 @@ namespace TestRun.fonbet
 
             LogStage("Проверка работы звездочки в дочерних событиях");
             ClickWebElement(".//*[@href='#!/bets/football']", "Меню футбола", "меню футбола");
-            ClickWebElement(".//*[@class='list-view-new__table-body']/tr[4]/td/div", "Разворот всех турниров по футболу", "разворот всех турниров по футболу");
+            //Thread.Sleep(5000);
+            waitTillElementisDisplayed(driver,".//*[@class='event-v-list__icon-expander _state_opened']",5);
+            //ClickWebElement(".//*[@class='list-view-new__table-body']/tr[4]/td/div", "Разворот всех турниров по футболу", "разворот всех турниров по футболу");
             ClickWebElement(".//*[@class='list-view-new__table-body']//tr[8]//a/div/div[2]", "Исключение одиного турнира из всего футбола", "на исключение одиного турнира из всего футбола");
             IWebElement footbalTournamentStar = GetWebElement(".//*[@class='list-view-new__table-body']//tr[8]//a/div/div[2]", "не найдена звезда в фильтре конкретного турнира по футболу");
             if (!footbalTournamentStar.GetAttribute("class").Contains("_state_off"))

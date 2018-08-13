@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 
 namespace TestRun.fonbet
 {
@@ -67,11 +69,15 @@ namespace TestRun.fonbet
                 throw new Exception("На главной странице нет слайдера");
 
             LogStage("Проверка переключения слайдера по кнопкам");
+            IWebElement slider = driver.FindElement(By.XPath(".//*[@class='home-slider__event-link']"));
+            new Actions(driver).MoveToElement(slider).Perform();
             ClickWebElement(".//*[@class='home-slider__switch-wrap']/div[1]", "Кнопка первой страницы слайдера", "кнопки первой страницы слайдера");
             var sliderButton = GetWebElement(".//*[@class='home-slider__switch-wrap']/div[1]", "Нет кнопки у слайдера");
             var sliderButtonClass = sliderButton.GetAttribute("class");
             if (!sliderButtonClass.Contains("selected"))
                 throw new Exception("Проблемы со слайдером на главной странице");
+
+            new Actions(driver).MoveToElement(slider).Perform();
             ClickWebElement(".//*[@class='home-slider__switch-wrap']/div[2]", "Кнопка второй страницы слайдера", "кнопки второй страницы слайдера");
             var sliderSecondButton = GetWebElement(".//*[@class='home-slider__switch-wrap']/div[2]", "У слайдера только одна кнопка");
             var sliderSecondButtonClass = sliderSecondButton.GetAttribute("class");
@@ -85,6 +91,8 @@ namespace TestRun.fonbet
             SendKeysToWebElement(".//*[@class='login-form__form']/div[1]/input", Login, "поле логина", "поля логина");
             SendKeysToWebElement(".//*[@class='login-form__form']/div[2]/input", Password, "поле пароля", "поля пароля");
             ClickWebElement(".//*[@class='login-form__form-row _right']/div[2]/button", "Кнопка логина", "кнопки логина");
+            IWebElement homeSlider = driver.FindElement(By.XPath(".//*[@class='home-slider']"));
+            new Actions(driver).MoveToElement(homeSlider).Perform();
             ClickWebElement(".//*[@class='home-slider__switch-wrap']/div[2]", "Кнопка второй страницы слайдера", "кнопки второй страницы слайдера");
             ClickWebElement(".//*[@class='home-slider__bets']/div[1]", "Модуль ставки на странице слайдера", "модуля ставки на странице сладера");
             if (!WebElementExist(".//*[@class='coupons']/div[1]//*[@class='coupon__title']"))
@@ -112,9 +120,11 @@ namespace TestRun.fonbet
             LogStage("Проверка наличия блока новостей");
             if (!WebElementExist(".//*[@class='home-news__items']"))
                 throw new Exception("Нет блока новостей на главной странице сайта");
-
+            //waitTillElementisDisplayed(driver, ".//*[@class='home-news__items']/article[1]/h1", 5);
+            //Thread.Sleep(2000);
             LogStage("Проверка отображения и корретной работы блока новостей");
-            ClickWebElement(".//*[@class='home-news__items']/article[1]/h1", "1ый топик из ленты новостей", "1ого топика из ленты новостей");
+            ClickWebElement(".//*[@class='home-news__items']/article[1]/h1/a", "1ый топик из ленты новостей", "1ого топика из ленты новостей");
+            Thread.Sleep(1500);
             if (!WebElementExist(".//*[@id='popupModal']"))
                 throw new Exception("Не открылся попап с новостью");
             ClickWebElement(".//*[@class='news-modal__close']", "Кнопка закрытия popup", "кнопки закрытия popup");

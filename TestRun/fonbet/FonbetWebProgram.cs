@@ -154,8 +154,8 @@ namespace TestRun
         protected void ClickOnAccount()
         {
             LogStage("Переход в Личный кабинет");
-            ClickWebElement(".//*[@class='header__item header__login']/div/div[1]/span", "ФИО в шапке", "ФИО в шапке");
-            ClickWebElement(".//*[@id='popup']/li[2]", "Кнопка Личный кабинет", "кнопки Личный кабинет");
+            ClickWebElement(".//*[@class='header__login-head']/div[1]", "Кнопка Аккаунт", "кнопки Аккаунт");
+            ClickWebElement(".//*[@id='popup']/li[1]", "Кнопка Личный кабинет", "кнопки Личный кабинет");
         }
 
         // Метод устанавливает настройки вебсайта по-умолчанию.
@@ -986,6 +986,15 @@ namespace TestRun
             return elementDisplayed;
 
         }
+
+
+        protected  void waitTillElementContains(IWebDriver driver, string xpath, string containsText)
+        {
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            wait.Until(drv => drv.FindElement(By.XPath(xpath))).GetAttribute("class").Contains(containsText);
+        }
+
+
         protected void SendSmsVerificationBK(string smsValue, string process, string code, string rejcode)
         {
             LogStage("Проверка SendSmsCode по тестовому сценарию");

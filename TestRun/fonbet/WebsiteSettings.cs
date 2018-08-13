@@ -424,11 +424,19 @@ namespace TestRun.fonbet
             if (couponMenuClass.Contains("wide"))
                 throw new Exception("Не работает узкая лента купонов");
 
-            LogStage("Проверка функции Развернуть все купоны");
+            LogStage("Проверка функции Скрыть все недавние купоны");
             ClickWebElement(".//*[@class='coupons-toolbar']/div[1]", "Меню отображения списка ставок", "меню отображения списка ставок");
             ClickWebElement(".//*[@id='popupLineMenu']/li[1]", "Кнопка узкая лента купонов", "кнопки узкая ленты купонов");
             ClickWebElement(".//*[@class='coupons-toolbar']/div[1]", "Меню отображения списка ставок", "меню отображения списка ставок");
-            ClickWebElement(".//*[@id='popupLineMenu']/li[2]", "Кнопка Развернуть все купоны", "кнопки Развернуть все купоны");
+            ClickWebElement(".//*[@id='popupLineMenu']/li[2]", "Кнопка Скрыть все недавние купоны", "кнопки Скрыть все недавние купоны");
+            if(!WebElementExist(".//*[@class='coupon__content-empty']"))
+                throw new Exception("Не работает скрытие всех купонов");
+            ClickWebElement(".//*[@class='coupons-toolbar']/div[1]", "Меню отображения списка ставок", "меню отображения списка ставок");
+            ClickWebElement(".//*[@id='popupLineMenu']/li[2]", "Кнопка Показать все недавние купоны", "кнопки Показать все недавние купоны");
+
+            LogStage("Проверка функции Развернуть все купоны");
+            ClickWebElement(".//*[@class='coupons-toolbar']/div[1]", "Меню отображения списка ставок", "меню отображения списка ставок");
+            ClickWebElement(".//*[@id='popupLineMenu']/li[3]", "Кнопка Развернуть все купоны", "кнопки Развернуть все купоны");
 
             LogStartAction("Проверка кол-ва стрелочек у купонов");
             IList<IWebElement> betType = driver.FindElements(By.XPath(".//*[@class='coupon__info-item-inner']//*[@class='coupon__info-text']"));

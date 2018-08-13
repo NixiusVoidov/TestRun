@@ -135,7 +135,10 @@ namespace TestRun.fonbet
 
             LogStage("Переход во вкладку \"Операции\"");
             ClickWebElement(".//*[@href='#!/account/history']", "Меню История", "меню История");
+            Thread.Sleep(2000);
             ClickWebElement(".//*[@class='account-calendar__row'][1]/div[1]", "Дата первого видимого дня календаря", "даты первого видимого дня календаря"); //подгружаю события минимум за прошедший месяц
+            Thread.Sleep(2000);
+            waitTillElementContains(driver, ".//*[@class='account-calendar__row'][1]/div[1]", "loaded");
             ClickWebElement(".//*[@href='#!/account/history/operations']", "Вкладка Операции", "вкладки Операции");
 
             LogStage("Снятие всех фильтров в столбце \"Тип операции\"");
@@ -145,7 +148,7 @@ namespace TestRun.fonbet
                 string nameTofind = string.Format(".//*[@class='ui__checkboxes']/div[{0}]//*[@class='ui__checkbox-text']/span", i);
                 var element = driver.FindElement(By.XPath(nameTofind));
                 element.Click();
-                Thread.Sleep(200);
+                Thread.Sleep(500);
             }
 
             LogStage("Проверка работы всех фильтров в столбце \"Тип операции\"");
@@ -162,6 +165,7 @@ namespace TestRun.fonbet
                     if (!betoperationGridText.Equals(element))
                         throw new Exception("Не работают фильтры Типа операций");
                 }
+                Thread.Sleep(200);
                 ClickWebElementWithText("ui__checkbox-text", element, "Чекбокс", "чекбокса");
             }
 
@@ -332,9 +336,8 @@ namespace TestRun.fonbet
             Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки отправить");
             waitTillElementisDisplayed(driver, ".//*[@classid='account-error__btn-inner']//span", 5);
-            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-            if (!errorMessage.Text.Contains("Поздравляем! Email-адрес подтвержден."))
-                throw new Exception("Неверный текст ошибки");
+           if(!WebElementExist(".//*[@class='account-error _type_success _style_bordered']"))
+                throw new Exception("Ошибка на финальном шаге. Нет поздравительного сообщения");
             ClickWebElement(".//*[@classid='account-error__btn-inner']//span", "Кнопка Вернуться к профилю", "кнопки Вернуться к профилю");
             var mainTab = GetWebElement(".//*[@class='account-tabs']/a[1]", "Нет вкладки Основные данные");
             var mainTabClass = mainTab.GetAttribute("class");
@@ -562,6 +565,7 @@ namespace TestRun.fonbet
             base.Run();
 
             ClickOnAccount();
+            waitTillElementisDisplayed(driver, ".//*[@href='#!/account/profile/change-phone']", 5);
             ClickWebElement(".//*[@href='#!/account/profile/change-phone']", "Вкладка Смена номера телефона", "вкладки Смена номера телефона");
             LogStage("Проверка createProcess по тестовому сценарию");
             CreateProcessPhoneChange("000000000",null,null,null);
