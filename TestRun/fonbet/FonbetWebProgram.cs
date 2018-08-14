@@ -263,9 +263,10 @@ namespace TestRun
                 waitTillElementisDisplayed(driver, ".//*[@name='AMOUNTRUB']", 5);
                 SendKeysToWebElement(".//*[@name='AMOUNTRUB']", "2409", "Поле Суммы(руб)", "поля Суммы(руб)");
                 waitTillElementisDisplayed(driver, "//*[@class='ui__label']/input", 5);
+                Thread.Sleep(1500);
                 SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg","Поле Прикрепления файла", "поля Прикрепления файла");
                 waitTillElementisDisplayed(driver, ".//*[@class='toolbar__item account-form__button']/a/div", 5);
-                Thread.Sleep(1000);
+                Thread.Sleep(1500);
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;
             }
@@ -274,7 +275,9 @@ namespace TestRun
             {
                 SendKeysToWebElement(".//*[@name='AMOUNTRUB']", "2409", "Поле Суммы(руб)", "поля Суммы(руб)");
                 SendKeysToWebElement(".//*[@name='PROBLEMDESCRIPTION']", "Test", "Поле описания проблемы", "поля описания проблемы"); //1 - мобильный телефон
+                
                 SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                Thread.Sleep(1500);
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;
             }
@@ -283,6 +286,7 @@ namespace TestRun
             {
                 SendKeysToWebElement(".//*[@name='QUESTION']", "Test", "Поле Вопрос", "поля Вопрос"); //2-1 вопрос по работе сайта 
                 SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg","Поле Прикрепления файла", "поля Прикрепления файла");
+                Thread.Sleep(1500);
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;
             }
@@ -292,6 +296,7 @@ namespace TestRun
                 SendKeysToWebElement(".//*[@name='COMMENT']", "Test", "Поле Замечание", "поля Замечание"); //2-2 замечания и предложения
                 SendKeysToWebElement(".//*[@name='SUGGESTION']", "Test", "Поле Предложение", "поля Предложение");
                 SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg","Поле Прикрепления файла", "поля Прикрепления файла");
+                Thread.Sleep(1500);
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;
             }
@@ -301,6 +306,7 @@ namespace TestRun
                 SendKeysToWebElement(".//*[@name='TYPEOFAPPLICATION']", "Test", "Поле Тип приложения", "поля Тип приложения"); //2-3 вопрос по работе моб приложения
                 SendKeysToWebElement(".//*[@name='QUESTION']", "Test", "Поле Вопрос", "поля Вопрос");
                 SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                Thread.Sleep(1500);
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;
             }
@@ -310,8 +316,9 @@ namespace TestRun
                 SendKeysToWebElement(".//*[@name='BETNUMBER']", "523", "Поле Номер ставки", "поля Номер ставки"); //3-1 пари Лайф
                 ClickWebElement(".//*[@class='ui-datetime__actions']", "Иконка календарь", "иконки календаря");
                 ClickWebElement(".//*[@class='ui-calendar__body']/tr[1]/td[1]", "Поле даты в календаре", "поля даты в календаре");
+                ClickWebElement(".//*[@class='ui-datetime__actions']", "Иконка календарь", "иконки календаря");
                 SendKeysToWebElement(".//*[@name='QUESTION']", "Test Question", "Поле Содержание вопроса", "поля Содержание вопроса");
-                SendKeysToWebElement(".//*[@name='REQUEST']", "Test Request", "Поле Просьба к администрации", "поля Просьба к администрации");
+               // SendKeysToWebElement(".//*[@name='REQUEST']", "Test Request", "Поле Просьба к администрации", "поля Просьба к администрации");
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;
             }
@@ -353,10 +360,18 @@ namespace TestRun
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;
             }
-
             if (inputValue == 72)
             {
-                SendKeysToWebElement(".//*[@name='COMMENT']", "Test", "Поле Замечание", "поля Замечание"); //7-2 
+                SendKeysToWebElement(".//*[@name='QUESTION']", "Test", "Поле Вопрос", "поля Вопрос"); //7-2
+                SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                Thread.Sleep(1500);
+                ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
+                return;
+            }
+
+            if (inputValue == 73)
+            {
+                SendKeysToWebElement(".//*[@name='COMMENT']", "Test", "Поле Замечание", "поля Замечание"); //7-3
                 SendKeysToWebElement(".//*[@name='SUGGESTION']", "Test", "Поле Предложение", "поля Предложение");
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;
@@ -366,8 +381,8 @@ namespace TestRun
         protected void CreateNewRequest(string firstClassValue, string firstError, string secondClassValue, string secondError)
         {
             LogStage("Создание нового запроса");
-            string firstMenuValue = string.Format(".//*[@class='ui-dropdown__items']/div[{0}]", firstClassValue);
-            string secondMenuValue = string.Format(".//*[@class='ui-dropdown__items']/div[{0}]", secondClassValue);
+            string firstMenuValue = string.Format(".//span[text()='{0}']", firstClassValue);
+            string secondMenuValue = string.Format(".//span[text()='{0}']", secondClassValue);
             string firstErrorValue = string.Format("Строка \"{0}\"", firstError);
             string firstErrorValueTwo = string.Format("строки \"{0}\"", firstError);
             string secondErrorValue = string.Format("Строка \"{0}\"", secondError);
@@ -379,15 +394,15 @@ namespace TestRun
             ClickWebElement(".//*[@class='account-form__window _icon_img']//label[2]", "Меню Тема запроса", "меню Тема запроса");
             ClickWebElement(secondMenuValue, secondErrorValue, secondErrorValueTwo);
             ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
-            if (!WebElementExist(".//*[@class='account-form__message _kind-error _style-box']"))
-                throw new Exception("В форме нет обязательных полей");
+            if (!WebElementExist(".//*[@class='ui__error']"))
+                throw new Exception("Можно продолжить без обязательных полей");
         }
 
         //Метод проверяет все фильтры при работе с запросом
         protected void CheckRequestFilter(string requestName)
         {
             LogStage("Проверка сообщения о создании заявки");
-            waitTillElementisDisplayed(driver, ".//*[@class='account-form__message _kind-top-notice _style-box']", 5);
+            Thread.Sleep(2000);
             if (!WebElementExist(".//*[@class='account-form__message _kind-top-notice _style-box']"))
                 throw new Exception("Нет сообщения о создании заявки");
             IWebElement createResult = GetWebElement(".//*[@class='account-form__message _kind-top-notice _style-box']", "Нет сообщения о создании заявки");
@@ -451,9 +466,14 @@ namespace TestRun
             LogStage("Проверка что фаил скачивается из заявки");
             ClickWebElement(".//*[@class='requests-list__data']/div[1]", "Строка с последней созданной заявкой", "строки с последней созданной заявкой");
             ClickWebElement(".//*[@class='request-details']//*[@class='toolbar__item']", "Кнопка закрыть заявку", "кнопки закрыть заявку");
-            ClickWebElement(".//*[@class='request-details__request-file']/span", "Кнопка скачать прикрепленный фаил", "кнопки скачать прикрепленный фаил");
-            if (CheckFileDownloaded("rccimg_0000000011_d180d396.jpg") == false)
-                throw new Exception("Фаил из заявки не скачался");
+            if(WebElementExist(".//*[@class='request-details__request-file']/span"))
+            {
+                ClickWebElement(".//*[@class='request-details__request-file']/span", "Кнопка скачать прикрепленный фаил", "кнопки скачать прикрепленный фаил");
+                Thread.Sleep(1500);
+                if (CheckFileDownloaded("rccimg_0000000011_d180d396.jpg") == false)
+                    throw new Exception("Фаил из заявки не скачался");
+            }
+           
         }
         // Метод принимает кол-во отмеченных событий в суперэкспрессе
         protected void MarkedBoxCounter(int value, string mark)

@@ -35,6 +35,7 @@ namespace TestRun
             CustomProgram.Register("request_depositqiwi", fonbet.requests.DepositQiwi.FabricateDepositQiwi); //Проверка полного цикла создания и работы с запросом на тему "Депозит-Киви" из личного кабинета пользователя
             CustomProgram.Register("request_depositcard", fonbet.requests.DepositCard.FabricateDepositCard); //Проверка полного цикла создания и работы с запросом на тему "Депозит-Карта" из личного кабинета пользователя
             CustomProgram.Register("request_depositmobile", fonbet.requests.DepositMobile.FabricateDepositMobile); //Проверка полного цикла создания и работы с запросом на тему "Депозит-Мобильный телефон" из личного кабинета пользователя
+            CustomProgram.Register("request_depositapple", fonbet.requests.DepositApple.FabricateDepositApple); //Проверка полного цикла создания и работы с запросом на тему "Депозит-Apple Pay" из личного кабинета пользователя
             CustomProgram.Register("request_deposityandex", fonbet.requests.DepositYandex.FabricateDepositYandex); //Проверка полного цикла создания и работы с запросом на тему "Депозит-Янлекс Деньги" из личного кабинета пользователя
             CustomProgram.Register("request_supportsite", fonbet.requests.SupportSite.FabricateSupportSite); //Проверка полного цикла создания и работы с запросом на тему "Техподдержка-Сайт" из личного кабинета пользователя
             CustomProgram.Register("request_supportsuggestion", fonbet.requests.SupportSuggestion.FabricateSupportSuggestion); //Проверка полного цикла создания и работы с запросом на тему "Техподдержка-Вопросы и предложениия" из личного кабинета пользователя
@@ -48,6 +49,7 @@ namespace TestRun
             CustomProgram.Register("request_paymentyandex", fonbet.requests.PaymentYandex.FabricatePaymentYandex); //Проверка полного цикла создания и работы с запросом на тему "Проблемы с выплатой - Яндекс Деньги" из личного кабинета пользователя
             CustomProgram.Register("request_phonecalculation", fonbet.requests.PhoneCalculation.FabricatePhoneCalculation); //Проверка полного цикла создания и работы с запросом на тему "Телефонный сервис - Вопрос по расчету" из личного кабинета пользователя
             CustomProgram.Register("request_phoneservice", fonbet.requests.PhoneService.FabricatePhoneService); //Проверка полного цикла создания и работы с запросом на тему "Телефонный сервис - Вопрос по тел сервису" из личного кабинета пользователя
+            CustomProgram.Register("request_saleadministration", fonbet.requests.SaleAdministration.FabricateSaleAdministration); //Проверка полного цикла создания и работы с запросом на тему "Прочие вопросы - Вопросы к администрации" из личного кабинета пользователя
             CustomProgram.Register("request_otheradministration", fonbet.requests.OtherAdministration.FabricateOtherAdministration); //Проверка полного цикла создания и работы с запросом на тему "Прочие вопросы - Вопросы к администрации" из личного кабинета пользователя
             CustomProgram.Register("request_othersuggestion", fonbet.requests.OtherSuggestion.FabricateOtherSuggestion); //Проверка полного цикла создания и работы с запросом на тему "Прочие вопросы - Замечания и предложения" из личного кабинета пользователя
             CustomProgram.Register("fonbet_broadcast", fonbet.BroadCastCheck.FabricateBroadCastCheck); //Проверка отображения всех видов трансляций лайф событий 
@@ -65,8 +67,8 @@ namespace TestRun
             CustomProgram.Register("fonbet_changephonecupis", fonbet.ChangePhoneCupis.FabricateChangePhoneCupis); //Проверка работы процесса изменения номера телефона по тестовому сценарию
             CustomProgram.Register("fonbet_verificationcupisbk", fonbet.VerificationCupisBk.FabricateVerificationCupisBk); //Проверка работы процесса верификации через BK по тестовому сценарию
             CustomProgram.Register("cyprus_registration", fonbet.cyprus.RegistrationCypr.FabricateRegistrationCypr); //Проверка работы процесса регистрации кипра по тестовому сценарию
-            CustomProgram.Register("fonbet_compressionmenu", fonbet.CompressionMenu.FabricateCompressionMenu);
-            CustomProgram.Register("fonbet_evlive", fonbet.EventViewLive.FabricateEventViewLive);
+            CustomProgram.Register("fonbet_compressionmenu", fonbet.CompressionMenu.FabricateCompressionMenu); //Проверка шапки меню на сжатие
+            CustomProgram.Register("fonbet_evlive", fonbet.EventViewLive.FabricateEventViewLive); //Функционал EventView в Лайв событиях
 
             CustomProgram.Register("backoffice_clientcontrol", backoffice.СlientControl.FabricateСlientControl);
             CustomProgram.Register("backoffice_contentblog", backoffice.ContentBlog.FabricateContentBlog);

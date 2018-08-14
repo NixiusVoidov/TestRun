@@ -16,7 +16,7 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("1","Проблема с пополнением","1","Qiwi");
+            CreateNewRequest("Проблема с пополнением", "Проблема с пополнением", "QIWI Кошелек", "Qiwi");
             FillAndCreateFormBuilder(11);
             CheckRequestFilter("QIWI");
         }
@@ -35,7 +35,7 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("1", "Проблема с пополнением", "2", "Банковская карта");
+            CreateNewRequest("Проблема с пополнением", "Проблема с пополнением", "Банковская карта", "Банковская карта");
             FillAndCreateFormBuilder(12);
             CheckRequestFilter("Банковская");
         }
@@ -54,7 +54,7 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("1", "Проблема с пополнением", "3", "Мобильный телефон");
+            CreateNewRequest("Проблема с пополнением", "Проблема с пополнением", "Мобильный телефон", "Мобильный телефон");
             FillAndCreateFormBuilder(13);
             CheckRequestFilter("Мобильный");
         }
@@ -73,9 +73,28 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("1", "Проблема с пополнением", "4", "Яндекс.Деньги");
+            CreateNewRequest("Проблема с пополнением", "Проблема с пополнением", "Яндекс.Деньги", "Яндекс.Деньги");
             FillAndCreateFormBuilder(14);
             CheckRequestFilter("Яндекс");
+        }
+    }
+    class DepositApple : FonbetWebProgram
+    {
+        public static CustomProgram FabricateDepositApple()
+        {
+            return new DepositApple();
+        }
+
+        public override void Run()
+        {
+            base.Run();
+
+            MakeDefaultSettings();
+            ClickOnAccount();
+            OpenRequests();
+            CreateNewRequest("Проблема с пополнением", "Проблема с пополнением", "Apple Pay", "Apple Pay");
+            FillAndCreateFormBuilder(14);
+            CheckRequestFilter("Apple Pay");
         }
     }
     class SupportSite : FonbetWebProgram
@@ -92,7 +111,7 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("2", "Техническая поддержка", "1", "Вопросы по работе сайте");
+            CreateNewRequest("Техническая поддержка", "Техническая поддержка", "Вопросы по работе сайта", "Вопросы по работе сайта");
             FillAndCreateFormBuilder(21);
             CheckRequestFilter("Вопросы по работе");
         }
@@ -111,7 +130,7 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("2", "Техническая поддержка", "2", "Замечания и предложения");
+            CreateNewRequest("Техническая поддержка", "Техническая поддержка", "Замечания и предложения", "Замечания и предложения");
             FillAndCreateFormBuilder(22);
             CheckRequestFilter("Замечания");
         }
@@ -130,7 +149,7 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("2", "Техническая поддержка", "3", "Вопросы по работе мобильного приложения");
+            CreateNewRequest("Техническая поддержка", "Техническая поддержка", "Вопросы по работе мобильного приложения", "Вопросы по работе мобильного приложения");
             FillAndCreateFormBuilder(23);
             CheckRequestFilter("мобильного приложения");
         }
@@ -149,9 +168,9 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("3", "Вопросы по расчету", "1", "Пари Лайф");
+            CreateNewRequest("Вопрос по расчету", "Вопросы по расчету", "Пари Лайв", "Пари Лайв");
             FillAndCreateFormBuilder(31);
-            CheckRequestFilter("Лайф");
+            CheckRequestFilter("Лайв");
         }
     }
     class CalculationsBet : FonbetWebProgram
@@ -168,7 +187,7 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("3", "Вопросы по расчету", "2", "Пари");
+            CreateNewRequest("Вопрос по расчету", "Вопросы по расчету", "Пари", "Пари");
             FillAndCreateFormBuilder(32);
             CheckRequestFilter("Пари");
         }
@@ -187,7 +206,7 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("4", "Повышенный максимум", "1", "Повысить максимум");
+            CreateNewRequest("Повышенный максимум", "Повышенный максимум", "Повысить максимум", "Повысить максимум");
             FillAndCreateFormBuilder(41);
             CheckRequestFilter("Повысить");
         }
@@ -206,7 +225,7 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("5", "Проблема с выплатой", "1", "Qiwi");
+            CreateNewRequest("Проблема с выплатой", "Проблема с выплатой", "QIWI Кошелек", "Qiwi");
             FillAndCreateFormBuilder(5);
             CheckRequestFilter("QIWI");
         }
@@ -225,7 +244,7 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("5", "Проблема с выплатой", "2", "Банковская карта");
+            CreateNewRequest("Проблема с выплатой", "Проблема с выплатой", "Банковская карта", "Банковская карта");
             FillAndCreateFormBuilder(5);
             CheckRequestFilter("Банковская");
         }
@@ -244,7 +263,7 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("5", "Проблема с выплатой", "3", "Мобильный телефон");
+            CreateNewRequest("Проблема с выплатой", "Проблема с выплатой", "Мобильный телефон", "Мобильный телефон");
             FillAndCreateFormBuilder(5);
             CheckRequestFilter("Мобильный");
         }
@@ -263,7 +282,7 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("5", "Проблема с выплатой", "4", "Яндекс деньги");
+            CreateNewRequest("Проблема с выплатой", "Проблема с выплатой", "Яндекс.Деньги", "Яндекс деньги");
             FillAndCreateFormBuilder(5);
             CheckRequestFilter("Яндекс");
         }
@@ -282,7 +301,7 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("6", "Телефонный сервис", "1", "Вопрос по расчету");
+            CreateNewRequest("Телефонный сервис", "Телефонный сервис", "Вопрос по расчету", "Вопрос по расчету");
             FillAndCreateFormBuilder(61);
             CheckRequestFilter("расчету");
         }
@@ -301,9 +320,28 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("6", "Телефонный сервис", "2", "Вопросы по телефонному сервису");
+            CreateNewRequest("Телефонный сервис", "Телефонный сервис", "Вопросы по телефонному сервису", "Вопросы по телефонному сервису");
             FillAndCreateFormBuilder(62);
             CheckRequestFilter("сервису");
+        }
+    }
+    class SaleAdministration : FonbetWebProgram
+    {
+        public static CustomProgram FabricateSaleAdministration()
+        {
+            return new SaleAdministration();
+        }
+
+        public override void Run()
+        {
+            base.Run();
+
+            MakeDefaultSettings();
+            ClickOnAccount();
+            OpenRequests();
+            CreateNewRequest("Прочие вопросы", "Прочие вопросы", "Вопросы по акциям", "Вопросы по акциям");
+            FillAndCreateFormBuilder(71);
+            CheckRequestFilter("по акциям");
         }
     }
     class OtherAdministration : FonbetWebProgram
@@ -320,8 +358,8 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("7", "Прочие вопросы", "1", "Вопросы к администрации");
-            FillAndCreateFormBuilder(71);
+            CreateNewRequest("Прочие вопросы", "Прочие вопросы", "Вопросы к администрации", "Вопросы к администрации");
+            FillAndCreateFormBuilder(72);
             CheckRequestFilter("администрации");
         }
     }
@@ -339,8 +377,8 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("7", "Прочие вопросы", "2", "Замечания и предложения");
-            FillAndCreateFormBuilder(72);
+            CreateNewRequest("Прочие вопросы", "Прочие вопросы", "Замечания и предложения", "Замечания и предложения");
+            FillAndCreateFormBuilder(73);
             CheckRequestFilter("Замечания");
         }
     }
