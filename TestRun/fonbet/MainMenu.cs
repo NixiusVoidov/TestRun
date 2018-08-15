@@ -186,5 +186,49 @@ namespace TestRun.fonbet
                 throw new Exception("Не разворачивается компактное меню");
         }
     }
+    class PriorityLiveAndLineEvents : FonbetWebProgram
+    {
+        public static CustomProgram FabricatePriorityLiveAndLineEvents()
+        {
+            return new PriorityLiveAndLineEvents();
+        }
+
+
+        public override void Run()
+        {
+            base.Run();
+            MakeDefaultSettings();
+            LogStage("Проверка попадание в избранное");
+            ClickWebElement(".//*[@class='line__table-wrap']/div[1]//tbody[1]//*[@class='table__star']", "Звездочка в лайв событии", "звездочки в лайв событии");
+            ClickWebElement(".//*[@class='line__table-wrap']/div[2]//tbody[1]//*[@class='table__star']", "Звездочка в событии из линии", "звездочки в событии из линии");
+            LogStage("Переход в линию из приоритетных событий");
+            ClickWebElement(".//*[@class='line__inner']//*[@href='#!/bets']", "Вкладка \"Линия\" из приоритетных событий", "вкладки \"Линия\" из приоритетных событий");
+            SwitchToLeftTypeMenu();
+            ClickWebElement("//*[@href='#!/bets/favorites']", "Строка Избранное", "строки Избранное");
+            if(driver.FindElements(By.XPath(".//*[@class='table']")).Count!=1)
+                throw new Exception("В избранном линии больше одного события");
+            SwitchPageToLive();
+            ClickWebElement("//*[@href='#!/live/favorites']", "Строка Избранное", "строки Избранное");
+            if (driver.FindElements(By.XPath(".//*[@class='table']")).Count != 1)
+                throw new Exception("В избранном линии больше одного события");
+
+            LogStage("Проверка ставки экспресс из линии+лайв");
+            ClickWebElement(".//*[@href='/#']", "Главная страница", "главной страницы");
+            ClickWebElement(".//*[@class='line__table-wrap']/div[1]//tbody[1]//*[@class='table__col _type_btn _type_normal'][1]", "Ставка Поб1 в лайв событии", "ставки Поб1 в лайв событии");
+            ClickWebElement(".//*[@class='line__table-wrap']/div[2]//tbody[1]//*[@class='table__col _type_btn _type_normal'][1]", "Ставка Поб1 в событии из линии", "ставки Поб1 в событии из линии");
+            ClickWebElement(".//*[@class='coupon__foot-btn']", "Кнопка Заключить пари", "кнопки Заключить пари");
+            Thread.Sleep(10000);
+            IWebElement balanceElement = FindWebElement(".//*[@class='header__login-balance']");
+            string balanceText = balanceElement.Text.Replace(" ", "").Replace(".", ",");
+            var a = Convert.ToDouble(balanceText);
+            if (ClientBalance == a)
+               throw new Exception("Ставка не поставилась");
+
+            LogStage("Проверка eventView");
+            ClickWebElement(".//*[@class='line__table-wrap']/div[1]//tbody[1]//*[@class='table__match-title-text']", "Строка названия матча лайв", "строки названия матча лайв");
+            ClickWebElement(".//*[@class='ev-scoreboard__back-button--4V1iz']", "Стрелка возвращения назад", "стрелки возвращения назад");
+            ClickWebElement(".//*[@class='line__inner']//*[@href='#!/live']", "Вкладка \"Лайв\" из приоритетных событий", "вкладки \"Лайв\" из приоритетных событий");
+        }
+    }
 
 }

@@ -132,8 +132,13 @@ namespace TestRun
             LogStage("Переход в линию");
             ClickWebElement(".//*[@href='/#!/bets']", "Вкладка \"Линия\"", "вкладки \"Линия\"");
         }
+        protected void SwitchPageToLive()
+        {
+            LogStage("Переход в лайв");
+            ClickWebElement(".//*[@href='/#!/live']", "Вкладка \"Линия\"", "вкладки \"Линия\"");
+        }
 
-       
+
 
         // Метод проверяет что при сужении окна бразуера появляется скролл у фильтра в верхнем меню, выдает ошибку если это не так
         protected void CheckScrollinFilterTopMenu(int x, int y)
