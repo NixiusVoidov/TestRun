@@ -153,6 +153,50 @@ namespace TestRun
             }
         }
 
+        // Метод проверяет существование элемента в DOM
+        protected bool WebElementExist(string element)
+        {
+            try
+            {
+                driver.FindElement(By.XPath(string.Format(element)));
+                return true;
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
+            }
+        }
+
+        protected static bool waitTillElementisDisplayed(IWebDriver driver, string xpath, int timeoutInSeconds)
+        {
+            bool elementDisplayed = false;
+
+            for (int i = 0; i < timeoutInSeconds; i++)
+            {
+                try
+                {
+                    if (timeoutInSeconds > 0)
+                    {
+                        var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutInSeconds));
+                        wait.Until(drv => drv.FindElement(By.XPath(xpath)));
+
+                    }
+                    elementDisplayed = driver.FindElement(By.XPath(xpath)).Displayed;
+                }
+                catch
+                { }
+            }
+            return elementDisplayed;
+        }
+
+
+        protected void ClearBeforeInput(string xpath)
+        {
+            driver.FindElement(By.XPath(xpath)).Clear();
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            wait.Until(drv => drv.FindElement(By.XPath(xpath))).GetAttribute("value").Equals("");
+        }
+
         protected IWebElement GetWebElement(string xPath, string errorIfNotExists)
         {
             IWebElement element = FindWebElement(xPath);

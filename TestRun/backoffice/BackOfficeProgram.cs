@@ -22,23 +22,29 @@ namespace TestRun.backoffice
         public string Login = null;
         public string Password = null;
         protected string ClientName = null;
-        protected double ClientBalance = 0.0;
 
         public static CustomProgram FabricateBackOfficeProgram()
         {
             return new BackOfficeProgram();
         }
 
-        public void ReadParameters(FonbetWebProgramParameters parameters)
+        public void ReadParameters(BackOfficeProgramParameters parameters)
         {
             base.ReadParameters(parameters);
             Login = parameters.Login;
             Password = parameters.Password;
         }
 
+        public override void ReadParameters(TestTaskResponseBody prm)
+        {
+            base.ReadParameters(prm);
+            Login = prm.user;
+            Password = prm.password;
+        }
+
         public override void ReadParamsFromJson(string jsonText)
         {
-            FonbetWebProgramParameters prm = JsonConvert.DeserializeObject<FonbetWebProgramParameters>(jsonText);
+            BackOfficeProgramParameters prm = JsonConvert.DeserializeObject<BackOfficeProgramParameters>(jsonText);
             ReadParameters(prm);
         }
 
@@ -78,66 +84,26 @@ namespace TestRun.backoffice
             LogActionSuccess();
         }
 
+        protected void SetupVisualSettings()
+        {
+            LogStage("Установка области видимости");
+
+            ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[text()='Область видимости']", "Вкладка Область видимости", "вкладки Область видимости");
+            var website = GetWebElement(".//*[@class='role-form__inner']/div[1]/div[1]//input", "Нет чекбокса Веб-сайт");
+            var websiteClass = website.GetAttribute("class");
+            if (!websiteClass.Contains("state_checked"))
+                ClickWebElement(".//*[@class='role-form__inner']/div[1]//*[@class='ui__list-node right-list__row'][1]//input", "Чекбокс Веб-сайт", "чекбокса Веб-сайт");
+            ClickWebElement("//*[@class='ui__list role-list__body _style-height-auto'][last()]/div[2]//input", "Чекбокс Fonbet русский", "чекбокса Fonbet русский");
+            ClickWebElement("//*[@class='ui__list role-list__body _style-height-auto'][last()]/div[3]//input", "Чекбокс Fonbet английский", "чекбокса Fonbet английский");
+            ClickWebElement("//*[@class='ui__list role-list__body _style-height-auto'][last()]/div[5]//input", "Чекбокс ЦУПИС", "чекбокса ЦУПИС");
+        }
+
         public override void BeforeRun()
         {
             base.BeforeRun();
             DoLoginBackoffice();
         }
 
-        protected bool WebElementExist(string element)
-        {
-            try
-            {
-                driver.FindElement(By.XPath(string.Format(element)));
-                return true;
-            }
-            catch (NoSuchElementException)
-            {
-                return false;
-            }
-        }
-         protected static bool waitTillElementisDisplayed(IWebDriver driver, string xpath, int timeoutInSeconds)
-        {
-            bool elementDisplayed = false;
-
-            for (int i = 0; i < timeoutInSeconds; i++)
-            {
-                try
-                {
-                    if (timeoutInSeconds > 0)
-                    {
-                        var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutInSeconds));
-                        wait.Until(drv => drv.FindElement(By.XPath(xpath)));
-                    }
-                    elementDisplayed = driver.FindElement(By.XPath(xpath)).Displayed;
-                }
-                catch
-                { }
-            }
-            return elementDisplayed;
-
-        }
-       
-
-        protected void SetupVisualSettings()
-        {
-            LogStage("Установка области видимости");
-            
-            ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[text()='Область видимости']", "Вкладка Область видимости", "вкладки Область видимости");
-            var website = GetWebElement(".//*[@class='role-form__inner']/div[1]/div[1]//input", "Нет чекбокса Веб-сайт");
-            var websiteClass = website.GetAttribute("class");
-            if (!websiteClass.Contains("state_checked"))
-                ClickWebElement(".//*[@class='role-form__inner']/div[1]//*[@class='ui__list-node right-list__row'][1]//input", "Чекбокс Веб-сайт", "чекбокса Веб-сайт");
-                ClickWebElement("//*[@class='ui__list role-list__body _style-height-auto'][last()]/div[2]//input", "Чекбокс Fonbet русский", "чекбокса Fonbet русский");
-                ClickWebElement("//*[@class='ui__list role-list__body _style-height-auto'][last()]/div[3]//input", "Чекбокс Fonbet английский", "чекбокса Fonbet английский");
-                ClickWebElement("//*[@class='ui__list role-list__body _style-height-auto'][last()]/div[5]//input", "Чекбокс ЦУПИС", "чекбокса ЦУПИС");
-        }
-        protected void ClearBeforeInput(string xpath)
-        {
-            driver.FindElement(By.XPath(xpath)).Clear();
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-            wait.Until(drv => drv.FindElement(By.XPath(xpath))).GetAttribute("value").Equals("");
-        }
         protected void DeleteButton()
         {
             ClickWebElement(".//*[@id='js-toolbar']/div//*[text()='Удалить']", "Кнопка Удалить", "кнопки Удалить");
@@ -151,6 +117,7 @@ namespace TestRun.backoffice
             wait.Until((wdriver) => (driver as IJavaScriptExecutor).ExecuteScript("return document.readyState").Equals("complete"));
 
         }
+
         protected void SwitchToWebsiteNewWindow(string url)
         {
             LogStage("Проверка что все элементы ставки дня отображаются на сайте");
