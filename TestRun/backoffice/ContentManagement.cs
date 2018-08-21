@@ -27,10 +27,9 @@ namespace TestRun.backoffice
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
             for (int i =0; i< dataArray.Length-1; i++)
             {
-                waitTillElementisDisplayed(driver, ".//*[@class='form__title']", 2);
+                WaitTillElementisDisplayed(driver, ".//*[@class='form__title']", 2);
                 js.ExecuteScript("arguments[0].click()", dataArray[i]);
                 DeleteButton();
-
 
             }
 
@@ -91,6 +90,7 @@ namespace TestRun.backoffice
             LogStage("Проверка функции Удаление");
             var count = driver.FindElements(By.XPath(".//*[@id='curtain']/div/div[2]//li")).Count;
             DeleteButton();
+            Thread.Sleep(2000);
             if (driver.FindElements(By.XPath(".//*[@id='curtain']/div/div[2]//li")).Count == count)
                 throw new Exception("При удалении число блогов не изменилось");
 
@@ -148,21 +148,21 @@ namespace TestRun.backoffice
             LogStage("Выбор события");
             ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[1]", "Вкладка Общее", "вкладки Общее");
             ClickWebElement(".//*[@id='popup-event']//a", "Вкладка Событие", "вкладки Событие");
-            waitTillElementisDisplayed(driver, ".//*[@id='popup-event']//a/../div[last()]//span", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@id='popup-event']//a/../div[last()]//span", 5);
             Thread.Sleep(500);
             ClickWebElement(".//*[@id='popup-event']//a/../div[last()]//span", "Разворот события", "разворота события");
-            waitTillElementisDisplayed(driver,".//*[@id='popup-event']//a/../div[last()]//*[@class='ui-dropdown__items']/div[3]/span",5);
+            WaitTillElementisDisplayed(driver,".//*[@id='popup-event']//a/../div[last()]//*[@class='ui-dropdown__items']/div[3]/span",5);
             ClickWebElement(".//*[@id='popup-event']//a/../div[last()]//*[@class='ui-dropdown__items']/div[3]/span", "Разворот события Чемпионат мира", "разворота события Чемпионат мира");
             ClickWebElement(".//*[@id='popup-event']//a/../div[last()]//*[@class='ui-dropdown__items']/div[4]/span", "Конечное событие Англия-Германия", "конечного события Англия-Германия");
 
             LogStage("Выбор Котировки");
             ClickWebElement(".//*[@id='popup-Fon.Ora.Factor']//a", "Котировка 1", "котировки 1");
-            waitTillElementisDisplayed(driver, ".//*[@class='ui-dropdown__items']/div[1]", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@class='ui-dropdown__items']/div[1]", 5);
             ClickWebElement(".//*[@class='ui-dropdown__items']/div[1]", "Строка Основные ставки", "строки Основные ставки");
             ClickWebElement(".//*[@class='ui-dropdown__items']/div[2]", "Строка Итоги", "строки Итоги");
             ClickWebElement(".//*[@class='ui-dropdown__items']/div[3]", "Строка Поб1", "строки Поб1");
             ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Добавить", "кнопки Добавить");
-            waitTillElementisDisplayed(driver, "//*[@class='form__row _gaps-bottom_150']/div[5]/div/div[1]//a", 5);
+            WaitTillElementisDisplayed(driver, "//*[@class='form__row _gaps-bottom_150']/div[5]/div/div[1]//a", 5);
             ClickWebElement(".//*[@class='form__row _gaps-bottom_150']/div[5]/div/div[1]//a", "Котировка 2", "котировки 2");
             ClickWebElement(".//*[@class='form__row _gaps-bottom_150']/div[5]/div/div[1]//a/../div[2]//*[@class='ui-dropdown__item'][1]", "Строка Ничья", "строки Ничья");
             ClickWebElement(".//*[@class='form__row _gaps-bottom_150']/div[6]/div/div[1]//a", "Котировка 3", "котировки 3");
@@ -274,7 +274,7 @@ namespace TestRun.backoffice
             ClickWebElement(".//*[@class='curtain__list']/li[1]", "Строка Главная", "строки Главная");
             ClickWebElement(".//*[@class='curtain _state_expanded']/div[2]//li[2]", "Строка Сайдбар с купонами", "строки Сайдбар с купонами");
             ClickWebElement(".//*[@class='curtain _state_expanded']/div[3]//li[7]", "Строка Зона-7", "строки Зона-7");
-            waitTillElementisDisplayed(driver, ".//*[@id='js-toolbar']/div[1]/div[1]/button", 2);
+            WaitTillElementisDisplayed(driver, ".//*[@id='js-toolbar']/div[1]/div[1]/button", 2);
 
             LogStage("Удаление слайдеров, если есть");
 
@@ -359,6 +359,7 @@ namespace TestRun.backoffice
 
             Thread.Sleep(65000);
             ClickWebElement(".//*[@id='js-toolbar']/div/div[5]//button", "Кнопка Обновить", "кнопки обновить");
+            Thread.Sleep(2000);
             var indicator = GetWebElement(".//*[@class='curtain _state_expanded']/div[2]//*[@class='curtain__list']/li[1]/div/span[1]","Нет кружка индикатора");
             var indicatorClass = indicator.GetAttribute("style");
             if (indicatorClass.Contains("green"))
@@ -403,11 +404,11 @@ namespace TestRun.backoffice
 
             SwitchToWebsiteNewWindow("http://fonred5051.dvt24.com/#!/");
 
-            waitTillElementisDisplayed(driver, ".//*[text()='100500 тысяч японских йен']", 5);
+            WaitTillElementisDisplayed(driver, ".//*[text()='100500 тысяч японских йен']", 5);
             ClickWebElement(".//*[@class='top-win__head']/a", "Меню Клуб Победителей", "меню Клуб Победителей");
             if (!WebElementExist(".//*[@class='content-list__image']"))
                 throw new Exception("Не отображается маленькое изображене");
-            waitTillElementisDisplayed(driver, ".//*[@class='content-list']/article[1]/h2/a", 2);
+            WaitTillElementisDisplayed(driver, ".//*[@class='content-list']/article[1]/h2/a", 2);
             ClickWebElement(".//*[@class='content-list']/article[1]/h2/a", "Ссылка на разворот 1ого события", "ссылки на разворот 1ого события");
             if (!WebElementExist(".//*[@class='content-list__big-image-inner']"))
                 throw new Exception("Не отображается большое изображение");
@@ -500,7 +501,7 @@ namespace TestRun.backoffice
             SwitchToWebsiteNewWindow("http://fonred5051.dvt24.com/#!/faq");
             WaitForPageLoad();
             ExecuteJavaScript("window.location.reload()", "Дж скрипт тупит");
-            waitTillElementisDisplayed(driver, ".//*[@class='faq__title']", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@class='faq__title']", 5);
             if (!driver.FindElement(By.XPath(".//*[@class='faq__title']")).Text.Contains("Тестовый Ответ"))
                 throw new Exception("Не поменялся заголовок");
             driver.Close();
@@ -552,11 +553,11 @@ namespace TestRun.backoffice
             SwitchToWebsiteNewWindow("http://fonred5051.dvt24.com/#!/faq");
             WaitForPageLoad();
             ExecuteJavaScript("window.location.reload()", "Дж скрипт тупит");
-            waitTillElementisDisplayed(driver, ".//*[@class='faq__categories-column']/div[last()]/div", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@class='faq__categories-column']/div[last()]/div", 5);
             ClickWebElement(".//*[@class='faq__categories-column']/div[last()]/div", "Строка с добавленной категорией", "строки с добавленной категорией");
-            waitTillElementisDisplayed(driver, ".//*[@class='markdown__spoiler-title']", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@class='markdown__spoiler-title']", 5);
             ClickWebElement(".//*[@class='markdown__spoiler-title']", "Стрелка тестового вопроса", "стрелки тестового вопроса");
-            waitTillElementisDisplayed(driver, ".//*[@class='markdown__spoiler-content']/div[1]/div[1]", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@class='markdown__spoiler-content']/div[1]/div[1]", 5);
             if (!driver.FindElement(By.XPath(".//*[@class='markdown__spoiler-content']/div[1]/div[1]")).Text.Contains("Тестовый Ответ"))
                 throw new Exception("Неверный текст ответа");
             if(!WebElementExist(".//*[@class='faq__image-inner']"))
@@ -600,7 +601,7 @@ namespace TestRun.backoffice
             foreach (KeyValuePair<int, string> item in text)
                 SendKeysToWebElement(".//*[@class='role-form__inner']/label["+item.Key+"]//textarea", item.Value, "Поле " + item.Value+"", "поля " + item.Value+"");
             SendKeysToWebElement(".//*[@class='role-form__inner']/label[4]//input", "Тестовая электронная почта", "Поле электронная почта", "поля электронная почта");
-            SendKeysToWebElement(".//*[@class='role-form__inner']/label[5]//input", "Тестовый телефон", "Поле телефон", "поля телефон");
+            SendKeysToWebElement(".//*[@class='role-form__inner']/label[5]//input", "88005553535", "Поле телефон", "поля телефон");
 
             LogStage("Заполнение вкладки Ссылки");
             ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[2]", "Вкладка Ссылки", "вкладки Ссылки");

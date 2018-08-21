@@ -160,6 +160,8 @@ namespace TestRun.fonbet
                 ClickWebElementWithText("ui__checkbox-text", element, "Чекбокс", "чекбокса");
                 if (!WebElementExist(".//*[@class='page-account__empty-list-text']"))
                 {
+                    var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                    wait.Until(ExpectedConditions.ElementIsVisible(By.XPath(".//*[@class='operation-row _odd']/div[4]")));
                     IWebElement betoperationGrid = GetWebElement(".//*[@class='operation-row _odd']/div[4]", "Не отображается Операции в гриде");
                     string betoperationGridText = betoperationGrid.Text;
                     if (!betoperationGridText.Equals(element))
@@ -250,17 +252,17 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@href='/#!/account/restore-password']", "Кнопка Забыли пароль", "кнопки забыли пароль");
 
             LogStage("Проверка sendCode по тестовому сценарию на error 10");
-            waitTillElementisDisplayed(driver, "//*[@class='toolbar__item']//button", 5);
+            WaitTillElementisDisplayed(driver, "//*[@class='toolbar__item']//button", 5);
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[2]//input", "000000005", "Поле номер телефона", "поля номер телефона");
             Thread.Sleep(500);
-            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[3]//input", "1", "Поле капча", "поля капчи");
+            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[4]//input", "1", "Поле капча", "поля капчи");
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
-            waitTillElementisDisplayed(driver, ".//*[@class='toolbar__item']//button", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@class='toolbar__item']//button", 5);
             Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='ui__field']", "123123", "Поле Код подтверждения", "поля Код подтверждения");
             Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
-            waitTillElementisDisplayed(driver, ".//*[@id='restore-password-error']", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@id='restore-password-error']", 5);
             var errorMessage = GetWebElement(".//*[@id='restore-password-error']", "Нет сообщения об ошибке");
             if (!errorMessage.GetAttribute("data-errorcode").Equals("10"))
                 throw new Exception("Неверный текст ошибки");
@@ -270,7 +272,7 @@ namespace TestRun.fonbet
             ClearBeforeInput(".//*[@class='ui__field']");
             SendKeysToWebElement(".//*[@class='ui__field']", "123456", "Поле Код подтверждения", "поля Код подтверждения");
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
-            waitTillElementisDisplayed(driver, ".//*[@class='change-password__form-inner']/div/div[1]//input", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@class='change-password__form-inner']/div/div[1]//input", 5);
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[1]//input", "1234567Q", "Поле Новый пароль", "поля Новый пароль");
             Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[2]//input", "1234567Q", "Поле Повторите новый пароль", "поля Повторите новый пароль");
@@ -283,7 +285,7 @@ namespace TestRun.fonbet
             LogStage("Проверка sendPassword на complete");
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[2]//input", "000000005", "Поле номер телефона", "поля номер телефона");
             Thread.Sleep(500);
-            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[3]//input", "1", "Поле капча", "поля капчи");
+            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[4]//input", "1", "Поле капча", "поля капчи");
             Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
             Thread.Sleep(500);
@@ -335,7 +337,7 @@ namespace TestRun.fonbet
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "1234", "Поле ввода кода", "поля ввода кода");
             Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки отправить");
-            waitTillElementisDisplayed(driver, ".//*[@classid='account-error__btn-inner']//span", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@classid='account-error__btn-inner']//span", 5);
            if(!WebElementExist(".//*[@class='account-error _type_success _style_bordered']"))
                 throw new Exception("Ошибка на финальном шаге. Нет поздравительного сообщения");
             ClickWebElement(".//*[@classid='account-error__btn-inner']//span", "Кнопка Вернуться к профилю", "кнопки Вернуться к профилю");
@@ -565,7 +567,7 @@ namespace TestRun.fonbet
             base.Run();
 
             ClickOnAccount();
-            waitTillElementisDisplayed(driver, ".//*[@href='#!/account/profile/change-phone']", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@href='#!/account/profile/change-phone']", 5);
             ClickWebElement(".//*[@href='#!/account/profile/change-phone']", "Вкладка Смена номера телефона", "вкладки Смена номера телефона");
             LogStage("Проверка createProcess по тестовому сценарию");
             CreateProcessPhoneChange("000000000",null,null,null);

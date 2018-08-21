@@ -20,7 +20,7 @@ namespace TestRun.backoffice
             SendKeysToWebElement(".//*[text()='Идентификатор клиента']/../div//input", "11", "Поле Идентификатор клиента", "поля Идентификатор клиента");
             Thread.Sleep(500);
             ClickWebElement(".//*[@class='clients__btn-inner']//button", "Кнопка Найти","кнопки Найти");
-            waitTillElementisDisplayed(driver, ".//*[@class='clients__result-stats']", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@class='clients__result-stats']", 5);
             IWebElement result = GetWebElement(".//*[@class='clients__result-stats']", "Нет результата поиска");
             if (!result.Text.Contains("Найден 1 Клиент"))
               throw new Exception("В поисковой выдаче больше одного клиента");

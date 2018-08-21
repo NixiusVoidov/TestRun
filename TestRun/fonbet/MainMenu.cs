@@ -64,7 +64,9 @@ namespace TestRun.fonbet
         public override void Run()
         {
             base.Run();
-
+            ExecuteJavaScript("window.location.reload()", "Дж скрипт тупит");
+            IWebElement mainSlider = driver.FindElement(By.XPath(".//*[@class='home-slider__event-link']"));
+            new Actions(driver).MoveToElement(mainSlider).Perform();
             if (!WebElementExist(".//*[@class='home-slider__switch-wrap']/div[1]"))
                 throw new Exception("На главной странице нет слайдера");
 
@@ -91,7 +93,7 @@ namespace TestRun.fonbet
             SendKeysToWebElement(".//*[@class='login-form__form']/div[1]/input", Login, "поле логина", "поля логина");
             SendKeysToWebElement(".//*[@class='login-form__form']/div[2]/input", Password, "поле пароля", "поля пароля");
             ClickWebElement(".//*[@class='login-form__form-row _right']/div[2]/button", "Кнопка логина", "кнопки логина");
-            IWebElement homeSlider = driver.FindElement(By.XPath(".//*[@class='home-slider']"));
+            IWebElement homeSlider = driver.FindElement(By.XPath(".//*[@class='home-slider__event-link']"));
             new Actions(driver).MoveToElement(homeSlider).Perform();
             ClickWebElement(".//*[@class='home-slider__switch-wrap']/div[2]", "Кнопка второй страницы слайдера", "кнопки второй страницы слайдера");
             ClickWebElement(".//*[@class='home-slider__bets']/div[1]", "Модуль ставки на странице слайдера", "модуля ставки на странице сладера");

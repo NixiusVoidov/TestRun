@@ -30,6 +30,7 @@ namespace TestRun.fonbet
 
             LogStage("Проверка работы звездочки в футболе");
             ClickWebElement(".//*[@href='#!/bets/football']", "Звездочка у футбола в фильтре событий", "звездочки у футбола в фильтре событий");
+            Thread.Sleep(900);
             ClickWebElement(".//*[@class='events__filter _type_segment']", "Конкретный турнир по футболу", "конкретного турнира по футболу");
             ClickWebElement(".//*[@id='popup']/li[1]/span", "Звездочка первого в списке турнира по футболу в фильтре", "звездочки первого в списке турнира по футболу в фильтре");
             IWebElement footbalTournamentStar = GetWebElement(".//*[@id='popup']/li[1]/span", "Не найдена звезда в фильтре турнира по футболу");
@@ -92,10 +93,10 @@ namespace TestRun.fonbet
             LogStage("Проверка работы звездочки в дочерних событиях");
             ClickWebElement(".//*[@href='#!/bets/football']", "Меню футбола", "меню футбола");
             //Thread.Sleep(5000);
-            waitTillElementisDisplayed(driver,".//*[@class='event-v-list__icon-expander _state_opened']",5);
+            WaitTillElementisDisplayed(driver,".//*[@class='event-v-list__icon-expander _state_opened']",5);
             //ClickWebElement(".//*[@class='list-view-new__table-body']/tr[4]/td/div", "Разворот всех турниров по футболу", "разворот всех турниров по футболу");
-            ClickWebElement(".//*[@class='list-view-new__table-body']//tr[8]//a/div/div[2]", "Исключение одиного турнира из всего футбола", "на исключение одиного турнира из всего футбола");
-            IWebElement footbalTournamentStar = GetWebElement(".//*[@class='list-view-new__table-body']//tr[8]//a/div/div[2]", "не найдена звезда в фильтре конкретного турнира по футболу");
+            ClickWebElement(".//*[@class='list-view-new__table-body']//tr[8]//a/div/div[last()]", "Исключение одного турнира из всего футбола", "на исключение одного турнира из всего футбола");
+            IWebElement footbalTournamentStar = GetWebElement(".//*[@class='list-view-new__table-body']//tr[8]//a/div/div[last()]", "не найдена звезда в фильтре конкретного турнира по футболу");
             if (!footbalTournamentStar.GetAttribute("class").Contains("_state_off"))
                 throw new Exception("Звездочки в дочерних событиях футбола не работают");
 

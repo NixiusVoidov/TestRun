@@ -40,10 +40,12 @@ namespace TestRun.fonbet
 
             LogStage("Выбор событий на систему 2/3");
             IList<IWebElement> grid = driver.FindElements(By.XPath(".//*[@class='table']/tbody//td[5]")); //все ставки из одного столбца грида событий
-            grid[3].Click();
+            Thread.Sleep(500);
+            grid[6].Click();
             grid[4].Click();
             grid[5].Click();
-            ClickWebElement(".//*[@class='coupons']/div[1]//*[@class='coupon__info-item-inner']", "Кнопка выбора типа пари", "кнопки выбора типа пари");
+            ClickWebElement(".//*[@class='coupons']/div[1]//*[@class='coupon__info-item-inner']/div", "Кнопка выбора типа пари", "кнопки выбора типа пари");
+            Thread.Sleep(500);
             ClickWebElement(".//*[@id='popup']/li[2]", "Строка Система 2/3", "строки Систима 2/3");
             ClickWebElement(".//*[@class='coupons']/div[1]//*[@class='coupon__info-item-inner']/i", "Иконка Калькулятор", "иконка Калькулятор");
 
@@ -239,7 +241,8 @@ namespace TestRun.fonbet
                 }
                 
             }
-
+            if(WebElementExist(".//*[@class='coupon__error']"))
+                throw new Exception("Возникла ошибка при ставки купона");
             LogStage("Проверяю что фрибет не остался и пропал из списка фрибетов");
             grid[6].Click();
             ClickWebElement(".//*[@class='coupon__freebet-switcher-head']", "Кнопка использовать фрибет", "кнопки использовать фрибет");

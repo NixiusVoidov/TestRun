@@ -9,6 +9,7 @@ using OpenQA.Selenium.Safari;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Opera;
 using OpenQA.Selenium.IE;
+using OpenQA.Selenium.Remote;
 
 namespace TestRun
 {
@@ -100,7 +101,24 @@ namespace TestRun
             }
             else if (Browser.Equals("FIREFOX", StringComparison.InvariantCultureIgnoreCase))
             {
-                driver = new FirefoxDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+                FirefoxOptions profile = new FirefoxOptions();
+                profile.SetPreference("browser.download.folderList", 2);
+                profile.SetPreference("browser.download.manager.showWhenStarting", false);
+                //Set downloadPath
+                //profile.SetPreference("browser.download.dir", "C:\\Users\\User\\Downloads");
+                //Set File Open &amp; Save preferences
+                profile.SetPreference("browser.helperApps.neverAsk.openFile", "text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml");
+                profile.SetPreference("browser.helperApps.neverAsk.saveToDisk",
+        "text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml,application/json");
+                profile.SetPreference("browser.helperApps.alwaysAsk.force", false);
+                profile.SetPreference("browser.download.manager.alertOnEXEOpen", false);
+                profile.SetPreference("browser.download.manager.focusWhenStarting", false);
+                profile.SetPreference("browser.download.manager.useWindow", false);
+                profile.SetPreference("browser.download.manager.showAlertOnComplete", false);
+                profile.SetPreference("browser.download.manager.closeWhenDone", false);
+
+                driver = new FirefoxDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), profile);
+                
             }
             else if (Browser.Equals("OPERA", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -167,7 +185,7 @@ namespace TestRun
             }
         }
 
-        protected static bool waitTillElementisDisplayed(IWebDriver driver, string xpath, int timeoutInSeconds)
+        protected static bool WaitTillElementisDisplayed(IWebDriver driver, string xpath, int timeoutInSeconds)
         {
             bool elementDisplayed = false;
 
@@ -211,7 +229,7 @@ namespace TestRun
             {
                 LogStartAction(String.Format("Клик {0}", elementCaptionInGenitive));
                 IWebElement element = driver.FindElement(By.XPath(xPath));
-                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
                 //  wait.Until(drv => drv.FindElement(By.XPath(xPath)));
                 wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath(xPath)));
                 element.Click();

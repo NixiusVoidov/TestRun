@@ -107,7 +107,7 @@ namespace TestRun.backoffice
         protected void DeleteButton()
         {
             ClickWebElement(".//*[@id='js-toolbar']/div//*[text()='Удалить']", "Кнопка Удалить", "кнопки Удалить");
-            waitTillElementisDisplayed(driver, ".//*[@class='modal__foot']/div[2]/a", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@class='modal__foot']/div[2]/a", 5);
             ClickWebElement(".//*[@class='modal__foot']/div[2]/a", "Кнопка Ок всплывающего окна", "кнопки Ок всплывающего окна");
         }
 
@@ -158,7 +158,7 @@ namespace TestRun.backoffice
             SwitchToWebsiteNewWindow("http://fonred5051.dvt24.com/#!/faq");
             WaitForPageLoad();
             ExecuteJavaScript("window.location.reload()", "Дж скрипт тупит");
-            waitTillElementisDisplayed(driver, ".//*[@class='faq__top-text-inner']/*[@class='faq__top-text']", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@class='faq__top-text-inner']/*[@class='faq__top-text']", 5);
             if (!WebElementExist(".//*[@class='faq__" + position + "-text-inner']/*[@class='faq__" + position + "-text']"))
                 throw new Exception("Не появился текст перед вопросом");
             if (!WebElementExist(".//*[@class='faq__" + position + "-text-inner']/*[@class='faq__links']"))
@@ -197,12 +197,12 @@ namespace TestRun.backoffice
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
             for (int i = testData.Count - 1;i>=0; i--)
             {
-                waitTillElementisDisplayed(driver, ".//*[@class='form__title']", 2);
+                WaitTillElementisDisplayed(driver, ".//*[@class='form__title']", 2);
                 js.ExecuteScript("arguments[0].click()", testData[i]);
                 if (testData[i].Text.Contains(eventName))
                 {
                     ClickWebElement(".//*[@id='js-toolbar']/div/div[7]//button", "Кнопка Удалить", "кнопки Удалить");
-                    waitTillElementisDisplayed(driver, ".//*[@class='modal__foot']/div[2]/a", 2);
+                    WaitTillElementisDisplayed(driver, ".//*[@class='modal__foot']/div[2]/a", 2);
                     ClickWebElement(".//*[@class='modal__foot']/div[2]/a", "Кнопка Ок всплывающего окна", "кнопки Ок всплывающего окна");
                 }
             }
@@ -333,7 +333,7 @@ namespace TestRun.backoffice
         {
             LogStage("Проверка работы вкладки Фрибет");
             ClickWebElement(".//*[@class='tabs__nav'][4]", "Фильтр Фрибеты", "фильтр Фрибеты");
-            waitTillElementisDisplayed(driver, ".//*[@class='toolbar__item']//*[text()='Добавить']", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@class='toolbar__item']//*[text()='Добавить']", 5);
             ClickWebElement(".//*[@class='toolbar__item']//*[text()='Добавить']", "Кнопка Добавить", "кнопка Добавить");
             SendKeysToWebElement(".//*[text()='СУММА']/..//input", "500", "Поле Сумма фрибета", "поля Сумма фрибета");
             SendKeysToWebElement(".//*[text()='Комментарий']/..//textarea", "test comment", "Поле Комменнтарий", "поля Сумма фрибета");
@@ -355,7 +355,7 @@ namespace TestRun.backoffice
 
         protected void ShowOnlyActive()
         {
-            waitTillElementisDisplayed(driver, ".//*[@id='js-toolbar']/div[2]/div/div[1]", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@id='js-toolbar']/div[2]/div/div[1]", 5);
             var stateChecked = GetWebElement(".//*[@id='js-toolbar']/div[2]/div/div[1]//button", "Нет кнопки показать только актвиные");
             var stateCheckedClass = stateChecked.GetAttribute("class");
             if (!stateCheckedClass.Contains("state_checked"))

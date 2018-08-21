@@ -28,10 +28,10 @@ namespace TestRun.fonbet
             LogStartAction("Проверка работы ставки пари с предыщушей ставки");
             //Выбор ставки из грида
             SwitchPageToBets();
-            waitTillElementisDisplayed(driver, ".//*[@class='table']", 10);
+            WaitTillElementisDisplayed(driver, ".//*[@class='table']", 10);
             IList<IWebElement> events = driver.FindElements(By.XPath(".//*[@class='table']/tbody//td[5]"));
             events[3].Click();
-            waitTillElementisDisplayed(driver, ".//*[@class='coupon__foot-sum']/input", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@class='coupon__foot-sum']/input", 5);
             ClearBeforeInput(".//*[@class='coupon__foot-sum']/input");
             SendKeysToWebElement(".//*[@class='coupon__foot-sum']/input", "99", "поле ввода значения ставки", "поля ввода значения ставки");
             Thread.Sleep(1000);
@@ -308,7 +308,7 @@ namespace TestRun.fonbet
             allBets[4].Click();
             allBets[5].Click();
             ClickWebElement(".//*[@class='coupons']/div[1]//*[@class='coupon__foot-btn']", "Кнопка заключить пари", "кнопки заключить пари");
-            waitTillElementisDisplayed(driver, ".//*[@class='coupons__list-inner']/div[1]/article[1]/div/i", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@class='coupons__list-inner']/div[1]/article[1]/div/i", 5);
             IWebElement couponArrow = GetWebElement(".//*[@class='coupons__list-inner']/div[1]/article[1]/div/i", "Нет стрелки разворота у купона");
             var couponArrowClass = couponArrow.GetAttribute("class");
             if (!couponArrowClass.Contains("expanded"))
@@ -343,7 +343,7 @@ namespace TestRun.fonbet
             Thread.Sleep(62000);
             LogStage("Проверка выхода из сессии");
             ClickWebElement(".//*[@class='session-dialog__buttons']/div[1]", "Кнопка Выход в диалоговом окне", "кнопки  Выход в диалоговом окне");
-            waitTillElementisDisplayed(driver, ".//*[@class='header__login-head']/a", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@class='header__login-head']/a", 5);
             IWebElement loginStatus = GetWebElement(".//*[@class='header__login-head']/a", "Нет кнопки Войти");
             string loginStatusText = loginStatus.GetAttribute("class");
             if (!loginStatusText.Contains("header__link"))
@@ -506,10 +506,10 @@ namespace TestRun.fonbet
 
                 LogStage("Проверка открытия/закрытия купона по событиям");
                 ClickWebElement(".//*[@class='coupons__list-inner']//article[1]/div[1]/a", "Кнопка Копировать купон", "кнопки Копировать купон");
-                IList<IWebElement> all = driver.FindElements(By.XPath("//*[@class='coupons__list-inner'][1]//article[1]/div[2]//tbody//td[1]"));
+                IList<IWebElement> all = driver.FindElements(By.XPath("//*[@class='coupons__list-inner'][1]//article[1]//tbody/tr/td[1][@class='coupon__table-col _type_close']"));
                 for(int i=0;i<all.Count;i++)
                 {
-                    driver.FindElement(By.XPath("//*[@class='coupons__list-inner'][1]//article[1]//tbody[1]/tr/td[1]")).Click();
+                    driver.FindElement(By.XPath("//*[@class='coupons__list-inner'][1]//article[1]//tbody/tr/td[1][@class='coupon__table-col _type_close']")).Click();
                 }
                 if (WebElementExist(".//*[@class='coupon__foot-btn']"))
                     throw new Exception("Не работает кнопка закрытия купона по событиям");
