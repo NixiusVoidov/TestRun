@@ -197,7 +197,6 @@ namespace TestRun.backoffice
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
             for (int i = testData.Count - 1;i>=0; i--)
             {
-                WaitTillElementisDisplayed(driver, ".//*[@class='form__title']", 2);
                 js.ExecuteScript("arguments[0].click()", testData[i]);
                 if (testData[i].Text.Contains(eventName))
                 {

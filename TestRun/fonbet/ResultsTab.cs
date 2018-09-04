@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using OpenQA.Selenium;
 
 namespace TestRun.fonbet
@@ -50,13 +51,15 @@ namespace TestRun.fonbet
             IList<IWebElement> numberGrid = driver.FindElements(By.XPath(".//*[@class='table__match-title']/span")); //номера событий
             SendKeysToWebElement(".//*[@placeholder='Поиск']", numberGrid[20].Text, "Меню поиск", "меню поиска");
             ClickWebElement("//*[@class='results__filter-item']//*[@name='sortMode']", "Радиобатон сортировать по номеру", "радиобатона сортировать по номеру");
+            WaitTillElementisDisplayed(driver, ".//*[@class='results_table']", 5);
             if (driver.FindElements(By.XPath(".//*[@class=\'table__match-title\']")).Count != 1) 
                 throw new Exception("Фильтр нашел 2 и более значений");
 
             LogStage("Проверка логаута");
-            ClickWebElement(".//*[@class='header__login-head']/div[1]/span", "ФИО в шапке", "ФИО в шапке");
+            ClickWebElement(".//*[@class='header__login-head']/div[1]", "ФИО в шапке", "ФИО в шапке");
             ClickWebElement(".//*[@id='popup']/li[last()]", "Кнопка Выйти из аккаунта", "кнопки выйти из аккаунта");
             WaitTillElementisDisplayed(driver, ".//*[@class='header__login-head']/a", 5);
+            Thread.Sleep(1500);
             IWebElement loginButton = GetWebElement(".//*[@class='header__login-head']/a", "Нет кнопки логина");
             string bloginButtonClass = loginButton.GetAttribute("class");
             if (!bloginButtonClass.Contains("header__link"))

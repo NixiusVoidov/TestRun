@@ -131,11 +131,13 @@ namespace TestRun
         {
             LogStage("Переход в линию");
             ClickWebElement(".//*[@href='/#!/bets']", "Вкладка \"Линия\"", "вкладки \"Линия\"");
+            WaitForPageLoad();
         }
         protected void SwitchPageToLive()
         {
             LogStage("Переход в лайв");
-            ClickWebElement(".//*[@href='/#!/live']", "Вкладка \"Линия\"", "вкладки \"Линия\"");
+            ClickWebElement(".//*[@href='/#!/live']", "Вкладка \"Лайв\"", "вкладки \"Лайв\"");
+            WaitForPageLoad();
         }
 
 
@@ -208,7 +210,7 @@ namespace TestRun
         protected void TimeFilterChecker(int timeValue, string chooseData)
         {
             ClickWebElement(".//*[@class='events__filter _type_time']", "Меню времени в фильтре", "меню времени в фильтре");
-            ClickWebElement(String.Format(".//*[@class='events__filter-item']//*[text()='{0}']", chooseData), String.Format("Значение \"{0}\"", chooseData), String.Format("значения \"{0}\"", chooseData));
+            ClickWebElement(String.Format(".//*[@class='events__filter-item']//*[text()='{0}']/..", chooseData), String.Format("Значение \"{0}\"", chooseData), String.Format("значения \"{0}\"", chooseData));
             IList<IWebElement> all = driver.FindElements(By.XPath(".//*[@class='table__time']"));
             foreach (IWebElement element in all)
             {
@@ -258,9 +260,17 @@ namespace TestRun
                 WaitTillElementisDisplayed(driver, "//*[@class='ui__label']/input", 5);
                 Thread.Sleep(1500);
                 ShowHiddenFileAttach();
-                SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg","Поле Прикрепления файла", "поля Прикрепления файла");
+                if (Browser.Equals("SAFARI", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    SendKeysToWebElement(".//*[@class='ui__label']/input", "//Users//user//Downloads//Sasha.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                }
+                else
+                {
+                    SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                }
+                // /Users/user/Downloads/Sasha.jpg
                 WaitTillElementisDisplayed(driver, ".//*[@class='toolbar__item account-form__button']/a/div", 5);
-                Thread.Sleep(1500);
+                Thread.Sleep(2500);
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;
             }
@@ -270,8 +280,15 @@ namespace TestRun
                 SendKeysToWebElement(".//*[@name='AMOUNTRUB']", "2409", "Поле Суммы(руб)", "поля Суммы(руб)");
                 SendKeysToWebElement(".//*[@name='PROBLEMDESCRIPTION']", "Test", "Поле описания проблемы", "поля описания проблемы"); //1 - мобильный телефон
                 ShowHiddenFileAttach();
-                SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
-                Thread.Sleep(1500);
+                if (Browser.Equals("SAFARI", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    SendKeysToWebElement(".//*[@class='ui__label']/input", "//Users//user//Downloads//Sasha.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                }
+                else
+                {
+                    SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                }
+                Thread.Sleep(2500);
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;
             }
@@ -280,8 +297,15 @@ namespace TestRun
             {
                 SendKeysToWebElement(".//*[@name='QUESTION']", "Test", "Поле Вопрос", "поля Вопрос"); //2-1 вопрос по работе сайта 
                 ShowHiddenFileAttach();
-                SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg","Поле Прикрепления файла", "поля Прикрепления файла");
-                Thread.Sleep(1500);
+                if (Browser.Equals("SAFARI", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    SendKeysToWebElement(".//*[@class='ui__label']/input", "//Users//user//Downloads//Sasha.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                }
+                else
+                {
+                    SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                }
+                Thread.Sleep(2500);
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;
             }
@@ -291,8 +315,15 @@ namespace TestRun
                 SendKeysToWebElement(".//*[@name='COMMENT']", "Test", "Поле Замечание", "поля Замечание"); //2-2 замечания и предложения
                 SendKeysToWebElement(".//*[@name='SUGGESTION']", "Test", "Поле Предложение", "поля Предложение");
                 ShowHiddenFileAttach();
-                SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg","Поле Прикрепления файла", "поля Прикрепления файла");
-                Thread.Sleep(1500);
+                if (Browser.Equals("SAFARI", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    SendKeysToWebElement(".//*[@class='ui__label']/input", "//Users//user//Downloads//Sasha.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                }
+                else
+                {
+                    SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                }
+                Thread.Sleep(2500);
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;
             }
@@ -302,8 +333,15 @@ namespace TestRun
                 SendKeysToWebElement(".//*[@name='TYPEOFAPPLICATION']", "Test", "Поле Тип приложения", "поля Тип приложения"); //2-3 вопрос по работе моб приложения
                 SendKeysToWebElement(".//*[@name='QUESTION']", "Test", "Поле Вопрос", "поля Вопрос");
                 ShowHiddenFileAttach();
-                SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
-                Thread.Sleep(1500);
+                if (Browser.Equals("SAFARI", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    SendKeysToWebElement(".//*[@class='ui__label']/input", "//Users//user//Downloads//Sasha.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                }
+                else
+                {
+                    SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                }
+                Thread.Sleep(2500);
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;
             }
@@ -361,7 +399,14 @@ namespace TestRun
             {
                 SendKeysToWebElement(".//*[@name='QUESTION']", "Test", "Поле Вопрос", "поля Вопрос"); //7-2
                 ShowHiddenFileAttach();
-                SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                if (Browser.Equals("SAFARI", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    SendKeysToWebElement(".//*[@class='ui__label']/input", "//Users//user//Downloads//Sasha.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                }
+                else
+                {
+                    SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
+                }
                 Thread.Sleep(1500);
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;
@@ -372,6 +417,7 @@ namespace TestRun
                 SendKeysToWebElement(".//*[@name='COMMENT']", "Test", "Поле Замечание", "поля Замечание"); //7-3
                 SendKeysToWebElement(".//*[@name='SUGGESTION']", "Test", "Поле Предложение", "поля Предложение");
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
+                
                 return;
             }
         }
@@ -407,8 +453,9 @@ namespace TestRun
             if (!WebElementExist(".//*[@class='ui__error']"))
                 throw new Exception("Можно продолжить без обязательных полей");
 
-            if(WebElementExist(".//*[@class='toolbar__item account-form__button']//a")) //Существует открытвая такая заявка
+            if(WebElementExist(".//*[@class='account-form__message _kind-top-notice _style-box']")) //Существует открытвая такая заявка
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']//a", "Кнопка Подтвердить", "кнопки Подтвердить");
+           
         }
 
         //Метод проверяет все фильтры при работе с запросом
@@ -424,7 +471,8 @@ namespace TestRun
             ClickWebElement(".//*[@class='toolbar__item account-form__button']/a//span", "Кнопка Закрыть", "кнопки Закрыть");
 
             LogStage("Проверка работы фильтра по статусу");
-            Thread.Sleep(900);
+            Thread.Sleep(1500);
+            //WaitTillElementisDisplayed(driver, ".//*[@class='account-requests__form']//*[@class='ui-dropdown__fields']", 5);
             ClickWebElement(".//*[@class='account-requests__form']//*[@class='ui-dropdown__fields']", "Кнопка разворота меню фильтра", "кнопки разворота меню фильтра");
             ClickWebElement(".//*[@class='ui-dropdown__items']/div[2]", "Строка Отвеченный", "строки Отвеченный");
             ClickWebElement(".//*[@class='ui-dropdown__items']/div[3]", "Строка В Обработке", "строки В Обработке");
@@ -483,8 +531,11 @@ namespace TestRun
             {
                 ClickWebElement(".//*[@class='request-details__request-file']/span", "Кнопка скачать прикрепленный фаил", "кнопки скачать прикрепленный фаил");
                 Thread.Sleep(1500);
-                if (CheckFileDownloaded("rccimg_0000000011_d180d396.jpg") == false)
-                    throw new Exception("Фаил из заявки не скачался");
+                if (!Browser.Equals("SAFARI", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    if (CheckFileDownloaded("rccimg_0000000011_d180d396.jpg") == false)
+                        throw new Exception("Фаил из заявки не скачался");
+                }
             }
            
         }

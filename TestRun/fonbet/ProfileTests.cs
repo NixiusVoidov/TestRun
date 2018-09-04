@@ -329,13 +329,15 @@ namespace TestRun.fonbet
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "4@dev.dev", "Поле email", "поля email");
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
             SendEmailCodeChecker("10", "1235");
+            Thread.Sleep(1000);
             SendEmailCodeChecker("1", "9999");
             ClearBeforeInput(".//*[@class='ui__field-inner']/input");
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "4@dev.dev", "Поле email", "поля email");
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
             ClearBeforeInput(".//*[@class='ui__field-inner']/input");
+            Thread.Sleep(1000);
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "1234", "Поле ввода кода", "поля ввода кода");
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки отправить");
             WaitTillElementisDisplayed(driver, ".//*[@classid='account-error__btn-inner']//span", 5);
            if(!WebElementExist(".//*[@class='account-error _type_success _style_bordered']"))

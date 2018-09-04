@@ -46,7 +46,7 @@ namespace TestRun.fonbet
             LogStage("Проверка что футбол попал в избранное");
             ClickWebElement(".//*[@href='#!/bets/favorites']", "Переход к избранному в фильтре", "перехода к избранному в фильтре");
             IWebElement tournamentTitle = GetWebElement(".//*[@class='table__title-text']", "не найден заголовок турнира");
-            if (!tournamentTitle.Text.Contains("ФУТБОЛ"))
+            if (!tournamentTitle.Text.ToUpper().Contains("ФУТБОЛ"))
                 throw new Exception("Нет заголовка в футбольных турнирах");
 
             LogStage("Проверка работы АнонсЛайф");
@@ -107,8 +107,9 @@ namespace TestRun.fonbet
 
             LogStage("Проверка что футбол попал в избранное");
             ClickWebElement(".//*[@href='#!/bets/favorites']", "Переход к избранному в фильтре", "перехода к избранному в фильтре");
+            waitTillElementContains(driver, ".//*[@class='list-view-new__table-body']/tr[2]//td/a/div", "state_disabled");
             IWebElement tournamentTitle = GetWebElement(".//*[@class='table__title-text']", "не найден заголовок турнира");
-            if (!tournamentTitle.Text.Contains("ФУТБОЛ"))
+            if (!tournamentTitle.Text.ToUpper().Contains("ФУТБОЛ"))
                 throw new Exception("Нет заголовка в футбольных турнирах");
 
             LogStage("Проверка работы АнонсЛайф");

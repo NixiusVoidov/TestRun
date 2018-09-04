@@ -202,7 +202,9 @@ namespace TestRun
                     elementDisplayed = driver.FindElement(By.XPath(xpath)).Displayed;
                 }
                 catch
-                { }
+                {
+                    throw new Exception("Элемент не появился за " + timeoutInSeconds + " секунд");
+                }
             }
             return elementDisplayed;
         }

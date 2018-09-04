@@ -25,12 +25,12 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
 
-            LogStartAction("Проверка работы ставки пари с предыщушей ставки");
+            LogStartAction("Проверка работы ставки пари с предыдущей ставки");
             //Выбор ставки из грида
             SwitchPageToBets();
-            WaitTillElementisDisplayed(driver, ".//*[@class='table']", 10);
+            Thread.Sleep(1500);
             IList<IWebElement> events = driver.FindElements(By.XPath(".//*[@class='table']/tbody//td[5]"));
-            events[3].Click();
+            events[8].Click();
             WaitTillElementisDisplayed(driver, ".//*[@class='coupon__foot-sum']/input", 5);
             ClearBeforeInput(".//*[@class='coupon__foot-sum']/input");
             SendKeysToWebElement(".//*[@class='coupon__foot-sum']/input", "99", "поле ввода значения ставки", "поля ввода значения ставки");
@@ -64,9 +64,10 @@ namespace TestRun.fonbet
             LogStage("Установка быстрого пари в 100 руб");
             ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
             ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
-            Thread.Sleep(1000);
+            Thread.Sleep(1500);
             ClickWebElement(".//*[@class='settings__section'][1]/div/div[1]//*[@class='header-ui__checkbox-label']/input", "Чекбокс быстрое пари", "чекбокса быстрое пари");
-            ClearBeforeInput(".//*[@class='settings__section'][1]/div/div//*[@class='settings__row']//input");
+            //ClearBeforeInput(".//*[@class='settings__section'][1]/div/div//*[@class='settings__row']//input");
+            Thread.Sleep(1500);
             SendKeysToWebElement(".//*[@class='settings__section'][1]/div/div//*[@class='settings__row']//input", "100", "поле ввода значения быстрой ставки", "поля ввода значения быстрой ставки");
 
             LogStage("Добавление любимого пари");
@@ -104,7 +105,7 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='oneClickSwitch on']", "Кнопка быстрой ставки", "кнопки быстрой ставки");
 
             //Выбор ставки из грида с кэф<2
-            IList<IWebElement> grid = driver.FindElements(By.XPath(".//*[@class='table']/tbody//td[5]"));
+            IList<IWebElement> grid = driver.FindElements(By.XPath(".//*[@class='table']/tbody//td[10]"));
             for(int i=2;i< grid.Count; i++)
             {
                 var a = grid[i].Text;
@@ -193,13 +194,16 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
 
             LogStage("Проверка работы настроек Продажи пари");
-            if (WebElementExist(".//*[@class='coupon__sell-button-area']"))
-                throw new Exception("Не работает чекбокс показывать продажу на всех вкладках");
             ClickWebElement(".//*[@class='coupons-toolbar']//*[@title='На продажу']", "Вкладка 'На продажу' в меню купонов", "вкладки 'На продажу' в меню купонов");
-            if (!WebElementExist(".//*[@class='coupon__sell-button-area']"))
-                throw new Exception("Не корректно отрабатывает вкладка меню 'На продажу'");
             if (WebElementExist(".//*[@class='coupon__content-empty']"))
-                LogHint("Нет купонов на продажу");
+            {
+                LogHint("Нет купонов на продажу, добавляем купоны");
+                //Выбор ставки из грида с кэф<2
+                IList<IWebElement> grid = driver.FindElements(By.XPath(".//*[@class='line__table-wrap']/div[2]//*[@class='table']/tbody//td[5]"));
+                grid[5].Click();
+                ClickWebElement(".//*[@class='coupons-toolbar']//*[@title='На продажу']", "Вкладка 'На продажу' в меню купонов", "вкладки 'На продажу' в меню купонов");
+                Thread.Sleep(5000);
+            }
             IWebElement sellSwitch = GetWebElement(".//*[@class='coupon__sell-button-area']/a[2]", "Нет тумблера рядом с кнопкой продажи пари");
             var sellSwitchClass = sellSwitch.GetAttribute("class");
             if (!sellSwitchClass.Contains("coupon__sell-switch _all"))
@@ -207,6 +211,7 @@ namespace TestRun.fonbet
 
             LogStage("Проверка работы настроек Диалогов");
             ClickWebElement(".//*[@href='/#!/bets']", "Вкладка \"Линия\"", "вкладки \"Линия\"");
+            WaitForPageLoad();
             IList<IWebElement> bet = driver.FindElements(By.XPath(".//*[@class='table']/tbody//td[5]"));
             bet[4].Click();
             if (WebElementExist(".//*[@class='modal-window__button-area']"))

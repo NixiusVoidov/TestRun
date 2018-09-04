@@ -127,8 +127,7 @@ namespace TestRun.fonbet
             LogStage("Проверка отображения и корретной работы блока новостей");
             ClickWebElement(".//*[@class='home-news__items']/article[1]/h1/a", "1ый топик из ленты новостей", "1ого топика из ленты новостей");
             Thread.Sleep(1500);
-            if (!WebElementExist(".//*[@id='popupModal']"))
-                throw new Exception("Не открылся попап с новостью");
+            WaitTillElementisDisplayed(driver, ".//*[@id='popupModal']", 5);
             ClickWebElement(".//*[@class='news-modal__close']", "Кнопка закрытия popup", "кнопки закрытия popup");
 
             ClickWebElement(".//*[@class='home-news__source-box']/span[2]", "Вкладка \"Прогнозы\"", "вкладки \"Прогнозы\"");
@@ -137,8 +136,7 @@ namespace TestRun.fonbet
             if (!predictionClass.Contains("_selected"))
                 throw new Exception("Не переключается на вкладку Прогнозы в шапке новостей");
             ClickWebElement(".//*[@class='home-news__items']/article[2]//a", "2ой топик из ленты новостей", "2ого топика из ленты новостей");
-            if (!WebElementExist(".//*[@id='popupModal']"))
-                throw new Exception("Не открылся попап с новостью");
+            WaitTillElementisDisplayed(driver, ".//*[@id='popupModal']", 5);
             ClickWebElement(".//*[@class='news-modal__close']", "Кнопка закрытия popup", "кнопки закрытия popup");
 
             ClickWebElement(".//*[@class='home-news__source-box']/span[3]", "Вкладка \"Спорт с Фонтбет\"", "вкладки \"Спорт с Фонтбет\"");
@@ -147,13 +145,11 @@ namespace TestRun.fonbet
             if (!sportClass.Contains("_selected"))
                 throw new Exception("Не переключается на вкладку Прогнозы в шапке новостей");
             ClickWebElement(".//*[@class='home-news__items']/article[3]//a", "3ий топик из ленты новостей", "3ого топика из ленты новостей");
-            if (!WebElementExist(".//*[@id='popupModal']"))
-                throw new Exception("Не открылся попап с новостью");
+            WaitTillElementisDisplayed(driver, ".//*[@id='popupModal']", 5);
             ClickWebElement(".//*[@class='news-modal__close']", "Кнопка закрытия popup", "кнопки закрытия popup");
-
+            Thread.Sleep(1000);
             ClickWebElement(".//*[@class='top-win__items']/article[1]//a", "Топик в модуле \"Клуб победителей\"", "топика в модуле \"Клуб победителей\"");
-            if (!WebElementExist(".//*[@id='popupModal']"))
-                throw new Exception("Не открылся попап с новостью");
+            WaitTillElementisDisplayed(driver, ".//*[@id='popupModal']", 5);
             ClickWebElement(".//*[@class='news-modal__close']", "Кнопка закрытия popup", "кнопки закрытия popup");
 
             ClickWebElement(".//*[@href='#!/news/fnl']", "Ссылка на ВСЕ новости", "ссылки на ВСЕ новости");

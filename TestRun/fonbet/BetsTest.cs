@@ -43,7 +43,7 @@ namespace TestRun.fonbet
             Thread.Sleep(500);
             grid[6].Click();
             grid[4].Click();
-            grid[5].Click();
+            grid[8].Click();
             ClickWebElement(".//*[@class='coupons']/div[1]//*[@class='coupon__info-item-inner']/div", "Кнопка выбора типа пари", "кнопки выбора типа пари");
             Thread.Sleep(500);
             ClickWebElement(".//*[@id='popup']/li[2]", "Строка Система 2/3", "строки Систима 2/3");

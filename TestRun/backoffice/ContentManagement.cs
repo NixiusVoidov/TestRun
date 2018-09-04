@@ -127,7 +127,7 @@ namespace TestRun.backoffice
         {
             base.Run();
 
-            RemoveDuplicates(".//*[@class='curtain__list']/li[2]", "Ставка дня", "Англия — Германия", ".//*[@class='curtain _state_expanded']/div[2]//li//*[@class='curtain__news-title-inner']");
+            RemoveDuplicates(".//*[@class='curtain__list']/li[2]", "Ставка дня", "Уругвай-Парагвай", ".//*[@class='curtain _state_expanded']/div[2]//li//*[@class='curtain__news-title-inner']");
 
             LogStage("Добавление новой Ставки дня в Меню управление клиентом");
             ClickWebElement(".//*[@class='menu']//*[@href='#/explorer/content']", "Меню Управление клиентом", "меню Управление клиентом");
@@ -153,7 +153,7 @@ namespace TestRun.backoffice
             ClickWebElement(".//*[@id='popup-event']//a/../div[last()]//span", "Разворот события", "разворота события");
             WaitTillElementisDisplayed(driver,".//*[@id='popup-event']//a/../div[last()]//*[@class='ui-dropdown__items']/div[3]/span",5);
             ClickWebElement(".//*[@id='popup-event']//a/../div[last()]//*[@class='ui-dropdown__items']/div[3]/span", "Разворот события Чемпионат мира", "разворота события Чемпионат мира");
-            ClickWebElement(".//*[@id='popup-event']//a/../div[last()]//*[@class='ui-dropdown__items']/div[4]/span", "Конечное событие Англия-Германия", "конечного события Англия-Германия");
+            ClickWebElement(".//*[@id='popup-event']//a/../div[last()]//*[@class='ui-dropdown__items']/div[5]/span", "Конечное событие Уругвай-Парагвай", "конечного события Уругвай-Парагвай");
 
             LogStage("Выбор Котировки");
             ClickWebElement(".//*[@id='popup-Fon.Ora.Factor']//a", "Котировка 1", "котировки 1");
@@ -182,6 +182,7 @@ namespace TestRun.backoffice
             if (driver.FindElements(By.XPath(".//*[@class='home-slider__logo-wrap']/div")).Count!=2)
                 throw new Exception("Не отображаются лого команд");
             driver.SwitchTo().Window(driver.WindowHandles[0]);
+            
             ClickWebElement(".//*[@class='ui__checkbox-item']//input", "Чекбокс Опубликовано", "чекбокса Опубликовано");
             ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Сохранить", "кнопки Сохранить");
         }
@@ -404,6 +405,7 @@ namespace TestRun.backoffice
 
             SwitchToWebsiteNewWindow("http://fonred5051.dvt24.com/#!/");
 
+            ExecuteJavaScript("window.location.reload()", "Страницы не открылась");
             WaitTillElementisDisplayed(driver, ".//*[text()='100500 тысяч японских йен']", 5);
             ClickWebElement(".//*[@class='top-win__head']/a", "Меню Клуб Победителей", "меню Клуб Победителей");
             if (!WebElementExist(".//*[@class='content-list__image']"))
@@ -585,8 +587,25 @@ namespace TestRun.backoffice
             LogStage("Переход в меню Управления футером");
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
             js.ExecuteScript("arguments[0].click()", driver.FindElement(By.XPath(".//*[@href='#/explorer/contentFooter']")));
-            ClickWebElement(".//*[@id='js-toolbar']/div[1]/div[1]", "Кнопка Создать футер", "кнопки Создать футер");
+          //  ClickWebElement(".//*[@title='Показывать активные']/button", "Кнопка Показать активные", "кнопки Показать активные");
+            ClickWebElement(".//*[@class='curtain__list']/li[1]", "Первая строка в гриде", "первой строка в гриде");
 
+            IEnumerable<IWebElement> cupisFooter = driver.FindElements(By.XPath(".//*[@class='curtain__sub-title']"));
+            var dataArray = cupisFooter.Where(n => n.Text.Contains("ЦУПИС")).ToArray();
+            for (int i = 0; i < dataArray.Length; i++)
+            {
+                Thread.Sleep(1000);
+                WaitTillElementisDisplayed(driver, ".//*[@class='form__title']", 2);
+                js.ExecuteScript("arguments[0].click()", dataArray[i]);
+                Thread.Sleep(1000);
+                if(driver.FindElement(By.XPath(".//*[@class='ui__checkbox-text']/../input")).GetAttribute("class").Contains("state_checked"))
+                {
+                    ClickWebElement(".//*[@class='ui__checkbox-text']", "Чекбокс Опубликовать", "чекбокса Опубликовать");
+                    Thread.Sleep(1000);
+                    ClickWebElement(".//*[@class='form__buttons']/div[1]", "Кнопка Сохранить", "кнопки Сохранить");
+                }
+            }
+             ClickWebElement(".//*[@id='js-toolbar']/div[1]/div[1]", "Кнопка Создать футер", "кнопки Создать футер");
             SetupVisualSettings();
 
             LogStage("Заполнение вкладки Общее");
@@ -599,68 +618,174 @@ namespace TestRun.backoffice
                 { 3, "Текст 3" },
             };
             foreach (KeyValuePair<int, string> item in text)
-                SendKeysToWebElement(".//*[@class='role-form__inner']/label["+item.Key+"]//textarea", item.Value, "Поле " + item.Value+"", "поля " + item.Value+"");
+                SendKeysToWebElement(".//*[@class='role-form__inner']/label[" + item.Key + "]//textarea", item.Value, "Поле " + item.Value + "", "поля " + item.Value + "");
             SendKeysToWebElement(".//*[@class='role-form__inner']/label[4]//input", "Тестовая электронная почта", "Поле электронная почта", "поля электронная почта");
             SendKeysToWebElement(".//*[@class='role-form__inner']/label[5]//input", "88005553535", "Поле телефон", "поля телефон");
 
-            LogStage("Заполнение вкладки Ссылки");
+            LogStage("Переход на вкладку Ссылки");
             ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[2]", "Вкладка Ссылки", "вкладки Ссылки");
             LogStage("Заполнение Верхнее меню Колонка 1");
-            for(int i = 0; i < 4; i++)
-            { //.//*[@class='tabs__content']/div/div[2]//*[@class='role-form__inner']/div[1]//table/tfoot//a
-                string[,] array = new string[4, 2] { { "Правила", "/#!/rules" }, { "Частые вопросы", "/#!/faq" }, { "Мобильный сайт", "/mobile/#/" }, { "TEST", "/#!/test" } };
-                ClickWebElement("//.//*[@class='tabs__content']/div/div[2]//*[@class='role-form__inner']/div[1]//table/tfoot//a", "Кнопка Добавить ссылку", "кнопки Добавить ссылку");
-                SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[1]//input", array[i, 0], "Поле Заголовок", "поля Заголовок");
-                SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[2]//input", array[i, 1], "Поле Url", "поля Url");
+            for (int i = 0; i < 4; i++)
+            {
+                string[,] array = new string[4, 2] { { "Правила", "/#!/rules" }, { "Частые вопросы", "/#!/faq" }, { "Мобильный сайт", "/#!/mobile" }, { "TEST", "/#!/test" } };
+                Thread.Sleep(1000);
+                ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='role-form__inner']/table[1]//a", "Кнопка Добавить ссылку", "кнопки Добавить ссылку");
+                SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='role-form__inner']/table[1]//*[@class='form-table__edit-form']//label[1]//input", array[i, 0], "Поле Заголовок", "поля Заголовок");
+                SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='role-form__inner']/table[1]//*[@class='form-table__edit-form']//label[2]//input", array[i, 1], "Поле Url", "поля Url");
                 ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*//*[@class='form__row']/div[1]/a", "Кнопка Применить", "кнопки Применить");
-              
+
             }
             LogStage("Проверка редактирования");
-            ClickWebElement(".//*[@class='tabs__content-inner _state_visible']/div/table[1]/tbody/*[@class='form-table__body-row'][last()]/td[last()]/div[1]/a", "Кнопка Редактировать", "кнопки Редактировать");
-            SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[1]//input","1", "Поле Заголовок", "поля Заголовок");
+            ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='role-form__inner']/table[1]//tbody//*[@class='toolbar__icon fa fa-pencil']", "Кнопка Редактировать", "кнопки Редактировать");
+            SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='role-form__inner']/table[1]//*[@class='form-table__edit-form']//label[1]//input", "1", "Поле Заголовок", "поля Заголовок");
             ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*//*[@class='form__row']/div[1]/a", "Кнопка Применить", "кнопки Применить");
 
-            if (!driver.FindElement(By.XPath("//*[@class='tabs__content-inner _state_visible']/div/table[1]/tbody/*[@class='form-table__body-row'][last()]/td[1]")).Text.Contains("TEST1"))
+            if (!driver.FindElement(By.XPath(".//*[@class='tabs__content-inner _state_visible']//*[@class='role-form__inner']/table[1]//tbody//tr[1]/td[1]")).Text.Contains("Правила1"))
                 throw new Exception("Не сработало редактирование");
 
             LogStage("Проверка удаления");
-            ClickWebElement(".//*[@class='tabs__content-inner _state_visible']/div/table[1]/tbody/*[@class='form-table__body-row'][last()]/td[last()]/div[2]/a", "Кнопка Удаления", "кнопки Удаления");
-            if(driver.FindElements(By.XPath("//*[@class='tabs__content-inner _state_visible']/div/table[1]/tbody/*[@class='form-table__body-row']")).Count!=3)
+            ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='role-form__inner']/table[1]//tbody//*[@class='toolbar__icon fa fa-times']", "Кнопка Удаления", "кнопки Удаления");
+            if (driver.FindElements(By.XPath("//*[@class='tabs__content-inner _state_visible']/div/table[1]/tbody/*[@class='form-table__body-row']")).Count != 3)
                 throw new Exception("Не сработало удаление");
 
             LogStage("Заполнение Верхнее меню Колонка 2");
             for (int i = 0; i < 3; i++)
             {
-                string[,] array = new string[3, 2] { { "Вакансии", "/#!/pages/vacancies" }, { "Акции", "/#!/pages/promo" }, { "О компании", "/#!/pages/about-us" }};
+                string[,] array = new string[3, 2] { { "Вакансии", "/#!/pages/vacancies" }, { "Акции", "/#!/pages/promo" }, { "О компании", "/#!/pages/about-us" } };
                 ClickWebElement(".//*[@class='tabs__content']/div/div[2]//*[@class='role-form__inner']/table[2]//a", "Кнопка Добавить ссылку", "кнопки Добавить ссылку");
                 SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[1]//input", array[i, 0], "Поле Заголовок", "поля Заголовок");
                 SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[2]//input", array[i, 1], "Поле Url", "поля Url");
                 ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*//*[@class='form__row']/div[1]/a", "Кнопка Применить", "кнопки Применить");
             }
 
+            LogStage("Заполнение Нижнее меню ");
+            for (int i = 0; i < 2; i++)
+            {
+                string[,] array = new string[2, 2] { { "Платежи", "/#!/pages/payments" }, { "Использование Cookies", "/#!/pages/cookie-policy" } };
+                ClickWebElement(".//*[@class='tabs__content']/div/div[2]//*[@class='role-form__inner']/table[3]//a", "Кнопка Добавить ссылку", "кнопки Добавить ссылку");
+                SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[1]//input", array[i, 0], "Поле Заголовок", "поля Заголовок");
+                SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[2]//input", array[i, 1], "Поле Url", "поля Url");
+                ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*//*[@class='form__row']/div[1]/a", "Кнопка Применить", "кнопки Применить");
+            }
+
             LogStage("Проверка приоритета");
-            ClickWebElement(".//*[@class='tabs__content-inner _state_visible']/div/table[2]/tbody/*[@class='form-table__body-row'][1]/td/div[1]/a", "Кнопка Редактировать", "кнопки Редактировать");
-            SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[4]//input", "2", "Поле Заголовок", "поля Заголовок");
+            ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='role-form__inner']/table[1]//tbody//*[@class='toolbar__icon fa fa-pencil']", "Кнопка Редактировать", "кнопки Редактировать");
+            SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='role-form__inner']/table[1]//*[@class='form-table__edit-form']//label[4]//input", "5", "Поле Порядковый номер", "поля Порядковый номер");
             ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*//*[@class='form__row']/div[1]/a", "Кнопка Применить", "кнопки Применить");
-            //SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[1]//input", "Правила", "Поле Заголовок", "поля Заголовок");
-            //SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[1]//input", "Правила", "Поле Заголовок", "поля Заголовок");
-            //Thread.Sleep(500);
-            //SendKeysToWebElement(".//*[@class='ui__field-inner']/textarea", "Это тестовый Анонс", "Поле Анонс", "поля Анонс");
-            //ClickWebElement(".//*[@class='tabs__content-inner _state_visible']/div/table[1]/tbody/tr[5]/td[last()]/div[1]/a", "Кнопка Редактировать", "кнопки Редактировать");
-            //Thread.Sleep(2000);
-            //SwitchToPreView();
-            //WaitForPageLoad();
-            //LogStage("Проверка что все элементы ставки дня отображаются на сайте");
-            //if (!WebElementExist(".//*//div[contains(@style,'soccer.jpg')]"))
-            //    throw new Exception("Не отображается изображение суперэкспресса");
-            //if (!WebElementExist(".//*[@class='home-slider__tote-text']"))
-            //    throw new Exception("Не отображается анонс суперэкспресса");
-            //ClickWebElement(".//*[@class='home-slider__tote-bet-item']", "Кнопка Заключить пари", "кнопки Заключить пари");
-            //WaitForPageLoad();
-            //if (!WebElementExist(".//*[@class='bet-table']"))
-            //    throw new Exception("Не перешли на страницу суперэкспресса");
-            //driver.SwitchTo().Window(driver.WindowHandles[0]);
-            //DeleteButton();
+
+            LogStage("Заполнение Другие ссылки");
+            ClickWebElement(".//*[@class='role-form__inner']/table[4]/tbody/tr[7]//*[@title='Редактировать']/a", "Кнопка Редактировать", "кнопки Редактировать");
+            SendKeysToWebElement(".//*[@class='form-table__edit-form']/div/label[1]//input", "18+", "Поле Заголовок", "поля Заголовок");
+            SendKeysToWebElement(".//*[@class='form-table__edit-form']/div/label[2]//input", "/#pages/terms-and-conditions", "Поле Url", "поля Url");
+            ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*//*[@class='form__row']/div[1]/a", "Кнопка Применить", "кнопки Применить");
+
+            LogStage("Переход на вкладку Логотип");
+            ClickWebElement(".//*[@class='tabs__head tabs__slider']/span/a[3]", "Кнопка Логотип", "кнопки Логотип");
+            LogStage("Заполнение Приложения");
+            for (int i = 0; i < 2; i++)
+            {
+                ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='role-form__inner']/table[1]//a", "Кнопка Добавить приложение", "кнопки Добавить приложение");
+                string[,] array = new string[2, 4] { { "Приложение для iOS", "/#!/apps/ios", "/ContentCommon/NewFooter/Apps/mac-blue.svg", "/ContentCommon/NewFooter/Apps/mac.svg" },
+                    { "Приложение для Windows", "/#!/apps/windows", "/ContentCommon/NewFooter/Apps/win-blue.svg", "/ContentCommon/NewFooter/Apps/win.svg" } };
+                InputFromArray(i, array);
+            }
+
+            LogStage("Заполнение Спонсоры");
+            for (int i = 0; i < 2; i++)
+            {
+                ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='role-form__inner']/table[2]//a", "Кнопка Добавить спонсора", "кнопки Добавить спонсора");
+                string[,] array = new string[2, 4] { { "Ibas", "http://www.ibas-uk.com/operators/registered-operator-directory/#", "/ContentCommon/NewFooter/Sponsors/ibas.png", "/ContentCommon/NewFooter/Sponsors/ibas.png" },
+                    { "Gamcare", "http://www.gamcare.org.uk/", "/ContentCommon/NewFooter/Sponsors/gamcare.png", "/ContentCommon/NewFooter/Sponsors/gamcare.png" } };
+                InputFromArray(i, array);
+            }
+
+            LogStage("Заполнение Платежные системы");
+            for (int i = 0; i < 2; i++)
+            {
+                ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='role-form__inner']/table[3]//a", "Кнопка Добавить платежную систему", "кнопки Добавить платежную систему");
+                string[,] array = new string[2, 4] { { "Visa", "/#pages/payments", "/ContentCommon/NewFooter/Payments/visa-blue.svg", "/ContentCommon/NewFooter/Payments/visa.svg" },
+                    { "Mastercard", "/#pages/payments", "/ContentCommon/NewFooter/Payments/mastercard-blue.svg", "/ContentCommon/NewFooter/Payments/mastercard.svg" } };
+                InputFromArray(i, array);
+            }
+            LogStage("Заполнение Информационные партнеры");
+            for (int i = 0; i < 1; i++)
+            {
+                ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='role-form__inner']/table[4]//a", "Кнопка Добавить партнера", "кнопки Добавить партнера");
+                string[,] array = new string[1, 4] { { "Essa", "http://www.eu-ssa.org/", "/ContentCommon/NewFooter/Sponsors/ESSA.svg", "/ContentCommon/NewFooter/Sponsors/ESSA.svg" } };
+                InputFromArray(i, array);
+            }
+            LogStage("Заполнение Социальные сети");
+            for (int i = 0; i < 2; i++)
+            {
+                ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='role-form__inner']/table[5]//a", "Кнопка Добавить социальную сеть", "кнопки Добавить социальную сеть");
+                string[,] array = new string[2, 4] { { "Твиттер", "https://twitter.com/Fonbet_Cyprus", "/ContentCommon/NewFooter/Socials/twitter-white.svg", "/ContentCommon/NewFooter/Socials/twitter-white.svg" },
+                    { "Инстаграм", "https://www.instagram.com/fonbet_cyprus/", "/ContentCommon/NewFooter/Socials/instagram-white.svg", "" } };
+                InputFromArray(i, array);
+            }
+            LogStage("Добавление \"Другой логотип\"");
+            ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='role-form__inner']/table[6]/tbody/tr[1]//*[@title='Редактировать']", "Кнопка Редактировать", "кнопки Редактировать");
+            SendKeysToWebElement(".//*[@class='form-table__edit-form']/div/label[1]//input", "NBA", "Поле Заголовок", "поля Заголовок");
+            SendKeysToWebElement(".//*[@class='form-table__edit-form']/div/label[2]//input", "http://nba.gov.cy/", "Поле Url", "поля Url");
+            SendKeysToWebElement(".//*[@class='form-table__edit-form']/div/div[1]//input", "/ContentCommon/NewFooter/Sponsors/nba.png", "Поле Иконка", "поля Иконка");
+            SendKeysToWebElement(".//*[@class='form-table__edit-form']/div/label[4]//textarea", "margin-top: -11px; width: 170px; height: 70px;", "Поле Инлайн стили", "поля Инлайн стили");
+            ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*//*[@class='form__row']/div[1]/a", "Кнопка Применить", "кнопки Применить");
+            ClickWebElement(".//*[@class='form__buttons']/div[1]", "Кнопка Сохранить", "кнопки Сохранить");
+
+            LogStartAction("Проверка что все отображается правильно");
+            SwitchToWebsiteNewWindow("http://fonred5051.dvt24.com/#!/");
+            Thread.Sleep(1000);
+            ExecuteJavaScript("window.location.reload()", "Страницы не открылась");
+            Thread.Sleep(1000);
+            ExecuteJavaScript("window.location.reload()", "Страницы не открылась");
+
+            if (driver.FindElements(By.XPath(".//*[@class='foot-apps__list']/div")).Count!=2)
+                throw new Exception("Кол-во иконок приложений не равно 2");
+            if(driver.FindElements(By.XPath("//*[@class='foot-logo__icon-hover']")).Count != 7)
+                throw new Exception("Кол-во hover на иконках отличается от 7");
+            if (driver.FindElements(By.XPath("//*[@class='foot-markdown']")).Count != 3)
+                throw new Exception("Кол-во Текстовых полей не равно 3");
+            if (!WebElementExist(".//*[@class='foot-apps__logo-1']"))
+                throw new Exception("Не появился \"Другой логотип\"");
+            if(!driver.FindElement(By.XPath(".//*[@class='foot-apps__logo-1']/a")).GetAttribute("title").Equals("NBA"))
+                throw new Exception("Title у \"Другой логотип\" неправильный");
+            if(!driver.FindElement(By.XPath(".//*[@class='foot-info__left']/div[1]//div[3]/a")).Text.Contains("Частые вопросы"))
+                throw new Exception("Не работает сортировка в верхнем меню");
+            LogActionSuccess();
+            LogStage("Возвращение старого футера");
+            driver.SwitchTo().Window(driver.WindowHandles[0]);
+            ClickWebElement(".//*[@class='tabs__head tabs__slider']/span/a[1]", "Вкладка Общие", "кладки Общие");
+            DeleteButton();
+            //ClickWebElement(".//*[@class='ui__checkbox-text']", "Чекбокс Опубликовать", "чекбокса Опубликовать");
+            //Thread.Sleep(1000);
+            //ClickWebElement(".//*[@class='form__buttons']/div[1]", "Кнопка Сохранить", "кнопки Сохранить");
+            Thread.Sleep(1500);
+            IEnumerable <IWebElement> cupis = driver.FindElements(By.XPath(".//*[@class='curtain__sub-title']"));
+            var cupisArray = cupis.Where(n => n.Text.Contains("ЦУПИС")).ToArray();
+            for (int i = 0; i < cupisArray.Length; i++)
+            {
+                Thread.Sleep(1000);
+                WaitTillElementisDisplayed(driver, ".//*[@class='form__title']", 2);
+                js.ExecuteScript("arguments[0].click()", cupisArray[i]);
+                Thread.Sleep(1000);
+                if (!driver.FindElement(By.XPath(".//*[@class='ui__checkbox-text']/../input")).GetAttribute("class").Contains("state_checked"))
+                {
+                    ClickWebElement(".//*[@class='ui__checkbox-text']", "Чекбокс Опубликовать", "чекбокса Опубликовать");
+                    Thread.Sleep(1000);
+                    ClickWebElement(".//*[@class='form__buttons']/div[1]", "Кнопка Сохранить", "кнопки Сохранить");
+                }
+            }
+        }
+
+        private void InputFromArray(int i, string[,] array)
+        {
+            
+            SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[1]//input", array[i, 0], "Поле Заголовок", "поля Заголовок");
+            SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[2]//input", array[i, 1], "Поле Url", "поля Url");
+            SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/div[1]//input", array[i, 2], "Поле Иконка", "поля Иконка");
+            SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/div[2]//input", array[i, 3], "Поле Иконка при наведении", "поля Иконка при наведении");
+            SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//*[@class='form-table__edit-form']/div/label[4]//textarea", "width: 75px;", "Поле Инлайн стили", "поля Инлайн стили");
+            Thread.Sleep(1000);
+            ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*//*[@class='form__row']/div[1]/a", "Кнопка Применить", "кнопки Применить");
         }
     }
 }
