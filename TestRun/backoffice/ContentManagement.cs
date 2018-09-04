@@ -260,10 +260,7 @@ namespace TestRun.backoffice
 
             SendKeysToWebElement(".//*[@class='tabs__content']/div/div[3]/div/div/label[1]//input", "Тестовый Заголовок", "Поле Заголовок", "поля Заголовок");
             SendKeysToWebElement(".//*[@class='tabs__content']/div/div[3]/div/div/div[1]//input", "/Content/Banners/RightBanners/First-deposit_red.jpg", "Поле Мульти-язычное изображение", "поля Мульти-язычное изображение");
-            driver.FindElement(By.XPath(".//*[@class='tabs__content']/div/div[3]/div/div/div[1]//input")).SendKeys(Keys.Backspace);
-            Thread.Sleep(500);
-            driver.FindElement(By.XPath(".//*[@class='tabs__content']/div/div[3]/div/div/div[1]//input")).SendKeys("g");
-            Thread.Sleep(500);
+            SendKeysToWebElement(".//*[@class='tabs__content']/div/div[3]/div/div/div[2]//input", "/Content/Banners/banner-reg.jpg", "Поле Маленькое Мульти-язычное изображение", "поля Маленькое Мульти-язычное изображение");
             ClickWebElement(".//*[@class='tabs__head tabs__slider']//a[1]", "Вкладка Общее", "вкладки Общее");
             ClickWebElement(".//*[@class='ui__checkbox-item']//input", "Чекбокс Опубликовано", "чекбокса Опубликовано");
             ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Добавить", "кнопки Добавить");
@@ -314,21 +311,34 @@ namespace TestRun.backoffice
             ClickWebElement(".//*[@class='form__buttons']/div[1]/button", "Кнопка Добавить", "кнопки Добавить");
 
             SwitchToWebsiteNewWindow("http://fonred5051.dvt24.com/#!/");
+            ClickWebElement(".//*[@class='header__login-head']/a", "Панель логина", "панели логина");
+            SendKeysToWebElement(".//*[@class='login-form__form']/div[1]/input", "11", "поле логина", "поля логина");
+            SendKeysToWebElement(".//*[@class='login-form__form']/div[2]/input", "ueueue11", "поле пароля", "поля пароля");
+            ClickWebElement(".//*[@class='login-form__form-row _right']/div[2]/button", "Кнопка логина", "кнопки логина");
             Thread.Sleep(1000);
             ExecuteJavaScript("window.location.reload()", "Страницы не открылась");
             Thread.Sleep(1000);
-            ExecuteJavaScript("window.location.reload()", "Страницы не открылась");
-            Thread.Sleep(1000);
+           // ExecuteJavaScript("window.location.reload()", "Страницы не открылась");
+            Thread.Sleep(2000);
             if (!WebElementExist(".//*[@src='//origin-test.bkfon-resource.ru/Content/Banners/RightBanners/First-deposit_red.jpg']"))
                 throw new Exception("Не отображается баннер на главной");
             ClickWebElement(".//*[@href='/#!/bets']", "Вкладка Линия", "вкладки Линия");
             Thread.Sleep(1000);
             if (!WebElementExist(".//*[@src='//origin-test.bkfon-resource.ru/Content/Banners/RightBanners/First-deposit_red.jpg']"))
                 throw new Exception("Не отображается баннер в линии");
-            ClickWebElement(".//*[@href='/#!/live']", "Вкладка Лайве", "вкладки Лайве");
+            ClickWebElement(".//*[@href='/#!/live']", "Вкладка Лайв", "вкладки Лайв");
             Thread.Sleep(1000);
             if (!WebElementExist(".//*[@src='//origin-test.bkfon-resource.ru/Content/Banners/RightBanners/First-deposit_red.jpg']"))
                 throw new Exception("Не отображается баннер в лайве");
+            Thread.Sleep(1000);
+            LogStage("Установка узкой ленты купонов");
+            ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
+            ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
+            ClickWebElement(".//*[text()='Узкая лента купонов']", "Чекбокс узкой ленты купонов", "чекбокса узкой ленты купонов");
+            ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
+            Thread.Sleep(1000);
+            if (!WebElementExist(".//*[@src='//origin-test.bkfon-resource.ru/Content/Banners/banner-reg.jpg']"))
+                throw new Exception("Не отображается маленькое мульти-язычное изображение");
         }
     }
     class ContentBannerLifeTime : BackOfficeProgram
