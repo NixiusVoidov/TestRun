@@ -187,6 +187,8 @@ namespace TestRun
             ClickWebElement(".//*[@href='#!/account/requests']", "Меню \"Запросы\"", "меню \"Запросы\"");
             if (driver.Title != "Запросы")
                 throw new Exception("Страница не содержит title \"Запросы\"");
+            WaitTillElementisDisplayed(driver, ".//*[@class='toolbar__item _left']", 20);
+           
         }
         // Метод переключает меню в режим отображения слева
         protected void SwitchToLeftTypeMenu()
@@ -443,7 +445,7 @@ namespace TestRun
             string firstErrorValueTwo = string.Format("строки \"{0}\"", firstError);
             string secondErrorValue = string.Format("Строка \"{0}\"", secondError);
             string secondErrorValueTwo = string.Format("cтроки \"{0}\"", secondError);
-
+           
             ClickWebElement(".//*[@class='toolbar__item _left']", "Кнопка Новый запрос", "кнопки Новый запрос");
             ClickWebElement(".//*[@class='ui__field-inner']", "Меню Тип запроса", "меню тип запроса");
             ClickWebElement(firstMenuValue, firstErrorValue, firstErrorValueTwo);
@@ -500,7 +502,7 @@ namespace TestRun
             ClickWebElement(".//*[@class='requests-list__data']/div[1]", "Строка с последней созданной заявкой", "строки с последней созданной заявкой");
             WaitTillElementisDisplayed(driver, ".//*[@class='request-details']//*[@class='toolbar__item']", 5);
             ClickWebElement(".//*[@class='request-details']//*[@class='toolbar__item']", "Кнопка закрыть заявку", "кнопки закрыть заявку");
-            Thread.Sleep(2000);
+            Thread.Sleep(3000);
             IWebElement requestCell = GetWebElement(".//*[@class='requests-list__data']/div[1]/div", "Нет строк с заявками");
             var requestCellClass = requestCell.GetAttribute("class");
             if (requestCellClass.Contains("new"))
@@ -661,51 +663,44 @@ namespace TestRun
 
         protected void FillRegistrationForm()
         {
-         
         LogStage("Заполнение формы регистрации начальными тестовыми данными"); 
-        ClickWebElement(".//*[@href='/#!/account/registration/Reg4']", "Кнопка Регистрации", "кнопки Регистрации");
-        SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[2]/label[1]//input", "Это", "Поле Фамилия", "поля Фамилия");
-        SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[2]/label[2]//input", "Тест", "Поле Имя", "поля Имя");
-        SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[6]/label[1]//input", "123qwe123", "Поле Пароль", "поля Пароль");
-        SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[6]/label[2]//input", "123qwe123", "Поле Подтверждение пароля", "поля Подтверждение пароля");
-        SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input", "4000100@mail.ru", "Поле email", "поля email");
-        Thread.Sleep(1500);
-        SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input", "000000008", "Поле Телефон", "поля Телефон");
-        Thread.Sleep(1000);
+        ClickWebElement(".//*[@href='/#!/account/registration']", "Кнопка Регистрации", "кнопки Регистрации");
+        SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[1]//input", "Тест", "Поле Имя", "поля Имя");
+        SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[5]//input", "123qwe123", "Поле Пароль", "поля Пароль");
+        SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[3]//input", "4000100@mail.ru", "Поле email", "поля email");
+            Thread.Sleep(800);
+        SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[2]//input", "000000008", "Поле Номер телефона", "поля Номер телефона");
         ClickWebElement(".//*[@id='checkbox2']", "Чекбокс Подтверждения правил", "чекбокса Подтверждения правил");
-        Thread.Sleep(1000);
-    }
+            ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']//button", "Кпонка Продолжить", "кпонки Продолжить");
+        }
 
         // Метод принимает на вход  ожидаемый номер телефона и  проверяет правильность работы createProcess по тестовому сценарию на тестовых данных для супер-регистрации
         protected void CreateProcessRegistration(string phoneValue, string process, string code, string rejcode)
         {
             if (phoneValue == "000000003")
             {
-                //FillRegistrationForm();
-                //driver.Navigate().GoToUrl("http://fonred5000.dvt24.com/?test=1#!/account/registration/Reg4");
-                //WaitForElementByXpath(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input");
+                
                 Thread.Sleep(500);
-                ClearBeforeInput(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input");
-                SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input", phoneValue, "Поле Номер телефона", "поля Номер телефона");
-                ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
-                if (!WebElementExist(".//*[@class='registration-v4__captcha-wrap']"))
+                ClearBeforeInput(".//*[@class='reg-v4__form-column--31oQE']/div[2]//input");
+                SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[2]//input", phoneValue, "Поле Номер телефона", "поля Номер телефона");
+                ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']//button", "Кпонка Продолжить", "кпонки Продолжить");
+                if (!WebElementExist(".//*[@class='reg-v4__captcha--a9ACp']"))
                     throw new Exception("Нет капчи");
-                ClickWebElement(".//*[@class='account__heading-close']", "Крестик окна", "крестика окна");
+                Thread.Sleep(500);
+                SendKeysToWebElement(".//*[@class='reg-v4__form-bottom--3bcYA']//input", "1", "Поле Капча", "поля Капча");
+                ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']//button", "Кпонка Далее", "кпонки Далее");
+                ClickWebElement(".//*[@class='toolbar__item reg-v4__resend-sms--3aJCm']/button", "Кпонка Изменить номер телефона", "кпонки Изменить номер телефона");
                 return;
             }
-
-            FillRegistrationForm();
-            // driver.Navigate().GoToUrl("http://fonred5000.dvt24.com/?test=1#!/account/registration/Reg4");
             Thread.Sleep(500);
-            ClearBeforeInput(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input");
-            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input", phoneValue, "Поле Номер телефона", "поля Номер телефона");
-            ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
-            var errorMessage = GetWebElement(".//*[@id='registration-v4-error']", "Нет модуля с ошибкой");
+            ClearBeforeInput(".//*[@class='reg-v4__form-column--31oQE']/div[2]//input");
+            SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[2]//input", phoneValue, "Поле Номер телефона", "поля Номер телефона");
+            ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']//button", "Кпонка Продолжить", "кпонки Продолжить");
+            var errorMessage = GetWebElement(".//*[@id='reg-v4-cupis-error']", "Нет модуля с ошибкой");
             if (phoneValue == "000000002")
             {
                 if (!(errorMessage.GetAttribute("data-errorcode").Equals(code)))
                     throw new Exception("Неверная обработка ошибки");
-               
             }
             else
             if (phoneValue == "000000004")
@@ -716,7 +711,7 @@ namespace TestRun
            else  if (!(errorMessage.GetAttribute("data-errorcode").Equals(code) && errorMessage.GetAttribute("data-processstate").Equals(process) && errorMessage.GetAttribute("data-rejectioncode").Equals(rejcode)))
                 throw new Exception("Неверная обработка ошибки");
             
-            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть", "кнопки Закрыть");
+            ClickWebElement(".//*[@class='reg-v4__error-buttons--1X_YP']//a", "Кнопка Закрыть", "кнопки Закрыть");
         }
 
         // Метод принимает на вход смс код с  телефона и  проверяет правильность работы SendSmsCode по тестовому сценарию на тестовых данных для супер-регистрации
@@ -725,25 +720,23 @@ namespace TestRun
             if (smsValue == "8")
             {
                 LogStage("Проверка sendSmsCode по тестовому сценарию");
-               
-                if (!WebElementExist(".//*[@class='registration-v4__form-inner']/div[2]//input"))
-                {
-                    FillRegistrationForm();
-                   // driver.Navigate().GoToUrl("http://fonred5000.dvt24.com/?test=1#!/account/registration/Reg4");
-                    ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
-                }
-               
-                SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", smsValue, "Поле СМС код", "поля СМС код");
-                ClickWebElement(".//*[@class='toolbar__item process-button']/button", "Кнопка Отправить", "Кнопка Отправить");
-                
 
-                if (!driver.FindElement(By.XPath(".//*[@class='registration-v4__verification-info']")).Text.Contains("Qiwi"))
+                ClearBeforeInput(".//*[@class='reg-v4__form-bottom--3bcYA']//input");
+                SendKeysToWebElement(".//*[@class='reg-v4__form-bottom--3bcYA']//input", smsValue, "Поле СМС код", "поля СМС код");
+                ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']", "Кнопка Отправить", "Кнопка Отправить");
+                WaitTillElementisDisplayed(driver, ".//*[@class='ident-instruction--3wvHY']", 10);
+                Thread.Sleep(1000);
+                if (WebElementExist(".//*[@class='ident-instruction--3wvHY']"))
+                {
+                    ClickWebElement(".//*[@class='ident-instruction__foot--2-EbX']//*[@class='toolbar__btn-text']", "Кпонка Продолжить", "кпонки Продолжить");
+                }
+                if (!driver.FindElement(By.XPath(".//*[@class='reg-v4__head-warn--1aaIq']")).Text.ToUpper().Contains("QIWI"))
                     throw new Exception("Смс не ведет на киви верификацию");
                 LogStage("Проверка перехода в личный кабинет");
-                ClickWebElement(".//*[@class='registration-v4__form-inner']//*[@class='toolbar__item']//span", "Кнопка Перейти в личный кабинет", "кнопки Перейти в личный кабинет");
-                if (!WebElementExist(".//*[@class='confirm__inner---LYRu']"))
+                ClickWebElement(".//*[@class='reg-v4__skip-ident-link--3PWvd']", "Кнопка Отложить идентификацию", "кнопки Отложить идентификацию");
+                if (!WebElementExist(".//*[@class='reg-v4__form-bottom--3bcYA _style-medium--2fL5j']"))
                     throw new Exception("Непоявилось подтверждение");
-                ClickWebElement(".//*[@class='confirm__inner---LYRu']/div[3]/div[2]/a", "Кнопка Ок", "кнопки Ок");
+                ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']/div[1]", "Кнопка Да", "кнопки Да");
 
                 if (WebElementExist(".//*[@class='ident-instruction--3wvHY']"))
                     ClickWebElement(".//*[@class='ident-instruction__foot--2-EbX']/div[1]//a", "Кнопка закрыть", "кнопки закрыть");
@@ -752,7 +745,7 @@ namespace TestRun
                     throw new Exception("Не перешел на страницу идентификации");
                
                 ClickWebElement(".//*[@class='page-account']//*[@class='account-menu__icon _exit']", "Кнопка Выход", "кнопки Выход");
-
+                WaitTillElementisDisplayed(driver, ".//*[@class='login-form']", 10);
                 sendPasportRegistrationQiwi("2222222222", null, "2", null);
                 sendPasportRegistrationQiwi("3333333333", "waitForPassport", "10", null);
                 sendPasportRegistrationQiwi("4444444444", "rejected", "0", "17");
@@ -765,27 +758,24 @@ namespace TestRun
             {
                 LogStage("Проверка sendSmsCode по тестовому сценарию");
                 
-                if (!WebElementExist(".//*[@class='registration-v4__form-inner']/div[2]//input"))
+                FillRegistrationForm();
+                ClearBeforeInput(".//*[@class='reg-v4__form-bottom--3bcYA']//input");
+                SendKeysToWebElement(".//*[@class='reg-v4__form-bottom--3bcYA']//input", smsValue, "Поле СМС код", "поля СМС код");
+                ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']", "Кнопка Отправить", "Кнопка Отправить");
+                if (WebElementExist(".//*[@class='ident-instruction--3wvHY']"))
                 {
-                    FillRegistrationForm();
-                    //driver.Navigate().GoToUrl("http://fonred5000.dvt24.com/?test=1#!/account/registration/Reg4");
-                    ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
+                    ClickWebElement(".//*[@class='ident-instruction__foot--2-EbX']//*[@class='toolbar__btn-text']", "Кпонка Продолжить", "кпонки Продолжить");
                 }
-                ClearBeforeInput(".//*[@class='registration-v4__form-inner']/div[2]//input");
-                SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", smsValue, "Поле СМС код", "поля СМС код");
-                ClickWebElement(".//*[@class='toolbar__item process-button']/button", "Кнопка Отправить", "Кнопка Отправить");
-
-
-                if (driver.FindElement(By.XPath(".//*[@class='registration-v4__verification-info']")).Text.Contains("Qiwi"))
-                    throw new Exception("Смс ведет на киви верификацию");
-                LogStage("Проверка перехода в личный кабинет");
-                ClickWebElement(".//*[@class='registration-v4__form-inner']//*[@class='toolbar__item']//span", "Кнопка Перейти в личный кабинет", "кнопки Перейти в личный кабинет");
-                if (!WebElementExist(".//*[@class='confirm__inner---LYRu']"))
-                    throw new Exception("Непоявилось подтверждение");
-                ClickWebElement(".//*[@class='confirm__inner---LYRu']/div[3]/div[2]/a", "Кнопка Ок", "кнопки Ок");
-                if (!driver.FindElement(By.XPath(".//*[@class='account-menu__wrap']/a[7]")).GetAttribute("class").Contains("active"))
-                    throw new Exception("Не перешел на страницу идентификации");
-                ClickWebElement(".//*[@class='page-account']//*[@class='account-menu__icon _exit']", "Кнопка Выход", "кнопки Выход");
+                if (!driver.FindElement(By.XPath(".//*[@class='reg-v4__head-warn--1aaIq']")).Text.ToUpper().Contains("ФОНБЕТ"))
+                    throw new Exception("Смс не ведет на бк верификацию");
+                //LogStage("Проверка перехода в личный кабинет");
+                //ClickWebElement(".//*[@class='registration-v4__form-inner']//*[@class='toolbar__item']//span", "Кнопка Перейти в личный кабинет", "кнопки Перейти в личный кабинет");
+                //if (!WebElementExist(".//*[@class='confirm__inner---LYRu']"))
+                //    throw new Exception("Непоявилось подтверждение");
+                //ClickWebElement(".//*[@class='confirm__inner---LYRu']/div[3]/div[2]/a", "Кнопка Ок", "кнопки Ок");
+                //if (!driver.FindElement(By.XPath(".//*[@class='account-menu__wrap']/a[7]")).GetAttribute("class").Contains("active"))
+                //    throw new Exception("Не перешел на страницу идентификации");
+                //ClickWebElement(".//*[@class='page-account']//*[@class='account-menu__icon _exit']", "Кнопка Выход", "кнопки Выход");
 
                 sendPasportRegistrationBk("2222222222", "waitForPassport", "10", null);
                 sendPasportRegistrationBk("3333333333", "rejected", "0", "18");
@@ -795,37 +785,26 @@ namespace TestRun
 
             if (smsValue == "0")
             {
-                if (!WebElementExist(".//*[@class='registration-v4__form-inner']/div[2]//input"))
-                {
-                    FillRegistrationForm();
-                    //driver.Navigate().GoToUrl("http://fonred5000.dvt24.com/?test=1#!/account/registration/Reg4");
-                    ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
-                }
-                ClearBeforeInput(".//*[@class='registration-v4__form-inner']/div[2]//input");
-                SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", smsValue, "Поле СМС код", "поля СМС код");
-                ClickWebElement(".//*[@class='toolbar__item process-button']/button", "Кнопка Отправить", "Кнопка Отправить");
+                FillRegistrationForm();
+                ClearBeforeInput(".//*[@class='reg-v4__form-bottom--3bcYA']//input");
+                SendKeysToWebElement(".//*[@class='reg-v4__form-bottom--3bcYA']//input", smsValue, "Поле СМС код", "поля СМС код");
+                ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']", "Кнопка Отправить", "Кнопка Отправить");
                 if (WebElementExist(".//*[@class='ident-instruction--3wvHY']"))
                     ClickWebElement(".//*[@class='ident-instruction__foot--2-EbX']/div[1]//a", "Кнопка закрыть", "кнопки закрыть");
-                ClickWebElement(".//*[@class='header__login-item _type_account']", "Кнопка меню", "кнопки меню");
-                ClickWebElement(".//*[@id='popup']/li[last()]", "Кнопка выйти", "кнопки выйти");
+                if(driver.FindElements(By.XPath(".//*[@class='reg-v4__instruction--Yq3tk']/div")).Count!=2)
+                    throw new Exception("Не выборов идентификации больше 2х");
+                ClickWebElement(".//*[@class='toolbar__item _reg-button']", "Кнопка Перейти в Лк", "кнопки Перейти в Лк");
+                ClickWebElement(".//*[@class='header__login-item _type_account']", "Кнопка Аккаунт", "кнопки Аккаунт");
+                ClickWebElement(".//*[@id='popup']/li[last()]", "Кнопка Выход", "кнопки Выход");
                 return;
             }
-                
 
             LogStage("Проверка sendSmsCode по тестовому сценарию");
-            if (!WebElementExist(".//*[@class='registration-v4__form-inner']/div[2]//input"))
-            {
-                FillRegistrationForm();
-                // driver.Navigate().GoToUrl("http://fonred5000.dvt24.com/?test=1#!/account/registration/Reg4");
-                Thread.Sleep(500);
-                ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
-            }
-            ClearBeforeInput(".//*[@class='registration-v4__form-inner']/div[2]//input");
-            SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", smsValue, "Поле СМС код", "поля СМС код");
-            ClickWebElement(".//*[@class='toolbar__item process-button']/button", "Кнопка Отправить", "Кнопка Отправить");
+            ClearBeforeInput(".//*[@class='reg-v4__form-bottom--3bcYA']//input");
+            SendKeysToWebElement(".//*[@class='reg-v4__form-bottom--3bcYA']//input", smsValue, "Поле СМС код", "поля СМС код");
+            ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']", "Кнопка Отправить", "Кнопка Отправить");
 
-
-            var messageData = GetWebElement(".//*[@id='registration-v4-error']", "Нет модуля с ошибкой");
+            var messageData = GetWebElement(".//*[@id='reg-v4-cupis-error']", "Нет модуля с ошибкой");
             if (smsValue == "1" || smsValue == "2")
             {
                 if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-processstate").Equals(process)))
@@ -836,18 +815,20 @@ namespace TestRun
                 if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-processstate").Equals(process) && messageData.GetAttribute("data-rejectioncode").Equals(rejcode)))
                     throw new Exception("Неверная обработка ошибки");
             }
-
             if (smsValue != "0")
-                ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+                ClickWebElement(".//*[@class='reg-v4__error-buttons--1X_YP']", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+            if (smsValue == "2")
+                ClickWebElement(".//*[@class='toolbar__item reg-v4__resend-sms--3aJCm']/button", "Кнопка Изменить номер телефона", "кнопки Изменить номер телефона");
+            if (smsValue == "3" || smsValue == "4")
+                ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']//button", "Кпонка Продолжить", "кпонки Продолжить");
+
             if (smsValue == "5" || smsValue == "6" || smsValue == "7")
             {
-               
-                var body = GetWebElement(".//body", "Нет тела");
-                if (!body.GetAttribute("class").Contains("restorePassword"))
+                if (!WebElementExist(".//*[@class='change-password__container']"))
                     throw new Exception("Не перешли на восстановление пароля");
-                ClickWebElement(".//*[@class='account__heading-title']/a", "Крестик формы восстановления пароля", "крестика формы восстановления пароля");
+                Thread.Sleep(1000);
+                FillRegistrationForm();
             }
-
         }
 
         protected void sendPasportRegistrationQiwi(string pasportnumber, string process, string code, string rejcode)
@@ -857,95 +838,86 @@ namespace TestRun
             {
                 // driver.Navigate().GoToUrl("http://fonred5000.dvt24.com/?test=1#!/account/registration/Reg4");
                 FillRegistrationForm();
-                ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить","кпонки Продолжить");
-                SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", "8", "Поле СМС код","поля СМС код");
-                ClickWebElement(".//*[@class='toolbar__item process-button']/button", "Кнопка Отправить", "Кнопка Отправить");
+                SendKeysToWebElement(".//*[@class='reg-v4__form-bottom--3bcYA']//input", "8", "Поле СМС код", "поля СМС код");
+                ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']", "Кнопка Отправить", "Кнопка Отправить");
+
                 LogStage("Проверка sendPasport qiwi по тестовому сценарию");
-                SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", pasportnumber, "Поле Серия и номер","поля Серия и номер");
+                SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input", pasportnumber, "Поле Номер паспорта", "поля Номер паспорта");
                 Thread.Sleep(800);
-                SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[3]//input", "01012000", "Поле Дата выдачи","поля Дата выдачи");
+                SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[2]//input", "01012000", "Поле Дата выдачи","поля Дата выдачи");
                 ClickWebElement(".//*[@id='checkbox2']", "Чекбокс Подтверждения правил", "чекбокса Подтверждения правил");
-                ClickWebElement(".//*[@class='toolbar__item process-button']", "Кнопка Отправить данные по киви","кнопки Отправить данные по киви");
-                var messageData = GetWebElement(".//*[@id='verification-qiwi-error']", "Нет модуля с ошибкой");
+                ClickWebElement(".//*[@class='toolbar__item _reg-button']", "Кнопка Далее", "кнопки Далее");
+                var messageData = GetWebElement(".//*[@id='reg-v4-cupis-error']", "Нет модуля с ошибкой");
                 if (!(messageData.GetAttribute("data-errorcode").Equals(code)))
                     throw new Exception("Неверная обработка ошибки");
-                ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+                ClickWebElement(".//*[@class='reg-v4__error-buttons--1X_YP']", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
                 return;
             }
             if (pasportnumber == "3333333333")
             {
                 LogStage("Проверка sendPasport qiwi по тестовому сценарию");
-                ClearBeforeInput(".//*[@class='registration-v4__form-inner']/div[2]//input");
-                SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", pasportnumber, "Поле Серия и номер", "поля Серия и номер");
+                ClearBeforeInput("//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input");
+                SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input", pasportnumber, "Поле Номер паспорта", "поля Номер паспорта");
                 Thread.Sleep(800);
-                ClickWebElement(".//*[@class='toolbar__item process-button']", "Кнопка Отправить данные по киви", "кнопки Отправить данные по киви");
-                var messageData = GetWebElement(".//*[@id='verification-qiwi-error']", "Нет модуля с ошибкой");
+                ClickWebElement(".//*[@class='toolbar__item _reg-button']", "Кнопка Далее", "кнопки Далее");
+                var messageData = GetWebElement(".//*[@id='reg-v4-cupis-error']", "Нет модуля с ошибкой");
                 if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-processstate").Equals(process)))
                 throw new Exception("Неверная обработка ошибки");
-                ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+                ClickWebElement(".//*[@class='reg-v4__error-buttons--1X_YP']", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
                 return;
             }
             if (pasportnumber == "4444444444")
             {
                 LogStage("Проверка sendPasport qiwi по тестовому сценарию");
-                ClearBeforeInput(".//*[@class='registration-v4__form-inner']/div[2]//input");
-                SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", pasportnumber, "Поле Серия и номер", "поля Серия и номер");
-                ClickWebElement(".//*[@class='toolbar__item process-button']", "Кнопка Отправить данные по киви", "кнопки Отправить данные по киви");
-                var messageData = GetWebElement(".//*[@id='verification-qiwi-error']", "Нет модуля с ошибкой");
+                ClearBeforeInput("//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input");
+                SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input", pasportnumber, "Поле Номер паспорта", "поля Номер паспорта");
+                Thread.Sleep(800);
+                ClickWebElement(".//*[@class='toolbar__item _reg-button']", "Кнопка Далее", "кнопки Далее");
+                var messageData = GetWebElement(".//*[@id='reg-v4-cupis-error']", "Нет модуля с ошибкой");
                 if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-processstate").Equals(process) && messageData.GetAttribute("data-rejectioncode").Equals(rejcode)))
                     throw new Exception("Неверная обработка ошибки");
-                ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
-                if (!driver.FindElement(By.XPath(".//*[@class='account-menu__wrap']/a[1]")).GetAttribute("class").Contains("active"))
-                    throw new Exception("Не перешел в мой профиль");
-                if (!WebElementExist(".//*[@class='verification__notice-item'][text()='Продолжить идентификацию']"))
-                    throw new Exception("Нет кнопки продолжить идентификацию из ЛК");
-                ClickWebElement(".//*[@class='page-account']//*[@class='account-menu__icon _exit']", "Кнопка Выход", "кнопки Выход");
+                ClickWebElement(".//*[@class='reg-v4__error-buttons--1X_YP']", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+                ClickWebElement(".//*[@class='header__login-item _type_account']", "Кнопка Аккаунт", "кнопки Аккаунт");
+                ClickWebElement(".//*[@id='popup']/li[last()]", "Кнопка Выход", "кнопки Выход");
                 return;
             }
             if (pasportnumber == "5555555555")
             {
                 FillRegistrationForm();
-                ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
-                WaitTillElementisDisplayed(driver, ".//*[@class='toolbar__item process-button']/button", 5);
-                SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", "8", "Поле СМС код", "поля СМС код");
+                SendKeysToWebElement(".//*[@class='reg-v4__form-bottom--3bcYA']//input", "8", "Поле СМС код", "поля СМС код");
                 Thread.Sleep(800);
-                ClickWebElement(".//*[@class='toolbar__item process-button']/button", "Кнопка Отправить", "Кнопка Отправить");
+                ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']", "Кнопка Отправить", "Кнопка Отправить");
                 LogStage("Проверка sendPasport qiwi по тестовому сценарию");
-                SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", pasportnumber, "Поле Серия и номер", "поля Серия и номер");
+                SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input", pasportnumber, "Поле Номер паспорта", "поля Номер паспорта");
                 Thread.Sleep(800);
-                SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[3]//input", "01012000", "Поле Дата выдачи", "поля Дата выдачи");
+                SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[2]//input", "01012000", "Поле Дата выдачи", "поля Дата выдачи");
                 ClickWebElement(".//*[@id='checkbox2']", "Чекбокс Подтверждения правил", "чекбокса Подтверждения правил");
-                ClickWebElement(".//*[@class='toolbar__item process-button']", "Кнопка Отправить данные по киви", "кнопки Отправить данные по киви");
-                var messageData = GetWebElement(".//*[@id='verification-qiwi-error']", "Нет модуля с ошибкой");
+                ClickWebElement(".//*[@class='toolbar__item _reg-button']", "Кнопка Далее", "кнопки Далее");
+                var messageData = GetWebElement(".//*[@id='reg-v4-cupis-error']", "Нет модуля с ошибкой");
                 if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-processstate").Equals(process) && messageData.GetAttribute("data-rejectioncode").Equals(rejcode)))
                     throw new Exception("Неверная обработка ошибки");
-                ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
-                if (!driver.FindElement(By.XPath(".//*[@class='account-menu__wrap']/a[1]")).GetAttribute("class").Contains("active"))
-                    throw new Exception("Не перешел в мой профиль");
-                if (!WebElementExist(".//*[@class='verification__notice-item'][text()='Продолжить идентификацию']"))
-                    throw new Exception("Нет кнопки продолжить идентификацию из ЛК");
-                ClickWebElement(".//*[@class='page-account']//*[@class='account-menu__icon _exit']", "Кнопка Выход", "кнопки Выход");
+                ClickWebElement(".//*[@class='reg-v4__error-buttons--1X_YP']", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+                ClickWebElement(".//*[@class='header__login-item _type_account']", "Кнопка Аккаунт", "кнопки Аккаунт");
+                ClickWebElement(".//*[@id='popup']/li[last()]", "Кнопка Выход", "кнопки Выход");
                 return;
             }
 
             FillRegistrationForm();
-            ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
-            WaitTillElementisDisplayed(driver, ".//*[@class='toolbar__item process-button']/button", 5);
-            SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", "8", "Поле СМС код", "поля СМС код");
+            SendKeysToWebElement(".//*[@class='reg-v4__form-bottom--3bcYA']//input", "8", "Поле СМС код", "поля СМС код");
             Thread.Sleep(800);
-            ClickWebElement(".//*[@class='toolbar__item process-button']/button", "Кнопка Отправить", "Кнопка Отправить");
+            ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']", "Кнопка Отправить", "Кнопка Отправить");
             Thread.Sleep(800);
             LogStage("Проверка sendPasport qiwi по тестовому сценарию");
-            SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", "6666666666", "Поле Серия и номер", "поля Серия и номер");
+            SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input", "6666666666", "Поле Серия и номер", "поля Серия и номер");
             Thread.Sleep(800);
-            SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[3]//input", "01012000", "Поле Дата выдачи", "поля Дата выдачи");
+            SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[2]//input", "01012000", "Поле Дата выдачи", "поля Дата выдачи");
             ClickWebElement(".//*[@id='checkbox2']", "Чекбокс Подтверждения правил", "чекбокса Подтверждения правил");
-            ClickWebElement(".//*[@class='toolbar__item process-button']", "Кнопка Отправить данные по киви", "кнопки Отправить данные по киви");
-            if (!WebElementExist(".//*[@class='account-error _type_success']"))
+            ClickWebElement(".//*[@class='toolbar__item _reg-button']", "Кнопка Отправить данные по киви", "кнопки Отправить данные по киви");
+            if (!WebElementExist(".//*[@class='reg-v4__ident-complete-wrap--1VXTQ']"))
                 throw new Exception("Верификация по киви не прошла");
-            ClickWebElement(".//*[@class='account-error__actions-inner']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
-
-            ClickWebElement(".//*[@class='page-account']//*[@class='account-menu__icon _exit']", "Кнопка Выход", "кнопки Выход");
+            ClickWebElement(".//*[@class='header__login-item _type_account']", "Кнопка Аккаунт", "кнопки Аккаунт");
+            ClickWebElement(".//*[@id='popup']/li[last()]", "Кнопка Выход", "кнопки Выход");
+            ClickWebElement(".//*[@class='reg-v4__heading-close--3l3yY']", "Крестик  окна регистрации", "крестика  окна регистрации");
 
 
         }
@@ -955,63 +927,51 @@ namespace TestRun
             if (pasportnumber == "2222222222")
             {
                 LogStage("Проверка sendPasport бк по тестовому сценарию");
-                // driver.Navigate().GoToUrl("http://fonred5000.dvt24.com/?test=1#!/account/registration/Reg4");
-                FillRegistrationForm();
-                ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
-                WaitTillElementisDisplayed(driver, ".//*[@class='toolbar__item process-button']/button", 5);
-                SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", "9", "Поле СМС код", "поля СМС код");
+                LogStage("Проверка sendPasport bk по тестовому сценарию");
+                SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input", pasportnumber, "Поле Серия и номер", "поля Серия и номер");
                 Thread.Sleep(800);
-                ClickWebElement(".//*[@class='toolbar__item process-button']/button", "Кнопка Отправить", "Кнопка Отправить");
-                Thread.Sleep(800);
-                LogStage("Проверка sendPasport qiwi по тестовому сценарию");
-                SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", pasportnumber, "Поле Серия и номер", "поля Серия и номер");
-                Thread.Sleep(800);
-                SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]/label[2]//input", "01012000", "Поле Дата выдачи", "поля Дата выдачи");
+                SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[2]//input", "01012000", "Поле Дата выдачи", "поля Дата выдачи");
                 ClickWebElement(".//*[@id='checkbox2']", "Чекбокс Подтверждения правил", "чекбокса Подтверждения правил");
-                ClickWebElement(".//*[@class='toolbar__item process-button']", "Кнопка Отправить данные по бк", "кнопки Отправить данные по бк");
-                var messageData = GetWebElement(".//*[@id='verification-bk-error']", "Нет модуля с ошибкой");
+                ClickWebElement(".//*[@class='toolbar__item _reg-button']", "Кнопка Отправить данные по бк", "кнопки Отправить данные по бк");
+                var messageData = GetWebElement(".//*[@id='reg-v4-cupis-error']", "Нет модуля с ошибкой");
                 if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-processstate").Equals(process)))
                     throw new Exception("Неверная обработка ошибки");
-                ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+                ClickWebElement(".//*[@class='reg-v4__error-buttons--1X_YP']", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
                 return;
             }
             if (pasportnumber == "3333333333")
             {
                 LogStage("Проверка sendPasport бк по тестовому сценарию");
 
-                ClearBeforeInput(".//*[@class='registration-v4__form-inner']/div[2]//input");
-                SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", pasportnumber, "Поле Серия и номер", "поля Серия и номер");
-                ClickWebElement(".//*[@class='toolbar__item process-button']", "Кнопка Отправить данные по бк", "кнопки Отправить данные по бк");
-                var messageData = GetWebElement(".//*[@id='verification-bk-error']", "Нет модуля с ошибкой");
+                ClearBeforeInput(".//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input");
+                SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input", pasportnumber, "Поле Серия и номер", "поля Серия и номер");
+                ClickWebElement(".//*[@class='toolbar__item _reg-button']", "Кнопка Отправить данные по бк", "кнопки Отправить данные по бк");
+                var messageData = GetWebElement(".//*[@id='reg-v4-cupis-error']", "Нет модуля с ошибкой");
                 if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-processstate").Equals(process) && messageData.GetAttribute("data-rejectioncode").Equals(rejcode)))
                     throw new Exception("Неверная обработка ошибки");
-                ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
-                if (!driver.FindElement(By.XPath(".//*[@class='account-menu__wrap']/a[1]")).GetAttribute("class").Contains("active"))
-                    throw new Exception("Не перешел в мой профиль");
-                if (!WebElementExist(".//*[@class='verification__notice-item'][text()='Продолжить идентификацию']"))
-                    throw new Exception("Нет кнопки продолжить идентификацию из ЛК");
-                ClickWebElement(".//*[@class='page-account']//*[@class='account-menu__icon _exit']", "Кнопка Выход", "кнопки Выход");
+                ClickWebElement(".//*[@class='reg-v4__error-buttons--1X_YP']", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+                ClickWebElement(".//*[@class='header__login-item _type_account']", "Кнопка Аккаунт", "кнопки Аккаунт");
+                ClickWebElement(".//*[@id='popup']/li[last()]", "Кнопка Выход", "кнопки Выход");
                 return;
             }
+            
             FillRegistrationForm();
-            ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
-            WaitTillElementisDisplayed(driver, ".//*[@class='toolbar__item process-button']/button", 5);
-            SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", "9", "Поле СМС код", "поля СМС код");
+            SendKeysToWebElement(".//*[@class='reg-v4__form-bottom--3bcYA']//input", "9", "Поле СМС код", "поля СМС код");
             Thread.Sleep(800);
-            ClickWebElement(".//*[@class='toolbar__item process-button']/button", "Кнопка Отправить", "Кнопка Отправить");
+            ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']", "Кнопка Отправить", "Кнопка Отправить");
+            Thread.Sleep(800);
             LogStage("Проверка sendPasport бк по тестовому сценарию");
-            SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]//input", "6666666666", "Поле Серия и номер", "поля Серия и номер");
+            SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input", "6666666666", "Поле Серия и номер", "поля Серия и номер");
             Thread.Sleep(800);
-            SendKeysToWebElement(".//*[@class='registration-v4__form-inner']/div[2]/label[2]//input", "01012000", "Поле Дата выдачи", "поля Дата выдачи");
+            SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[2]//input", "01012000", "Поле Дата выдачи", "поля Дата выдачи");
             ClickWebElement(".//*[@id='checkbox2']", "Чекбокс Подтверждения правил", "чекбокса Подтверждения правил");
-            ClickWebElement(".//*[@class='toolbar__item process-button']", "Кнопка Отправить данные по бк", "кнопки Отправить данные по бк");
-            if (!WebElementExist(".//*[@class='account-error _type_success']"))
-                throw new Exception("Верификация по бк не прошла");
-            ClickWebElement(".//*[@class='account-error__actions-inner']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
-            if (!driver.FindElement(By.XPath(".//*[@class='account-menu__wrap']/a[7]")).GetAttribute("class").Contains("active"))
-                throw new Exception("Не перешел на страницу идентификации");
-           
-            ClickWebElement(".//*[@class='page-account']//*[@class='account-menu__icon _exit']", "Кнопка Выход", "кнопки Выход");
+            ClickWebElement(".//*[@class='toolbar__item _reg-button']", "Кнопка Отправить данные по бк", "кнопки Отправить данные по бк");
+
+            if (!WebElementExist(".//*[@class='reg-v4__ident-instr-list--1ZcTu']"))
+                throw new Exception("Не загрузилась финальная страница бк");
+            ClickWebElement(".//*[@class='toolbar__item _reg-button']", "Кнопка Перейти в Лк", "кнопки Перейти в Лк");
+            ClickWebElement(".//*[@class='header__login-item _type_account']", "Кнопка Аккаунт", "кнопки Аккаунт");
+            ClickWebElement(".//*[@id='popup']/li[last()]", "Кнопка Выход", "кнопки Выход");
 
         }
 

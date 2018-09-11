@@ -365,45 +365,43 @@ namespace TestRun.fonbet
         {
             base.Run();
 
-            if (!WebElementExist(".//*[@href='/#!/account/registration/Reg4']"))
+            if (!WebElementExist(".//*[@href='/#!/account/registration']"))
                 throw new Exception("На данном сайте нет супер-регистрации");
 
             LogStage("Переход на страницу регистрации");
-            ClickWebElement(".//*[@href='/#!/account/registration/Reg4']", "Кнопка Регистрации", "кнопки Регистрации");
+            ClickWebElement(".//*[@href='/#!/account/registration']", "Кнопка Регистрации", "кнопки Регистрации");
             var required = driver.FindElements(By.XPath(".//*[@class='ui__required']"));
-            if (required.Count != 6)
-                throw new Exception("Число обязательных полей не равно 6");
+            if (required.Count != 4)
+                throw new Exception("Число обязательных полей не равно 4");
 
             LogStage("Заполнение персональных данных");
-            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[2]/label[1]//input", "Это", "Поле Фамилия", "поля Фамилия");
-            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[2]/label[2]//input", "Тест", "Поле Имя", "поля Имя");
+            SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[1]//input", "Тест", "Поле Имя", "поля Имя");
             ClickWebElement(".//*[@id='checkbox2']", "Чекбокс Подтверждения правил", "чекбокса Подтверждения правил");
-            IWebElement button = GetWebElement(".//*[@class='toolbar__item process-button']//button", "Нет кнопки отправить форму");
+            IWebElement button = GetWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']//button", "Нет кнопки отправить форму");
             if (!button.GetAttribute("class").Contains("state_disabled"))
-                throw new Exception("Возможно продолжить только с Именем и Фамилией");
+                throw new Exception("Возможно продолжить только с Именем ");
             LogStage("Заполнение пароля");
-            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[6]/label[1]//input", "123qwe123", "Поле Пароль", "поля Пароль");
-            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[6]/label[2]//input", "123qwe123", "Поле Подтверждение пароля", "поля Подтверждение пароля");
+            SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[5]//input", "123qwe123", "Поле Пароль", "поля Пароль");
             if (!button.GetAttribute("class").Contains("state_disabled"))
-                throw new Exception("Возможно продолжить без мыла и номера телефона");
+                throw new Exception("Возможно продолжить без email и номера телефона");
             LogStage("Заполнение контактной информации");
-            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input", "4000100@mail.ru", "Поле email", "поля email");
+            SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[3]//input", "4000100@mail.ru", "Поле email", "поля email");
             if (!button.GetAttribute("class").Contains("state_disabled"))
                 throw new Exception("Возможно продолжить без телефона");
             Thread.Sleep(500);
-            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input", "000000001", "Поле Номер телефона", "поля Номер телефона");
-            ClearBeforeInput(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input");
-            driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input")).SendKeys("a");
-            driver.FindElement(By.XPath(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input")).SendKeys(Keys.Backspace);
+            SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[2]//input", "000000001", "Поле Номер телефона", "поля Номер телефона");
+            ClearBeforeInput(".//*[@class='reg-v4__form-column--31oQE']/div[3]//input");
+            driver.FindElement(By.XPath(".//*[@class='reg-v4__form-column--31oQE']/div[3]//input")).SendKeys("a");
+            driver.FindElement(By.XPath(".//*[@class='reg-v4__form-column--31oQE']/div[3]//input")).SendKeys(Keys.Backspace);
             if (!button.GetAttribute("class").Contains("state_disabled"))
                 throw new Exception("Возможно продолжить без почты");
-            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[1]//input", "4000100@mail.ru", "Поле email", "поля email");
+            SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[3]//input", "4000100@mail.ru", "Поле email", "поля email");
             Thread.Sleep(500);
-            ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
-            var errorMessage = GetWebElement(".//*[@id='registration-v4-error']", "Нет модуля с ошибкой");
-            if (!errorMessage.GetAttribute("data-rejectioncode").Equals("4") && !errorMessage.GetAttribute("data-processstate").Equals("rejected"))
+            ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']//button", "Кпонка Продолжить", "кпонки Продолжить");
+            var errorMessage = GetWebElement(".//*[@id='reg-v4-cupis-error']", "Нет модуля с ошибкой");
+            if (!errorMessage.GetAttribute("data-rejectioncode").Equals("4") && !errorMessage.GetAttribute("data-processstate").Equals("rejected") && !errorMessage.GetAttribute("data-errorcode").Equals("0"))
                 throw new Exception("Неверная обработка ошибки");
-            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть", "кнопки Закрыть");
+            ClickWebElement(".//*[@class='reg-v4__error-buttons--1X_YP']//a", "Кнопка Повторить", "кнопки Повторить");
 
             CreateProcessRegistration("000000002", null, "2", null);
             CreateProcessRegistration("000000003", null, null, null);
@@ -412,10 +410,9 @@ namespace TestRun.fonbet
             CreateProcessRegistration("000000006", "rejected", "0", "10");
             CreateProcessRegistration("000000007", "rejected", "0", "1");
 
-            FillRegistrationForm();
-            // driver.Navigate().GoToUrl("http://fonred5000.dvt24.com/?test=1#!/account/registration/Reg4");
-            SendKeysToWebElement(".//*[@class='registration-v4__step-wrap']/div[4]/label[2]//input", "000000008", "Поле Номер телефона", "поля Номер телефона");
-            ClickWebElement(".//*[@class='registration-v4__form-row _form-buttons']//button", "Кпонка Продолжить", "кпонки Продолжить");
+            ClearBeforeInput(".//*[@class='reg-v4__form-column--31oQE']/div[2]//input");
+            SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[2]//input", "000000008", "Поле Номер телефона", "поля Номер телефона");
+            ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']//button", "Кпонка Продолжить", "кпонки Продолжить");
             SendSmsCodeRegistration("1", "waitForSmsCode", "10", null);
             SendSmsCodeRegistration("2", "waitForSmsCode", "11", null);
             SendSmsCodeRegistration("3", "rejected", "10", "12");
@@ -426,8 +423,6 @@ namespace TestRun.fonbet
             SendSmsCodeRegistration("8", null, null, null);
             SendSmsCodeRegistration("0", null, null, null);
             SendSmsCodeRegistration("9", null, null, null);
-
-
         }
     }
 
