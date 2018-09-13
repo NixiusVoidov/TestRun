@@ -51,12 +51,12 @@ namespace TestRun.fonbet
 
             LogStage("Проверка калькулятора");
             Thread.Sleep(2000);
-            IWebElement possibleWin = GetWebElement(".//*[@class='calculator__head']/div[3]", "Не отображается возможный выигрыш в калькуляторе");
-            IWebElement firstBetfirstEv = GetWebElement("//*[@class='calculator__table _right']/tbody/tr[1]/td[1]", "Не отображается первая ставка первого события");
-            IWebElement firstBetSecEv = GetWebElement("//*[@class='calculator__table _right']/tbody/tr[2]/td[1]", "Не отображается первая ставка второго события");
-            IWebElement betSumm = GetWebElement(".//*[@class='calculator__head']//*[@title='Сумма пари']", "Не отображается сумма пари");
-            IWebElement combinationRate = GetWebElement("//*[@class='calculator__table _right']/tbody/tr[6]/td[1]", "Не отображается коэффициент комбинации");
-            IWebElement winRate = GetWebElement("//*[@class='calculator__table _right']/tbody/tr[7]/td[1]", "Не отображается выигрыш комбинации");
+            IWebElement possibleWin = GetWebElement(".//*[@class='calculator__head--1EwKY']/div[3]", "Не отображается возможный выигрыш в калькуляторе");
+            IWebElement firstBetfirstEv = GetWebElement("//*[@class='calculator__table--1ECj5 _right--C0RVE']/tbody/tr[1]/td[1]", "Не отображается первая ставка первого события");
+            IWebElement firstBetSecEv = GetWebElement("//*[@class='calculator__table--1ECj5 _right--C0RVE']/tbody/tr[2]/td[1]", "Не отображается первая ставка второго события");
+            IWebElement betSumm = GetWebElement(".//*[@class='calculator__head--1EwKY']/div[2]", "Не отображается сумма пари");
+            IWebElement combinationRate = GetWebElement("//*[@class='calculator__table--1ECj5 _right--C0RVE']/tbody/tr[6]/td[1]", "Не отображается коэффициент комбинации");
+            IWebElement winRate = GetWebElement("//*[@class='calculator__table--1ECj5 _right--C0RVE']/tbody/tr[7]/td[1]", "Не отображается выигрыш комбинации");
 
             string possibleWinText = possibleWin.Text;
             string firstBetfirstEvText = firstBetfirstEv.Text;
@@ -77,31 +77,31 @@ namespace TestRun.fonbet
             if (Math.Round(Convert.ToDouble(firstBetfirstEvText, CultureInfo.GetCultureInfo("en-US").NumberFormat) *
                 Convert.ToDouble(firstBetSecEvText, CultureInfo.GetCultureInfo("en-US").NumberFormat)) == Math.Round(
                     Convert.ToDouble(
-                        driver.FindElement(By.XPath("//*[@class='calculator__table _right']/tbody/tr[6]/td[1]")).Text,
+                        driver.FindElement(By.XPath("//*[@class='calculator__table--1ECj5 _right--C0RVE']/tbody/tr[6]/td[1]")).Text,
                         CultureInfo.GetCultureInfo("en-US").NumberFormat)))
             {
                 if (Math.Round(Math.Round(betSummText / 3, 2) * Convert.ToDouble(
                                    driver.FindElement(
-                                       By.XPath("//*[@class='calculator__table _right']/tbody/tr[6]/td[1]")).Text,
+                                       By.XPath("//*[@class='calculator__table--1ECj5 _right--C0RVE']/tbody/tr[6]/td[1]")).Text,
                                    CultureInfo.GetCultureInfo("en-US").NumberFormat)) == sum)
                 {
                     if (Math.Round(Math.Round(betSummText / 3, 2) * Convert.ToDouble(
                                        driver.FindElement(
-                                           By.XPath("//*[@class='calculator__table _right']/tbody/tr[6]/td[1]")).Text,
+                                           By.XPath("//*[@class='calculator__table--1ECj5 _right--C0RVE']/tbody/tr[6]/td[1]")).Text,
                                        CultureInfo.GetCultureInfo("en-US").NumberFormat) +
                                    Math.Round(betSummText / 3, 2) * Convert.ToDouble(
                                        driver.FindElement(
-                                           By.XPath("//*[@class='calculator__table _right']/tbody/tr[6]/td[2]")).Text,
+                                           By.XPath("//*[@class='calculator__table--1ECj5 _right--C0RVE']/tbody/tr[6]/td[2]")).Text,
                                        CultureInfo.GetCultureInfo("en-US").NumberFormat) +
                                    Math.Round(betSummText / 3, 2) * Convert.ToDouble(
                                        driver.FindElement(
-                                           By.XPath("//*[@class='calculator__table _right']/tbody/tr[6]/td[3]")).Text,
+                                           By.XPath("//*[@class='calculator__table--1ECj5 _right--C0RVE']/tbody/tr[6]/td[3]")).Text,
                                        CultureInfo.GetCultureInfo("en-US").NumberFormat)) == Convert.ToDouble(finalSum))
                     {
-                        ClickWebElement("//*[@class='calculator__left-wrap']//tbody/tr[1]/td[3]//input",
+                        ClickWebElement("//*[@class='calculator__table--1ECj5']//tbody/tr[1]/td[3]//input",
                             "Чекбокс первого исхода", "чекбокса первого исхода");
 
-                        IWebElement firstEvent = GetWebElement("//*[@class='calculator__left-wrap']//tbody/tr[1]",
+                        IWebElement firstEvent = GetWebElement("//*[@class='calculator__table--1ECj5']//tbody/tr[1]",
                             "Не отображается первое событие в калькуляторе");
                         var firstEventClass = firstEvent.GetAttribute("class");
                         if (!firstEventClass.Contains("disabled"))
@@ -109,7 +109,7 @@ namespace TestRun.fonbet
                         if (!firstBetfirstEv.Text.Contains("0.00"))
                             throw new Exception("Не обнуляется кэф при снятии чекбокса");
 
-                        IWebElement winCombo = GetWebElement("//*[@class='calculator__table _right']/tbody/tr[7]/td[3]", "Не отображается выигрыш комбинации");
+                        IWebElement winCombo = GetWebElement("//*[@class='calculator__table--1ECj5 _right--C0RVE']/tbody/tr[7]/td[3]", "Не отображается выигрыш комбинации");
                         string winComboValue = winCombo.Text;
                         string possibleWinValue = possibleWin.Text;
                         if (winComboValue != possibleWinValue)

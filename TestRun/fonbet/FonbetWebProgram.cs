@@ -465,6 +465,12 @@ namespace TestRun
         {
             LogStage("Проверка сообщения о создании заявки");
             Thread.Sleep(2000);
+            if(driver.FindElements(By.XPath("//div[contains(@class,'toolbar__item account-form__button')]")).Count==2)
+            {
+                LogHint("Уже существует такая же не закрытая заявка");
+                ClickWebElement(".//*[@class='toolbar__item account-form__button']/a", "Кнопка Подвердить", "кнопки Подвердить");
+            }
+            WaitTillElementisDisplayed(driver, ".//*[@class='account-form__message _kind-top-notice _style-box']", 10);
             if (!WebElementExist(".//*[@class='account-form__message _kind-top-notice _style-box']"))
                 throw new Exception("Нет сообщения о создании заявки");
             IWebElement createResult = GetWebElement(".//*[@class='account-form__message _kind-top-notice _style-box']", "Нет сообщения о создании заявки");
@@ -643,21 +649,26 @@ namespace TestRun
         }
 
         // Метод принимает на вход  ожидаемый номер ошибки и почту и проверяет правильность работы функции подтверждения email по тестовому сценарию на тестовых данных
-        protected void SendEmailCodeChecker(string value, string smsValue)
+        protected void SendEmailCodeChecker(string smsValue, string process, string code, string rejcode)
         {
-            string errorText = "";
-            if (value == "10")
-                errorText = "Неправильный код подтверждения";
-            if (value == "1")
-                errorText = "Внутренняя ошибка";
+           
             ClearBeforeInput(".//*[@class='ui__field-inner']/input");
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", smsValue, "Поле Код подтверждения", "поля Код подтверждения");
             Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки отправить");
-            WaitTillElementisDisplayed(driver, ".//*[@class='account-error__actions']//span", 5);
-            var errorMessage = GetWebElement(".//*[@class='account-error__text']", "Нет текста ошибки");
-            if (!errorMessage.Text.Contains(errorText))
-                throw new Exception("Неверный текст ошибки");
+            WaitTillElementisDisplayed(driver, ".//*[@id='set-email-error']", 5);
+            Thread.Sleep(500);
+            var errorMsg = GetWebElement(".//*[@id='set-email-error']", "Нет модуля с ошибкой");
+            var errorcode = errorMsg.GetAttribute("data-errorcode");
+            var proccode = errorMsg.GetAttribute("data-processstate");
+            var rejeccode = errorMsg.GetAttribute("data-rejectioncode");
+          
+            if (
+                    ((rejeccode == null && rejcode != null) || (rejeccode != null && !rejeccode.Equals(rejcode))) ||
+                    ((errorcode == null && code != null) || (errorcode != null && !errorcode.Equals(code))) ||
+                    ((proccode == null && process != null) || (proccode != null && !proccode.Equals(process)))
+               )
+                throw new Exception("Неверная обработка ошибки");
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
         }
 
@@ -1056,6 +1067,7 @@ namespace TestRun
                 ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
                 SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", smsValue, "Поле Код смс", "поля Код смс");
                 Thread.Sleep(500);
+                WaitTillElementisDisplayed(driver, ".//*[@class='toolbar__item']/button", 10);
                 ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
                 driver.FindElement(By.XPath(".//*[@class='verification__form-row']/label[1]//input")).SendKeys(Keys.Home);
                 SendKeysToWebElement(".//*[@class='verification__form-row']/label[1]//input", "1", "Поле Серия и номер паспорта", "поля Серия и номер паспорта");
@@ -1074,11 +1086,12 @@ namespace TestRun
                     throw new Exception("Неверная обработка ошибки");
                 ClickWebElement(".//*[@class='verification']//span", "Кнопка Закрыть", "кнопки Закрыть");
                 ClickWebElement(".//*[@class='verification__notice-types-wrap']/a", "Кнопка Отменить процесс", "кнопки Отменить процесс");
+                ClickWebElement(".//*[@class='confirm__foot--3H8gD']/div[2]//span", "Кнопка Да", "кнопки Да");
                 ClickWebElement(".//*[@href='#!/account/verification/bk']", "Кнопка Верификации по БК","кнопки Верификации по БК");
                 SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[2]//input", "0000FFFF000", "Поле Номера карты фонбет", "поля Номера карты фонбет");
-                Thread.Sleep(500);
+                Thread.Sleep(800);
                 SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[1]//input", "2222222222", "Поле Серия и номер паспорта", "поля Серия и номер паспорта");
-                Thread.Sleep(500);
+                Thread.Sleep(800);
                 SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[2]//input", "11112011", "Поле Дата выдачи", "поля Дата выдачи");
                 ClickWebElement(".//*[@id='rulesAgree']", "Чекбокс Соглашения с правилами", "чекбокс Соглашения с правилами");
                 ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
@@ -1198,8 +1211,8 @@ namespace TestRun
                 }
                 else
                 {
-                    WaitTillElementisDisplayed(driver, ".//*[@class='account-error__actions']//span", 5);
-                    if (!driver.FindElement(By.XPath(".//*[@class='verification']/div")).GetAttribute("class").Contains("success"))
+                    WaitTillElementisDisplayed(driver, ".//*[@classid='account-error__actions']//span", 10);
+                    if (!driver.FindElement(By.XPath(".//*[@class='verification']/div")).GetAttribute("class").Contains("_success"))
                     throw new Exception("Неверная обработка ошибки");
                     ClickWebElement(".//*[@classid='account-error__actions']//span", "Кнопка Закрыть", "кнопки Закрыть");
                     return;

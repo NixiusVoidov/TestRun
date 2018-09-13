@@ -67,7 +67,8 @@ namespace TestRun.fonbet
           
                 if (!WebElementExist(".//*[@class='page-account__empty-list-text']"))
                 {
-                    IWebElement betresultGrid = GetWebElement(".//*[@class=\'wrap\'][1]//*[@class=\"operation-row _odd\"]/div[6]/span[1]", "Не отображается Результат пари в гриде");
+                    WaitTillElementisDisplayed(driver, ".//*[@class='wrap'][1]//*[@class='operation-row _odd']/div[6]/span[1]", 120);
+                    IWebElement betresultGrid = GetWebElement(".//*[@class='wrap'][1]//*[@class='operation-row _odd']/div[6]/span[1]", "Не отображается Результат пари в гриде");
                     string betresultGridText = betresultGrid.Text;
                     if (!betresultGridText.Equals(dataText))
                         throw new Exception("Не работают фильтры Результата пари");
@@ -78,6 +79,7 @@ namespace TestRun.fonbet
 
             LogStage("Проверка развертки конкретного события");
             ClickWebElement(".//*[@class='ui__checkbox-text']/*[text()='Выигрыш']", "Чекбокс Выигрыш", "чекбокса Выигрыш");
+            WaitTillElementisDisplayed(driver, ".//*[@class='wrap'][1]//*[@class='operation-row _odd']/div[6]/span[1]", 120);
             ClickWebElement(".//*[@class='wrap'][1]//*[@class='operation-row _odd']/div[7]", "Стрелка разворота события", "стрелки разворота события");
             IWebElement betValue = GetWebElement(".//*[@class='bet-details _odd']//table//*[text()='Выигрыш']", "Не отображается Результат пари в развернутом гриде");
             string betValueText = betValue.Text;
@@ -328,9 +330,9 @@ namespace TestRun.fonbet
             ClearBeforeInput(".//*[@class='ui__field-inner']/input");
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "4@dev.dev", "Поле email", "поля email");
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
-            SendEmailCodeChecker("10", "1235");
+            SendEmailCodeChecker("1235", "waitForCode","10", null);
             Thread.Sleep(1000);
-            SendEmailCodeChecker("1", "9999");
+            SendEmailCodeChecker("9999","rejected","0","1");
             ClearBeforeInput(".//*[@class='ui__field-inner']/input");
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "4@dev.dev", "Поле email", "поля email");
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
@@ -506,6 +508,7 @@ namespace TestRun.fonbet
             {
                 ClickWebElement(".//*[@class='verification__notice-types-wrap']/a[1]", "Кнопка Сброса верификации",
                     "кнопки Сброса верификации");
+                ClickWebElement(".//*[@class='confirm__foot--3H8gD']/div[2]//span", "Кнопка Да", "кнопки Да");
             }
 
             ClickWebElement(".//*[@href='#!/account/verification/bk']", "Кнопка Верификации по БК",
