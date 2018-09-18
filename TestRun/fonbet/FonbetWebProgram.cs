@@ -270,7 +270,6 @@ namespace TestRun
                 {
                     SendKeysToWebElement(".//*[@class='ui__label']/input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Прикрепления файла", "поля Прикрепления файла");
                 }
-                // /Users/user/Downloads/Sasha.jpg
                 WaitTillElementisDisplayed(driver, ".//*[@class='toolbar__item account-form__button']/a/div", 5);
                 Thread.Sleep(2500);
                 ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
@@ -1228,6 +1227,7 @@ namespace TestRun
             WaitTillElementisDisplayed(driver, ".//*[@class='ui__field-inner']/input", 5);
             Thread.Sleep(1000);
             ClearBeforeInput(".//*[@class='ui__field-inner']/input");
+            Thread.Sleep(1000);
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", phoneValue, "Поле Номер телефона", "поля Номер телефона");
             Thread.Sleep(1000);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");

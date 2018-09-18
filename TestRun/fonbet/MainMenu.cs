@@ -2,6 +2,7 @@
 using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
+using OpenQA.Selenium.Support.UI;
 
 namespace TestRun.fonbet
 {
@@ -212,15 +213,40 @@ namespace TestRun.fonbet
 
             LogStage("Проверка ставки экспресс из линии+лайв");
             ClickWebElement(".//*[@href='/#']", "Главная страница", "главной страницы");
-            ClickWebElement(".//*[@class='line__table-wrap']/div[1]//tbody[1]//*[@class='table__col _type_btn _type_normal'][1]", "Ставка Поб1 в лайв событии", "ставки Поб1 в лайв событии");
-            ClickWebElement(".//*[@class='line__table-wrap']/div[2]//tbody[1]//*[@class='table__col _type_btn _type_normal'][1]", "Ставка Поб1 в событии из линии", "ставки Поб1 в событии из линии");
+            string betLive = ".//*[@class='line__table-wrap']/div[1]//tbody[1]/tr[2]/td[3]"; 
+            string betLine = ".//*[@class='line__table-wrap']/div[2]//tbody[1]/tr[2]/td[3]";
+            if(driver.FindElement(By.XPath(betLive)).GetAttribute("class").Contains("state_blocked"))
+            {
+                    var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+                    wait.Until(drv => !drv.FindElement(By.XPath(betLive)).GetAttribute("class").Contains("state_blocked"));
+                    ClickWebElement(betLive, "Ставка Поб1 в лайв событии", "ставки Поб1 в лайв событии");
+            }
+           else ClickWebElement(betLive, "Ставка Поб1 в лайв событии", "ставки Поб1 в лайв событии");
+
+            if (driver.FindElement(By.XPath(betLine)).GetAttribute("class").Contains("state_blocked"))
+            {
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+                wait.Until(drv => !drv.FindElement(By.XPath(betLine)).GetAttribute("class").Contains("state_blocked"));
+                ClickWebElement(betLine, "Ставка Поб1 в событии линии", "ставки Поб1 в событии линии");
+            }
+            else ClickWebElement(betLine, "Ставка Поб1 в событии линии", "ставки Поб1 в событии линии");
+
             ClickWebElement(".//*[@class='coupon__foot-btn']", "Кнопка Заключить пари", "кнопки Заключить пари");
             Thread.Sleep(10000);
-            IWebElement balanceElement = FindWebElement(".//*[@class='header__login-balance']");
-            string balanceText = balanceElement.Text.Replace(" ", "").Replace(".", ",");
-            var a = Convert.ToDouble(balanceText);
-            if (ClientBalance == a)
-               throw new Exception("Ставка не поставилась");
+            if (WebElementExist(".//*[@class='coupon__error-text-area']"))
+            {
+                IWebElement error = FindWebElement(".//*[@class='coupon__error-text-area']");
+                string errorText = error.Text;
+                LogHint("Ставка не поставилась. "+ errorText+ " ");
+            }
+            else
+            {
+                IWebElement balanceElement = FindWebElement(".//*[@class='header__login-balance']");
+                string balanceText = balanceElement.Text.Replace(" ", "").Replace(".", ",");
+                var a = Convert.ToDouble(balanceText);
+                if (ClientBalance == a)
+                    throw new Exception("Ставка не поставилась. ");
+            }
 
             LogStage("Проверка eventView");
             ClickWebElement(".//*[@class='line__table-wrap']/div[1]//tbody[1]//*[@class='table__match-title-text']", "Строка названия матча лайв", "строки названия матча лайв");

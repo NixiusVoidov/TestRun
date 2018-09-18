@@ -26,6 +26,7 @@ namespace TestRun
             CustomProgram.Register("fonbet_view", fonbet.View.FabricateView); //Проверка всего функционала из модуля "Вид" в настройках сайта
             CustomProgram.Register("fonbet_viewwologin", fonbet.ViewWithoutLogin.FabricateViewWithoutLogin); //Проверка всего функционала из модуля "Вид" в настройках сайта без авторизации пользователя
             CustomProgram.Register("fonbet_superexpress", fonbet.SuperExpress.FabricateSuperExpress); //Проверка всего функционала во вкладке "Суперэкспресс"
+            CustomProgram.Register("fonbet_superexpressbatch", fonbet.SuperExpressBatch.FabricateSuperExpressBatch); //Проверка всего функционала во вкладке "Суперэкспресс"
             CustomProgram.Register("fonbet_coupongrid", fonbet.CouponGridInterface.FabricateCouponGridInterface); //Проверка работы панели фильтров из модуля ленты купонов (Меню, Все недавние, Нерасчитанные, На продажу)
             CustomProgram.Register("fonbet_results", fonbet.ResultsTab.FabricateResultsTab); //Проверка работы всего функицонала во вкладке "Результат"
             CustomProgram.Register("fonbet_historybet", fonbet.ProfileHistoryBet.FabricateProfileHistoryBet); //Проверка работы вкладки История в Личном кабинете пользователя
