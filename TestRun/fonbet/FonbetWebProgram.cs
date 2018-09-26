@@ -597,7 +597,7 @@ namespace TestRun
         {
             ClickOnAccount();
             LogStage("Проверка на статус верификации");
-            if (!WebElementExist(".//*[@class='verification__notice-types-wrap']"))
+            if (!driver.FindElement(By.XPath("//*[@class='account-profile__row-value _ident-status']")).GetAttribute("data-status").Equals("noIdent"))
             {
                 LogStage("Переход в админку");
                 driver.Navigate().GoToUrl("http://fonbackoffice.dvt24.com/");

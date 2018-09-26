@@ -72,7 +72,6 @@ namespace TestRun
             CustomProgram.Register("fonbet_evlive", fonbet.EventViewLive.FabricateEventViewLive); //Функционал EventView в Лайв событиях
             CustomProgram.Register("fonbet_priorityliveandline", fonbet.PriorityLiveAndLineEvents.FabricatePriorityLiveAndLineEvents); //Ставки из приоритетных событий линии и лайва с главной страницы
 
-
             CustomProgram.Register("backoffice_clientcontrol", backoffice.СlientControl.FabricateСlientControl);
             CustomProgram.Register("backoffice_contentblog", backoffice.ContentBlog.FabricateContentBlog);
             CustomProgram.Register("backoffice_contentgeneraltab", backoffice.ContentGeneralTab.FabricateContentGeneralTab);
@@ -85,6 +84,8 @@ namespace TestRun
             CustomProgram.Register("backoffice_contentfaqquestions", backoffice.СontentFaqQuestions.FabricateСontentFaqQuestions);
             CustomProgram.Register("backoffice_contentfaqcategoriesandquestions", backoffice.СontentFaqCategoriesAndQuestions.FabricateСontentFaqCategoriesAndQuestions);
             CustomProgram.Register("backoffice_contentfooter", backoffice.ContentFooter.FabricateContentFooter);
+            CustomProgram.Register("backoffice_operatorsschedule", backoffice.OperatorsSchedule.FabricateOperatorsSchedule);
+            CustomProgram.Register("backoffice_freebetimport", backoffice.FreebetImport.FabricateFreebetImport);
 
         }
 

@@ -441,11 +441,13 @@ namespace TestRun.fonbet
             VerificationStatusCheck();
 
             LogStage("Проверка createProcess по тестовому сценарию");
-            if(!WebElementExist(".//*[@href='#!/account/verification/qiwi']")) { 
-            ClickWebElement(".//*[@class='verification__notice-types-wrap']/a[1]", "Кнопка Сброса верификации",
-                "кнопки Сброса верификации"); }
-        
-            ClickWebElement(".//*[@href='#!/account/verification/qiwi']", "Кнопка Верификации по киви",
+            if (!WebElementExist(".//*[@href='#!/account/verification/qiwi']"))
+            {
+                ClickWebElement(".//*[@class='verification__notice-types-wrap']/a[1]", "Кнопка Сброса верификации",
+                    "кнопки Сброса верификации");
+            }
+
+            ClickWebElement(".//*[@class='verification__tab-wrap']/div[3]", "Кнопка Верификации по киви",
                 "кнопки Верификации по киви");
             IWebElement inputData = GetWebElement(".//*[@class='ui__field-wrap-inner']//input", "Нет поля для ввода");
             Thread.Sleep(1500);
