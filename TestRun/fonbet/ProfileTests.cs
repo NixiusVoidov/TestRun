@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 
 namespace TestRun.fonbet
@@ -556,7 +557,141 @@ namespace TestRun.fonbet
         }
     }
 
-    class ChangePhoneCupis : FonbetWebProgram
+    class RemoteVerification : FonbetWebProgram //захожу пот 13 учеткой на 5051  и смотрю чтобы была галка в админке
+    {
+        public static CustomProgram FabricateRemoteVerification()
+        {
+            return new RemoteVerification();
+        }
+
+        public override void Run()
+        {
+            base.Run();
+            VerificationStatusCheck();
+
+            LogStage("Проверка createProcess по тестовому сценарию");
+            string[,] arrayProcess = new string[4, 4] { { "2", "0","rejected","11" }, { "3", "0","rejected","4"},
+                    {"4", "2",null,null }, {"5", "0","rejected","10" } };
+            for (int i = 0; i < 4; i++)
+            {
+                driver.Navigate().GoToUrl("http://fonred5051.dvt24.com/?test=" + arrayProcess[i, 0] + "#!/account/verification/remote-verification");
+                if (WebElementExist("//*[@class='verification__form-row _gap-30']/div[2]"))
+                {
+                    ClickWebElement("//*[@class='verification__form-row _gap-30']/div[2]", "Кнопка Отменить", "кнопки Отменить");
+                    ClickWebElement("//*[@class='confirm__foot--3H8gD']/div[2]/a", "Кнопка Да", "кнопки Да");
+                }
+                else
+                    ClickWebElement("//*[@class='verification__tab']/div[1]", "Кнопка Удаленной идентификации", "кнопки Удаленной идентификации");
+
+                SendKeysToWebElement("//*[@class='verification__form-lock-container']/div[1]//input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Главный разворот страницы", "поля Главный разворот страницы");
+                LogStage("Проверка на валидность аттача");
+                SendKeysToWebElement("//*[@class='verification__form-lock-container']/div[2]//input", "C:\\Users\\User\\Downloads\\auto-tests.zip", "Поле Разворот с регистрацией", "поля Разворот с регистрацией");
+                if (!driver.FindElement(By.XPath("//*[@class='verification__form-lock-container']/div[2]//*[@class='upload-file__inner--ds5yK']/div[2]")).GetAttribute("class").Contains("error"))
+                    throw new Exception("Получилось прикрепить зип фаил");
+                ClickWebElement("//*[@class='verification__form-lock-container']/div[2]//*[@class='upload-file__inner--ds5yK']/i[2]", "Крестик удаления файла", "крестика удаления файла");
+                SendKeysToWebElement("//*[@class='verification__form-lock-container']/div[2]//input", "C:\\Users\\User\\Documents\\24H soft.png", "Поле Разворот с регистрацией", "поля Разворот с регистрацией");
+                ClickWebElement("//*[@class='toolbar__item _reg-button']", "Кнопка Далее", "кнопки Далее");
+                WaitTillElementisDisplayed(driver, ".//*[@id='rv-error']", 10);
+                var message = GetWebElement(".//*[@id='rv-error']", "Нет модуля с ошибкой");
+                if (arrayProcess[i, 2] == null && arrayProcess[i, 3] == null)
+                {
+                    if (!(message.GetAttribute("data-errorcode").Equals(arrayProcess[i, 1])))
+                        throw new Exception("Неверная обработка ошибки");
+                    ClickWebElement(".//*[@class='verification__error-buttons']/div", "Кнопка Повторить", "кнопки Повторить");
+                }
+                else
+                {
+                    if (!(message.GetAttribute("data-errorcode").Equals(arrayProcess[i, 1]) && message.GetAttribute("data-processstate").Equals(arrayProcess[i, 2]) && message.GetAttribute("data-rejectioncode").Equals(arrayProcess[i, 3])))
+                        throw new Exception("Неверная обработка ошибки");
+                    ClickWebElement(".//*[@class='verification__error-buttons']/div", "Кнопка Повторить", "кнопки Повторить");
+                }
+            }
+            driver.Navigate().GoToUrl("http://fonred5051.dvt24.com/?test=6#!/account/verification/remote-verification");
+            ClickWebElement("//*[@class='verification__tab']/div[1]", "Кнопка Удаленной идентификации", "кнопки Удаленной идентификации");
+            SendKeysToWebElement("//*[@class='verification__form-lock-container']/div[1]//input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Главный разворот страницы", "поля Главный разворот страницы");
+            SendKeysToWebElement("//*[@class='verification__form-lock-container']/div[2]//input", "C:\\Users\\User\\Documents\\24H soft.png", "Поле Разворот с регистрацией", "поля Разворот с регистрацией");
+
+
+            LogStage("Проверка SendSmsCode по тестовому сценарию");
+
+            string[,] arraySms = new string[5, 4] { { "2", "0","rejected","14" }, { "3", "0","rejected","15"},
+                    {"4", "0","rejected","16" }, {"5", "0","rejected","17" }, {"6", "0","rejected","19" } };
+            for (int i = 0; i < 5; i++)
+            {
+                ClickWebElement("//*[@class='toolbar__item _reg-button']", "Кнопка Далее", "кнопки Далее");
+                WaitTillElementisDisplayed(driver, ".//*[@class='ui__field verification__sms-field']", 10);
+                SendKeysToWebElement(".//*[@class='ui__field verification__sms-field']", arraySms[i, 0], "Поле SMS кода", "поля SMS кода");
+                Thread.Sleep(1000);
+                ClickWebElement(".//*[@class='toolbar__item _reg-button']/button", "Кнопка Отправить", "кнопки Отправить");
+                if (arraySms[i, 0] == "6")
+                {
+                    if (!WebElementExist("//*[@class='verification__form-row']"))
+                        throw new Exception("Не появился процесс по киви");
+                    WaitTillElementisDisplayed(driver, "//*[@class='verification__form-row']/div[2]/a", 8);
+                    ClickWebElement("//*[@class='verification__form-row']/div[2]/a", "Кнопка Отменить", "кнопки Отменить");
+                    ClickWebElement("//*[@class='confirm__foot--3H8gD']/div[2]/a", "Кнопка Да", "кнопки Да");
+                }
+                else
+                {
+                    WaitTillElementisDisplayed(driver, ".//*[@id='rv-error']", 10);
+                    var message = GetWebElement(".//*[@id='rv-error']", "Нет модуля с ошибкой");
+                    if (!(message.GetAttribute("data-errorcode").Equals(arraySms[i, 1]) && message.GetAttribute("data-processstate").Equals(arraySms[i, 2]) && message.GetAttribute("data-rejectioncode").Equals(arraySms[i, 3])))
+                        throw new Exception("Неверная обработка ошибки, когда логин равен " + arraySms[i, 0] + "");
+                    ClickWebElement(".//*[@class='verification__error-buttons']/div", "Кнопка Повторить", "кнопки Повторить");
+                }
+            }
+
+            LogStage("Проверка selectTimeSlot по тестовому сценарию");
+
+            driver.Navigate().GoToUrl("http://fonred5051.dvt24.com/?test=6#!/account/verification/remote-verification");
+            ClickWebElement("//*[@class='verification__tab']/div[1]", "Кнопка Удаленной идентификации", "кнопки Удаленной идентификации");
+            SendKeysToWebElement("//*[@class='verification__form-lock-container']/div[1]//input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Главный разворот страницы", "поля Главный разворот страницы");
+            SendKeysToWebElement("//*[@class='verification__form-lock-container']/div[2]//input", "C:\\Users\\User\\Documents\\24H soft.png", "Поле Разворот с регистрацией", "поля Разворот с регистрацией");
+            ClickWebElement("//*[@class='toolbar__item _reg-button']", "Кнопка Далее", "кнопки Далее");
+            WaitTillElementisDisplayed(driver, ".//*[@class='ui__field verification__sms-field']", 10);
+            SendKeysToWebElement(".//*[@class='ui__field verification__sms-field']", "7", "Поле SMS кода", "поля SMS кода");
+            Thread.Sleep(1000);
+            ClickWebElement(".//*[@class='toolbar__item _reg-button']/button", "Кнопка Отправить", "кнопки Отправить");
+            SelectSkypeLogin("2");
+            var error = GetWebElement(".//*[@id='rv-error']", "Нет модуля с ошибкой");
+            if (!(error.GetAttribute("data-errorcode").Equals("10") && error.GetAttribute("data-processstate").Equals("waitForSelectCallTime")))
+                throw new Exception("Неверная обработка ошибки, когда логин=2");
+            ClickWebElement("//*[@class='verification__error-buttons']/div[1]", "Кнопка Повторить", "кнопки Повторить");
+            SelectSkypeLogin("3");
+            Thread.Sleep(20000);
+            if (!driver.FindElement(By.XPath("//*[@class='verification__call-comment']")).Text.Contains("все операторы были заняты"))
+                throw new Exception("Неверная обработка ошибки, когда логин=3");
+            SelectSkypeLogin("4");
+            Thread.Sleep(20000);
+            if (!driver.FindElement(By.XPath("//*[@class='verification__call-comment']")).Text.Contains("не смогли до вас дозвониться"))
+                throw new Exception("Неверная обработка ошибки, когда логин=4");
+            SelectSkypeLogin("5");
+            Thread.Sleep(20000);
+            var msg = GetWebElement(".//*[@id='rv-error']", "Нет модуля с ошибкой");
+            if (!(msg.GetAttribute("data-errorcode").Equals("0") && msg.GetAttribute("data-processstate").Equals("rejected") && msg.GetAttribute("data-rejectioncode").Equals("18")))
+                throw new Exception("Неверная обработка ошибки, когда логин=5");
+            ClickWebElement("//*[@class='verification__error-buttons']/div[1]", "Кнопка Повторить", "кнопки Повторить");
+            ClickWebElement("//*[@class='toolbar__item _reg-button']", "Кнопка Далее", "кнопки Далее");
+            WaitTillElementisDisplayed(driver, ".//*[@class='ui__field verification__sms-field']", 10);
+            SendKeysToWebElement(".//*[@class='ui__field verification__sms-field']", "7", "Поле SMS кода", "поля SMS кода");
+            Thread.Sleep(1000);
+            ClickWebElement(".//*[@class='toolbar__item _reg-button']/button", "Кнопка Отправить", "кнопки Отправить");
+            SelectSkypeLogin("7");
+            Thread.Sleep(20000);
+            if (!driver.FindElement(By.XPath("account-header__title")).Text.Contains("завершения идентификации остался один шаг"))
+                throw new Exception("Неверная обработка ошибки, когда логин=7");
+        }
+
+        private void SelectSkypeLogin(string s)
+        {
+            WaitTillElementisDisplayed(driver, "//*[@class='verification__time-slot-wrap']", 10);
+            ClearBeforeInput("//*[@class='ui__field-inner']/input");
+            SendKeysToWebElement("//*[@class='ui__field-inner']/input", s, "Поле Логина", "поля Логина");
+            ClickWebElement("//*[@class='verification__form-row _gap-30']/div[1]", "Кнопка Отправить", "кнопки Отправить");
+        }
+    }
+
+        class ChangePhoneCupis : FonbetWebProgram
     {
         public static CustomProgram FabricateChangePhoneCupis()
         {
@@ -581,3 +716,4 @@ namespace TestRun.fonbet
         }
     }
 }
+

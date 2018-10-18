@@ -157,7 +157,7 @@ namespace TestRun.fonbet
           
                 LogStartAction("Сумма ставки больше максимальной");
             ClearBeforeInput(".//*[@class='coupon__foot-sum']/input");
-            SendKeysToWebElement(".//*[@class='coupon__foot-sum']/input", "999999", "поле ввода значения ставки", "поля ввода значения ставки");
+            SendKeysToWebElement(".//*[@class='coupon__foot-sum']/input", "9999999", "поле ввода значения ставки", "поля ввода значения ставки");
                 IWebElement button = GetWebElement(".//*[@class='coupon__foot']/a", "Нет кнопки заключить пари");
                 if (!button.GetAttribute("class").Contains("disabled"))
                     throw new Exception("Кнопка ставки не блокируется");
@@ -252,7 +252,7 @@ namespace TestRun.fonbet
             LogStage("Перевод меню в отображение слева");
             ClickWebElement(".//*[@class='settings__section']//span[text()='Слева']/../input", "Радиобатон отображения меню слева", "радиобатона отображения меню слева");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
-
+            SwitchPageToBets();
             LogStartAction("Проверка отображения номеров");
             if (!WebElementExist(".//*[@class='table__event-number']"))
                 throw new Exception("Не работает отображение номеров событий");

@@ -45,7 +45,6 @@ namespace TestRun.backoffice
                 throw new Exception("Расписание не добавилось");
             DeleteButton(); 
         }
-
     }
 
     class FreebetImport : BackOfficeProgram
@@ -54,7 +53,6 @@ namespace TestRun.backoffice
         {
             return new FreebetImport();
         }
-
         public override void Run()
         {
             base.Run();
@@ -90,9 +88,7 @@ namespace TestRun.backoffice
                 throw new Exception("В логе валюта не равна 1");
             LogActionSuccess();
         }
-
     }
-
 }
 
 

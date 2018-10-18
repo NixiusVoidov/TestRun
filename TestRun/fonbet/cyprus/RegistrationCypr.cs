@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using OpenQA.Selenium;
 
 namespace TestRun.fonbet.cyprus
@@ -37,14 +38,17 @@ namespace TestRun.fonbet.cyprus
             CreateProcessRegistrationCypr("5", "rejected", "0", "1");
             CreateProcessRegistrationCypr("6",null, null, null);
             LogStage("Проверка sendcode по тестовому сценарию");
-            SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "6", "Поле Код смс", "поля  Код смс");
+            Thread.Sleep(2500);
+            ClickWebElement(".//*[@class='ui__field-inner']/input", "Поле Код смс", "поля  Код смс");
+            SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "6", "Поле Код смс", "поля  Код смс");
+            ClickWebElement("//*[@class='registration__button-wrap']//span", "Кнопка Отправить", "кнопки Отправить");
             var msg = GetWebElement(".//*[@id='registration-cyprus-error']", "Нет модуля с ошибкой");
             if (!(msg.GetAttribute("data-processstate").Equals("waitForVerificationCode") && msg.GetAttribute("data-errorcode").Equals("10")))
                 throw new Exception("Неверная обработка ошибки");
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Подтвердить", "кнопки Подтвердить");
             ClearBeforeInput(".//*[@class='ui__field-wrap-inner']//input");
             SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", "1234", "Поле Код смс", "поля  Код смс");
-
+            ClickWebElement("//*[@class='registration__button-wrap']//span", "Кнопка Отправить", "кнопки Отправить");
             SendKeysToWebElement(".//*[@class='registration__password-fields']/div[1]//input", "123qwe123", "Поле Пароль", "поля Пароль");
             SendKeysToWebElement(".//*[@class='registration__password-fields']/div[2]//input", "123qwe123", "Поле Подтверждение пароля", "поля Подтверждение пароля");
             ClickWebElement(".//*[@class='toolbar__item process-button']/button", "Кнопка Завершить регистрацию", "кнопки Завершить регистрацию");
@@ -83,11 +87,16 @@ namespace TestRun.fonbet.cyprus
             SendKeysToWebElement(".//*[@class='registration__form-inner _size_middle']/div[2]//input", "1","Поле Код на картинке", "поля Код на картинке");
             ClickWebElement(".//*[@class='toolbar__item process-button']/button", "Кнопка Продолжить", "кнопки Продолжить");
 
-            var msg = GetWebElement(".//*[@id='registration-cyprus-error']", "Нет модуля с ошибкой");
-            if (!(msg.GetAttribute("data-processstate").Equals(process) && msg.GetAttribute("data-errorcode").Equals(code) &&
-                  msg.GetAttribute("data-rejectioncode").Equals(rejcode)))
-                throw new Exception("Неверная обработка ошибки");
-            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Подтвердить", "кнопки Подтвердить");
+            if (postcode != "6")
+            {
+                var msg = GetWebElement(".//*[@id='registration-cyprus-error']", "Нет модуля с ошибкой");
+                if (!(msg.GetAttribute("data-processstate").Equals(process) && msg.GetAttribute("data-errorcode").Equals(code) &&
+                      msg.GetAttribute("data-rejectioncode").Equals(rejcode)))
+                    throw new Exception("Неверная обработка ошибки");
+                ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Подтвердить", "кнопки Подтвердить");
+            }
+            
+           
         }
 
         private void IsRegistrationDisabled(int number)

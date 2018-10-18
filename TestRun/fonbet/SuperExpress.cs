@@ -58,6 +58,7 @@ namespace TestRun.fonbet
 
             LogStage("Проверяем возможность ставки");
             ClickWebElement(".//*[@class='matrix-form__header-actions']/div[2]", "Кнопка случайный выбор", "кнопки случайный выбор");
+            ClickWebElement(".//*[@class='new-bet__sum-value _kind_min']", "Минимальня ставка", "минимальной ставки");
             ClickWebElement(".//*[@class='new-coupon__button _kind_place']", "Кнопка заключить пари", "кнопки заключить пари");
             if(!WebElementExist(".//*[@class='coupon-item placed-coupon']"))
                 throw new Exception("Не появился купон с поставленным пари");

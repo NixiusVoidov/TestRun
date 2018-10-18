@@ -18,7 +18,7 @@ namespace TestRun.fonbet
             MakeDefaultSettings();
 
             LogStage("Переход в Лайф");
-            ClickWebElement(".//*[@href='/#!/live']", "Вкладка \"Лайф\"", "вкладки \"Лайф\"");
+            ClickWebElement(".//*[@href='/#!/live']", "Вкладка \"Лайв\"", "вкладки \"Лайв\"");
 
             LogStage("Выбор трансляции");
             OpenBetsEventFilter();
