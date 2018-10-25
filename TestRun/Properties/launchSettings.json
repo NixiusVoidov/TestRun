@@ -2,7 +2,7 @@
   "profiles": {
     "TestRun": {
       "commandName": "Project",
-      "commandLineArgs": "cyprus_registration"
+      "commandLineArgs": "fonbet_topthreeevents"
     }
   }
 }

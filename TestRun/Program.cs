@@ -71,7 +71,7 @@ namespace TestRun
             CustomProgram.Register("cyprus_registration", fonbet.cyprus.RegistrationCypr.FabricateRegistrationCypr); //Проверка работы процесса регистрации кипра по тестовому сценарию
             CustomProgram.Register("fonbet_compressionmenu", fonbet.CompressionMenu.FabricateCompressionMenu); //Проверка шапки меню на сжатие
             CustomProgram.Register("fonbet_evlive", fonbet.EventViewLive.FabricateEventViewLive); //Функционал EventView в Лайв событиях
-            CustomProgram.Register("fonbet_priorityliveandline", fonbet.PriorityLiveAndLineEvents.FabricatePriorityLiveAndLineEvents); //Ставки из приоритетных событий линии и лайва с главной страницы
+            CustomProgram.Register("fonbet_topthreeevents", fonbet.TopThreeEvents.FabricateTopThreeEvents); //Ставки из приоритетных событий линии и лайва с главной страницы
 
 
             CustomProgram.Register("backoffice_clientcontrol", backoffice.СlientControl.FabricateСlientControl);
