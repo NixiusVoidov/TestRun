@@ -10,6 +10,7 @@ using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Opera;
 using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Remote;
+using System.Threading;
 
 namespace TestRun
 {
@@ -142,7 +143,13 @@ namespace TestRun
             if (driver != null)
             {
                 LogStartAction("Закрытие браузера");
-                driver.Quit();
+                if (Browser.Equals("SAFARI", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    driver.Close();
+                    Thread.Sleep(2000);
+                    driver.Quit();
+                }
+                else  driver.Quit();
                 LogActionSuccess();
             }
             base.AfterRun();
@@ -211,6 +218,13 @@ namespace TestRun
         {
             var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
             driver.FindElement(By.XPath(xpath)).Clear();
+            if (Browser.Equals("SAFARI", StringComparison.InvariantCultureIgnoreCase))
+            {
+                driver.FindElement(By.XPath(xpath)).SendKeys(Keys.Command + "a");
+            }
+               else driver.FindElement(By.XPath(xpath)).SendKeys(Keys.Control + "a");
+            driver.FindElement(By.XPath(xpath)).SendKeys(Keys.Delete);
+            Thread.Sleep(1000);
             wait.Until(drv => drv.FindElement(By.XPath(xpath))).GetAttribute("value").Equals("");
         }
 

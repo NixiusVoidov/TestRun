@@ -42,7 +42,7 @@ namespace TestRun.fonbet
                 var a = events[i].Text;
                 double kef = Convert.ToDouble(a, CultureInfo.GetCultureInfo("en-US").NumberFormat);
                 var kef2 = Math.Round(kef);
-                if (kef2 <= 3)
+                if (kef2 <= 3 && (!events[i].GetAttribute("class").Contains("_state_blocked")))
                 {
                     events[i].Click();
                     break;
@@ -111,7 +111,7 @@ namespace TestRun.fonbet
                 var a = grid[i].Text;
                 double kef = Convert.ToDouble(a, CultureInfo.GetCultureInfo("en-US").NumberFormat);
                 var kef2 = Math.Round(kef);
-                if (kef2 <= 2)
+                if (kef2 <= 2 && (!grid[i].GetAttribute("class").Contains("_state_blocked")))
                 {
                     grid[i].Click();
                     break;
@@ -144,20 +144,25 @@ namespace TestRun.fonbet
            //     }
            // }
 
-            LogStage("Проверка ввода суммы больше чем баланс счета");
-         
+
+            if(ClientBalance<Convert.ToDouble(driver.FindElement(By.XPath("//span[contains(@class,'coupon__foot-sum-stakes')]/a[2]")).Text))
+            {
+                LogStage("Проверка ввода суммы больше чем баланс счета");
+
                 LogStartAction("Сумма ставки равна максимальной");
                 ClearBeforeInput(".//*[@class='coupon__foot-sum']/input");
                 ClickWebElement(".//*[@class='coupon__foot-sum-stakes']/a[2]", "Значение максимальной ставки", "значения максимальной ставки");
                 ClickWebElement(".//*[@class='coupon__foot']/a", "Кнопка заключить пари", "кнопки заключить пари");
                 if (!WebElementExist(".//*[@class='coupon__error']"))
                     throw new Exception("Нет ошибки о нехватке средств");
-            ClickWebElement(".//*[@class='coupon__error']//a", "Кнопка OK", "кнопки OK");
-            LogActionSuccess();
+                ClickWebElement(".//*[@class='coupon__error']//a", "Кнопка OK", "кнопки OK");
+                LogActionSuccess();
+            }
           
                 LogStartAction("Сумма ставки больше максимальной");
             ClearBeforeInput(".//*[@class='coupon__foot-sum']/input");
-            SendKeysToWebElement(".//*[@class='coupon__foot-sum']/input", "9999999", "поле ввода значения ставки", "поля ввода значения ставки");
+            var maxBet = Convert.ToDouble(driver.FindElement(By.XPath("//span[contains(@class,'coupon__foot-sum-stakes')]/a[2]")).Text);
+            SendKeysToWebElement(".//*[@class='coupon__foot-sum']/input", Convert.ToString(maxBet * 2), "поле ввода значения ставки", "поля ввода значения ставки");
                 IWebElement button = GetWebElement(".//*[@class='coupon__foot']/a", "Нет кнопки заключить пари");
                 if (!button.GetAttribute("class").Contains("disabled"))
                     throw new Exception("Кнопка ставки не блокируется");
@@ -350,8 +355,8 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='session-dialog__buttons']/div[1]", "Кнопка Выход в диалоговом окне", "кнопки  Выход в диалоговом окне");
             WaitTillElementisDisplayed(driver, ".//*[@class='header__login-head']/a", 5);
             IWebElement loginStatus = GetWebElement(".//*[@class='header__login-head']/a", "Нет кнопки Войти");
-            string loginStatusText = loginStatus.GetAttribute("class");
-            if (!loginStatusText.Contains("header__link"))
+            string loginStatusText = loginStatus.Text.ToUpper();
+            if (!loginStatusText.Contains("ВОЙТИ"))
                 throw new Exception("Кнопка называется иначе чем Войти");
         }
     }
@@ -453,7 +458,7 @@ namespace TestRun.fonbet
                 if (typeBet!="Одинар")
                     betCount++;
             }
-            IList<IWebElement> countArrow = driver.FindElements(By.XPath(".//*[@class='coupon__head _style_gray']/i"));
+            IList<IWebElement> countArrow = driver.FindElements(By.XPath("//div[contains(@class,'coupon__head _style')]/i"));
             if(betCount != countArrow.Count)
                 throw new Exception("Не корректное кол-во стрелок у купонов");
             LogActionSuccess();

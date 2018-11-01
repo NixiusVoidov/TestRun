@@ -265,7 +265,7 @@ namespace TestRun.fonbet
             SendKeysToWebElement(".//*[@class='ui__field']", "123123", "Поле Код подтверждения", "поля Код подтверждения");
             Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
-            WaitTillElementisDisplayed(driver, ".//*[@id='restore-password-error']", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@id='restore-password-error']", 15);
             var errorMessage = GetWebElement(".//*[@id='restore-password-error']", "Нет сообщения об ошибке");
             if (!errorMessage.GetAttribute("data-errorcode").Equals("10"))
                 throw new Exception("Неверный текст ошибки");
@@ -392,6 +392,7 @@ namespace TestRun.fonbet
             if (!button.GetAttribute("class").Contains("state_disabled"))
                 throw new Exception("Возможно продолжить без телефона");
             Thread.Sleep(500);
+            SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[2]//input", Keys.Home, "Поле Номер телефона", "поля Номер телефона");
             SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[2]//input", "000000001", "Поле Номер телефона", "поля Номер телефона");
             ClearBeforeInput(".//*[@class='reg-v4__form-column--31oQE']/div[3]//input");
             driver.FindElement(By.XPath(".//*[@class='reg-v4__form-column--31oQE']/div[3]//input")).SendKeys("a");
