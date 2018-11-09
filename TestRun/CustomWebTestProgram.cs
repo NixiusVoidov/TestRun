@@ -108,6 +108,8 @@ namespace TestRun
                 profile.SetPreference("browser.helperApps.neverAsk.openFile", "text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml");
                 profile.SetPreference("browser.helperApps.neverAsk.saveToDisk",
         "text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml,application/json");
+                profile.SetPreference("webdriver.log.file", "C:\\Users\\User\\Downloads\\firefox.log");
+               
                 //profile.SetPreference("browser.helperApps.alwaysAsk.force", false);
                 //profile.SetPreference("browser.download.manager.alertOnEXEOpen", false);
                 //profile.SetPreference("browser.download.manager.focusWhenStarting", false);
@@ -217,6 +219,8 @@ namespace TestRun
         protected void ClearBeforeInput(string xpath)
         {
             var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            Thread.Sleep(1000);
+            driver.FindElement(By.XPath(xpath)).Click();
             driver.FindElement(By.XPath(xpath)).Clear();
             if (Browser.Equals("SAFARI", StringComparison.InvariantCultureIgnoreCase))
             {

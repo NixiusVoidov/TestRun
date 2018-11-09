@@ -112,6 +112,7 @@ namespace TestRun.fonbet
                 element.Click();
             }
             ClickWebElement("//*[@class='batch-form__add-new-variant matrix-form__button-tap']", "Кнопка Добавить вариант", "кнопки Добавить вариант");
+            Thread.Sleep(1500);
             if (!driver.FindElement(By.XPath(".//*[@class='new-coupon__box-footer']/a")).GetAttribute("class").Contains("state_disabled"))
                 throw new Exception("Возможно заключить пари с пустой строкой");
 
@@ -127,9 +128,9 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='matrix-form__header-actions']/div[1]", "Кнопка Ввод текста", "кнопки Ввод текста");
             ClickWebElement(".//*[@class='matrix-form__header-actions']/div[2]", "Кнопка Очистить", "кнопки Очистить");
             ClickWebElement(".//*[@class='list-view__body']", "Поле ввода ставок", "поля ввода ставок");
-            SendKeysToWebElement(".//*[@class='batch-editor__text-input _state_error']", "100; 1-(X); 2-(X); 3-(X); 4-(X); 5-(X); 6-(X); 7-(2); 8-(1); 9-(X); 10-(1); 11-(2); 12-(1); 13-(2); 14-(X); 15-(1).", "Ставка первого события", "ставки первого события");
+            SendKeysToWebElement(".//*[@class='batch-editor__text-input _state_error']", Keys.Home + "100; 1-(X); 2-(X); 3-(X); 4-(X); 5-(X); 6-(X); 7-(2); 8-(1); 9-(X); 10-(1); 11-(2); 12-(1); 13-(2); 14-(X); 15-(1).", "Ставка первого события", "ставки первого события");
             SendKeysToWebElement(".//*[@class='batch-editor__text-input']", Keys.Enter, "Переход к след строке", "перехода к след строке");
-            SendKeysToWebElement(".//*[@class='list-view__table-body']/tr[2]//input", "100; 1-(1); 2-(2); 3-(X); 4-(1); 5-(1); 6-(X); 7-(2); 8-(2); 9-(X); 10-(1); 11-(2); 12-(1); 13-(2); 14-(X); 15-(1).", "Ставка второго события", "ставки второго события");
+            SendKeysToWebElement(".//*[@class='list-view__table-body']/tr[2]//input", Keys.Home + "100; 1-(1); 2-(2); 3-(X); 4-(1); 5-(1); 6-(X); 7-(2); 8-(2); 9-(X); 10-(1); 11-(2); 12-(1); 13-(2); 14-(X); 15-(1).", "Ставка второго события", "ставки второго события");
             CheckBatchBet();
         }
 

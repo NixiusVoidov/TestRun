@@ -21,7 +21,8 @@ namespace TestRun.fonbet
         public override void Run()
         {
             base.Run();
-
+            ExecuteJavaScript("window.location.reload()", "Дж скрипт тупит");
+            Thread.Sleep(4000);
             if (!WebElementExist(".//*[@class='how2play']"))
                throw new Exception("Нет виджета HowToPlay");
 
@@ -64,23 +65,20 @@ namespace TestRun.fonbet
 
         public override void Run()
         {
-            base.Run();
             ExecuteJavaScript("window.location.reload()", "Дж скрипт тупит");
-            IWebElement mainSlider = driver.FindElement(By.XPath(".//*[@class='home-slider']"));
-            new Actions(driver).MoveToElement(mainSlider).Perform();
+            Thread.Sleep(4000);
+            IJavaScriptExecutor jse = (IJavaScriptExecutor)driver;
+            jse.ExecuteScript("document.getElementsByClassName('home-slider__switch-wrap')[0].style.opacity = 1");
             if (!WebElementExist(".//*[@class='home-slider__switch-wrap']/div[1]"))
                 throw new Exception("На главной странице нет слайдера");
 
             LogStage("Проверка переключения слайдера по кнопкам");
             IWebElement slider = driver.FindElement(By.XPath(".//*[@class='home-slider']"));
-            new Actions(driver).MoveToElement(slider).Perform();
             ClickWebElement(".//*[@class='home-slider__switch-wrap']/div[1]", "Кнопка первой страницы слайдера", "кнопки первой страницы слайдера");
             var sliderButton = GetWebElement(".//*[@class='home-slider__switch-wrap']/div[1]", "Нет кнопки у слайдера");
             var sliderButtonClass = sliderButton.GetAttribute("class");
             if (!sliderButtonClass.Contains("selected"))
                 throw new Exception("Проблемы со слайдером на главной странице");
-
-            new Actions(driver).MoveToElement(slider).Perform();
             ClickWebElement(".//*[@class='home-slider__switch-wrap']/div[2]", "Кнопка второй страницы слайдера", "кнопки второй страницы слайдера");
             var sliderSecondButton = GetWebElement(".//*[@class='home-slider__switch-wrap']/div[2]", "У слайдера только одна кнопка");
             var sliderSecondButtonClass = sliderSecondButton.GetAttribute("class");
@@ -94,17 +92,18 @@ namespace TestRun.fonbet
             SendKeysToWebElement(".//*[@class='login-form__form']/div[1]/input", Login, "поле логина", "поля логина");
             SendKeysToWebElement(".//*[@class='login-form__form']/div[2]/input", Password, "поле пароля", "поля пароля");
             ClickWebElement(".//*[@class='login-form__form-row _right']/div[2]/button", "Кнопка логина", "кнопки логина");
-           // ExecuteJavaScript("window.location.reload()", "Дж скрипт тупит");
-            IWebElement homeSlider = driver.FindElement(By.XPath(".//*[@class='home-slider']"));
-            new Actions(driver).MoveToElement(homeSlider).Perform();
+            Thread.Sleep(4000);
+            jse.ExecuteScript("document.getElementsByClassName('home-slider__switch-wrap')[0].style.opacity = 1");
             ClickWebElement(".//*[@class='home-slider__switch-wrap']/div[2]", "Кнопка второй страницы слайдера", "кнопки второй страницы слайдера");
             ClickWebElement(".//*[@class='home-slider__bets']/div[1]", "Модуль ставки на странице слайдера", "модуля ставки на странице сладера");
             if (!WebElementExist(".//*[@class='coupons']/div[1]//*[@class='coupon__title']"))
                 throw new Exception("Не появилась новая ставка");
 
         }
+       
     }
-    class NewsAndWinnerClub : FonbetWebProgram
+   
+class NewsAndWinnerClub : FonbetWebProgram
     {
         public static CustomProgram FabricateNewsAndWinnerClub()
         {

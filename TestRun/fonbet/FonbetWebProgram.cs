@@ -450,6 +450,10 @@ namespace TestRun
             ClickWebElement(firstMenuValue, firstErrorValue, firstErrorValueTwo);
             ClickWebElement(".//*[@class='account-form__window _icon_img']//label[2]", "Меню Тема запроса", "меню Тема запроса");
             ClickWebElement(secondMenuValue, secondErrorValue, secondErrorValueTwo);
+            if(WebElementExist(".//*[@class='account-form__window _icon_img']//label[3]")){
+                ClickWebElement(".//*[@class='account-form__window _icon_img']//label[3]", "Доп меню", "доп меню");
+                ClickWebElement(".//*[@class='account-form__window _icon_img']//label[3]//*[@class='ui-dropdown__items']/div[1]", "1ый в списке доп меню", "1го в списке доп меню");
+            }
             ClickWebElement(".//*[@class='toolbar__item account-form__button']/a/div", "Кнопка Подтвердить", "кнопки Подтвердить");
             if (!WebElementExist(".//*[@class='ui__error']"))
                 throw new Exception("Можно продолжить без обязательных полей");
@@ -582,7 +586,8 @@ namespace TestRun
 
             LogStage("Проверка createProcessWithCaptcha по тестовому сценарию");
             Thread.Sleep(1000);
-            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[2]//input", phoneValue , "Поле номер телефона", "поля номер телефона");
+            WaitTillElementisDisplayed(driver,".//*[@class='change-password__form-inner']/div/div[2]//input",5);
+            SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[2]//input", Keys.Home + phoneValue , "Поле номер телефона", "поля номер телефона");
             Thread.Sleep(1000);
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[4]//input", "1", "Поле капча", "поля капчи");
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки Отправить");
@@ -1074,7 +1079,7 @@ namespace TestRun
                 driver.FindElement(By.XPath(".//*[@class='verification__form-row']/label[1]//input")).SendKeys(Keys.Home);
                 SendKeysToWebElement(".//*[@class='verification__form-row']/label[1]//input", "3", "Поле Серия и номер паспорта", "поля Серия и номер паспорта");
                 ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки Отправить");
-                WaitTillElementisDisplayed(driver, ".//*[@class='account-error__actions']//span", 5);
+                WaitTillElementisDisplayed(driver, ".//*[@class='account-error__actions']//span", 15);
                 var msg = GetWebElement(".//*[@id='verification-bk-error']", "Нет модуля с ошибкой");
                 if (!(msg.GetAttribute("data-errorcode").Equals("0") && msg.GetAttribute("data-processstate").Equals("rejected") && msg.GetAttribute("data-rejectioncode").Equals("18")))
                     throw new Exception("Неверная обработка ошибки");
@@ -1096,19 +1101,23 @@ namespace TestRun
             }
             if (smsValue == "0")
             {
-                
-                WaitTillElementisDisplayed(driver, ".//*[@class='verification']//span", 10);
+                Thread.Sleep(3000);
+                WaitTillElementisDisplayed(driver, "//div[contains(@class,'account-error _type_success')]", 10);
                 if (!driver.FindElement(By.XPath(".//*[@class='verification']/div")).GetAttribute("class").Contains("success"))
                     throw new Exception("Неверная обработка ошибки");
                 ClickWebElement(".//*[@class='verification']//span", "Кнопка Закрыть", "кнопки Закрыть");
-                ClickWebElement(".//*[@class='verification__notice-types-wrap']/a", "Кнопка Отменить процесс", "кнопки Отменить процесс");
-                ClickWebElement(".//*[@class='confirm__foot--3H8gD']/div[2]//span", "Кнопка Да", "кнопки Да");
-                ClickWebElement(".//*[@href='#!/account/verification/bk']", "Кнопка Верификации по БК","кнопки Верификации по БК");
+                Thread.Sleep(1000);
+                ExecuteJavaScript("app.accountManager.cancelWaitingVerificationProcess();", "Не убился процесс идентификации");
+                //ClickWebElement(".//*[@class='verification__notice-types-wrap']/a", "Кнопка Отменить процесс", "кнопки Отменить процесс");
+                //ClickWebElement(".//*[@class='confirm__foot--3H8gD']/div[2]//span", "Кнопка Да", "кнопки Да");
+                ExecuteJavaScript("window.location.reload()", "Дж скрипт тупит");
+                Thread.Sleep(1000);
+                ClickWebElement(".//*[@class='verification__tab']/div[2]", "Кнопка Верификации по БК","кнопки Верификации по БК");
                 SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[2]//input", "0000FFFF000", "Поле Номера карты фонбет", "поля Номера карты фонбет");
                 Thread.Sleep(800);
-                SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[1]//input", "2222222222", "Поле Серия и номер паспорта", "поля Серия и номер паспорта");
+                SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[1]//input", Keys.Home +"2222222222", "Поле Серия и номер паспорта", "поля Серия и номер паспорта");
                 Thread.Sleep(800);
-                SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[2]//input", "11112011", "Поле Дата выдачи", "поля Дата выдачи");
+                SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[2]//input", Keys.Home + "11112011", "Поле Дата выдачи", "поля Дата выдачи");
                 ClickWebElement(".//*[@id='rulesAgree']", "Чекбокс Соглашения с правилами", "чекбокс Соглашения с правилами");
                 ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
                 return;

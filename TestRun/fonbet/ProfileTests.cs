@@ -276,6 +276,7 @@ namespace TestRun.fonbet
             SendKeysToWebElement(".//*[@class='ui__field']", "123456", "Поле Код подтверждения", "поля Код подтверждения");
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки отправить");
             WaitTillElementisDisplayed(driver, ".//*[@class='change-password__form-inner']/div/div[1]//input", 5);
+            Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[1]//input", "1234567Q", "Поле Новый пароль", "поля Новый пароль");
             Thread.Sleep(500);
             SendKeysToWebElement(".//*[@class='change-password__form-inner']/div/div[2]//input", "1234567Q", "Поле Повторите новый пароль", "поля Повторите новый пароль");
@@ -328,7 +329,9 @@ namespace TestRun.fonbet
             CreateProcessemailChecker("3@dev.dev", "rejected", "0", "12");
 
             LogStage("Проверка sendCode по тестовому сценарию");
-            ClearBeforeInput(".//*[@class='ui__field-inner']/input");
+            Thread.Sleep(1000);
+            ExecuteJavaScript("window.location.reload()", "Дж скрипт тупит");
+            Thread.Sleep(1000);
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "4@dev.dev", "Поле email", "поля email");
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки Отправить");
             SendEmailCodeChecker("1235", "waitForCode","10", null);
@@ -505,26 +508,30 @@ namespace TestRun.fonbet
         public override void Run()
         {
             base.Run();
-            VerificationStatusCheck();
+            //VerificationStatusCheck();
 
-            LogStage("Проверка createProcess по тестовому сценарию");
-            if (!WebElementExist(".//*[@href='#!/account/verification/bk']"))
-            {
-                ClickWebElement(".//*[@class='verification__notice-types-wrap']/a[1]", "Кнопка Сброса верификации",
-                    "кнопки Сброса верификации");
-                ClickWebElement(".//*[@class='confirm__foot--3H8gD']/div[2]//span", "Кнопка Да", "кнопки Да");
-            }
+            //LogStage("Проверка createProcess по тестовому сценарию");
+            //if (WebElementExist(".//*[@class='verification__notice-types-wrap']//span")) //если процесс уже существует
+            //{
+            //    ClickWebElement(".//*[@class='verification__notice-types-wrap']//span", "Кнопка Продолжить",
+            //        "кнопки Продолжить");
+            //    if (WebElementExist(".//*[@class='toolbar__btn-text'][text()='Отменить']")){
+            //        ClickWebElement(".//*[@class='toolbar__btn-text'][text()='Отменить']", "Кнопка Отменить", "кнопки Отменить");
+            //        ClickWebElement("//div[contains(@class,'confirm__foot--3H8gD')]/div[2]//a", "Кнопка Да", "кнопки Да");
+            //    }
+            //    else ExecuteJavaScript("app.accountManager.cancelWaitingVerificationProcess();", "Не убился процесс идентификации");
+            //}
 
-            ClickWebElement(".//*[@href='#!/account/verification/bk']", "Кнопка Верификации по БК",
+            ClickWebElement(".//*[@class='verification__tab']/div[2]", "Кнопка Верификации по БК",
                 "кнопки Верификации по БК");
             IWebElement inputData = GetWebElement(".//*[@class='verification__form-inner']/div/div[2]//input", "Нет поля номера карты фонбет");
 
             ClearBeforeInput(".//*[@class='verification__form-inner']/div/div[2]//input");
             SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[2]//input", "0000FFFF0002", "Поле Номера карты фонбет","поля Номера карты фонбет");
             Thread.Sleep(500);
-            SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[1]//input", "2222222222", "Поле Серия и номер паспорта", "поля Серия и номер паспорта");
+            SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[1]//input", Keys.Home + "2222222222", "Поле Серия и номер паспорта", "поля Серия и номер паспорта");
             Thread.Sleep(500);
-            SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[2]//input", "11112011", "Поле Дата выдачи", "поля Дата выдачи");
+            SendKeysToWebElement(".//*[@class='verification__form-inner']/div/div[3]/label[2]//input", Keys.Home + "11112011", "Поле Дата выдачи", "поля Дата выдачи");
             ClickWebElement(".//*[@id='rulesAgree']", "Чекбокс Соглашения с правилами", "чекбокс Соглашения с правилами");
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
 
@@ -535,14 +542,14 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
 
 
-            CreateProcessVerificationBk("3", "rejected", "0", "12");
-            CreateProcessVerificationBk("4", "rejected", "0", "13");
-            CreateProcessVerificationBk("5", "rejected", "0", "18");
-            CreateProcessVerificationBk("6", "rejected", "0", "4");
-            CreateProcessVerificationBk("7", null, "2", null);
-            CreateProcessVerificationBk("8", "rejected", "0", "14");
+            //CreateProcessVerificationBk("3", "rejected", "0", "12");
+            //CreateProcessVerificationBk("4", "rejected", "0", "13");
+            //CreateProcessVerificationBk("5", "rejected", "0", "18");
+            //CreateProcessVerificationBk("6", "rejected", "0", "4");
+            //CreateProcessVerificationBk("7", null, "2", null);
+            //CreateProcessVerificationBk("8", "rejected", "0", "14");
             CreateProcessVerificationBk("9", "rejected", "0", "10");
-
+            Thread.Sleep(1000);
             driver.FindElement(By.XPath(".//*[@class='verification__form-inner']/div/div[2]//input")).SendKeys(Keys.Backspace);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
 
@@ -623,7 +630,7 @@ namespace TestRun.fonbet
                 WaitTillElementisDisplayed(driver, ".//*[@class='ui__field verification__sms-field']", 10);
                 SendKeysToWebElement(".//*[@class='ui__field verification__sms-field']", arraySms[i, 0], "Поле SMS кода", "поля SMS кода");
                 Thread.Sleep(1000);
-                ClickWebElement(".//*[@class='toolbar__item _reg-button']/button", "Кнопка Отправить", "кнопки Отправить");
+                ClickWebElement(".//*[@class='toolbar__item _reg-button']/button//span", "Кнопка Отправить", "кнопки Отправить");
                 if (arraySms[i, 0] == "6")
                 {
                     if (!WebElementExist("//*[@class='verification__form-row']"))
