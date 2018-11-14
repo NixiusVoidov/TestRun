@@ -206,7 +206,7 @@ namespace TestRun.fonbet
             }
             
             LogStage("Проверка работы скрола в меню фильтра");
-            ClickWebElement(".//*[@class='events__filter _type_time']", "Меню времени в фильтре", "меню времени в фильтре");
+            ClickWebElement("//div[contains(@class,'line-header__menu')]/div[1]", "Меню времени в фильтре", "меню времени в фильтре");
             CheckScrollinFilterTopMenu(480, 350);
 
         }

@@ -211,8 +211,8 @@ namespace TestRun
         // Метод принимает на вход число минут и название строки в фильтре времени и проверяет что в результат выдачи попадают только те события, которые удовлетворяют кол-ву минут, переданных в параметр
         protected void TimeFilterChecker(int timeValue, string chooseData)
         {
-            ClickWebElement(".//*[@class='events__filter _type_time']", "Меню времени в фильтре", "меню времени в фильтре");
-            ClickWebElement(String.Format(".//*[@class='events__filter-item']//*[text()='{0}']/..", chooseData), String.Format("Значение \"{0}\"", chooseData), String.Format("значения \"{0}\"", chooseData));
+            ClickWebElement("//div[contains(@class,'line-header__menu')]/div[1]", "Меню времени в фильтре", "меню времени в фильтре");
+            ClickWebElement(String.Format("//*[@id='popup']//*[text()='{0}']/..", chooseData), String.Format("Значение \"{0}\"", chooseData), String.Format("значения \"{0}\"", chooseData));
             IList<IWebElement> all = driver.FindElements(By.XPath(".//*[@class='table__time']"));
             foreach (IWebElement element in all)
             {

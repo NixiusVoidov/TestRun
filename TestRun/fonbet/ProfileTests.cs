@@ -42,13 +42,16 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='ui__checkbox-text']/*[text()='Линия']", "Чекбокс Линия", "чекбокса Линия");
             IWebElement betTypeGrid = GetWebElement(".//*[@class='wrap'][1]//*[@class='operation-row _odd']/div[4]", "Не отображается Тип пари в гриде");
             string betTypeGridText = betTypeGrid.Text;
-            if (!betTypeGridText.Equals("Фрибет"))
+            if (!(betTypeGridText.Equals("Фрибет") || betTypeGridText.Equals("Суперэкспресс")))
                 throw new Exception("Добавился новый тип пари, кроме фрибета и линии");
-            ClickWebElement(".//*[@class='ui__checkbox-text']/*[text()='Фрибет']", "Чекбокс Фрибет", "чекбокса Фрибет");
-            if (!WebElementExist(".//*[@class='page-account__empty-list-text']"))
-                throw new Exception("Добавился новый тип пари, кроме фрибета и линии, либо фильтры не работают");
             ClickWebElement(".//*[@class='ui__checkbox-text']/*[text()='Линия']", "Чекбокс Линия", "чекбокса Линия");
-            ClickWebElement(".//*[@class='ui__checkbox-text']/*[text()='Фрибет']", "Чекбокс Фрибет", "чекбокса Фрибет");
+            var bets = driver.FindElements(By.XPath(".//*[@class='account-filter']/div[1]//input"));
+            for (int i = 0; i < bets.Count; i++)
+                bets[i].Click();
+            if (!WebElementExist(".//*[@class='page-account__empty-list-text']"))
+                throw new Exception("Добавился новый тип пари, кроме фрибета, суперэкспресса или линии, либо фильтры не работают");
+            for (int i = 0; i < bets.Count; i++)
+                bets[i].Click();
 
 
             LogStage("Снятие всех фильтров в столбце \"Результат\"");
@@ -159,11 +162,13 @@ namespace TestRun.fonbet
             {
                 string nameTofind = string.Format(".//*[@class='ui__checkboxes']/div[{0}]//*[@class='ui__checkbox-text']/span", i);
                 var element = driver.FindElement(By.XPath(nameTofind)).Text;
+               
+
 
                 ClickWebElementWithText("ui__checkbox-text", element, "Чекбокс", "чекбокса");
                 if (!WebElementExist(".//*[@class='page-account__empty-list-text']"))
                 {
-                    var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                    var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(50));
                     wait.Until(ExpectedConditions.ElementIsVisible(By.XPath(".//*[@class='operation-row _odd']/div[4]")));
                     IWebElement betoperationGrid = GetWebElement(".//*[@class='operation-row _odd']/div[4]", "Не отображается Операции в гриде");
                     string betoperationGridText = betoperationGrid.Text;
@@ -176,6 +181,7 @@ namespace TestRun.fonbet
 
             LogStage("Проверка развертки конкретной операции");
             ClickWebElement(".//*[@class='ui__checkbox-text']/*[text()='Заключено пари']", "Чекбокс заключено пари", "чекбокса заключено пари");
+            WaitTillElementisDisplayed(driver, ".//*[@class='wrap'][1]//*[@class='operation-row _odd']/div[7]", 30);
             ClickWebElement(".//*[@class='wrap'][1]//*[@class='operation-row _odd']/div[7]", "Стрелка разворота операции", "Стрелка разворота операции");
             IWebElement betMark = GetWebElement(".//*[@class='bet-details _odd']//table//*[text()='Коэффициент']", "Не отображается коэффициент в развернутом гриде");
             string betMarkText = betMark.Text;

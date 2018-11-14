@@ -102,23 +102,25 @@ namespace TestRun
             }
             else if (Browser.Equals("FIREFOX", StringComparison.InvariantCultureIgnoreCase))
             {
-                FirefoxOptions profile = new FirefoxOptions();
-                profile.SetPreference("browser.download.folderList", 2);
-                profile.SetPreference("browser.download.manager.showWhenStarting", false);
-                profile.SetPreference("browser.helperApps.neverAsk.openFile", "text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml");
-                profile.SetPreference("browser.helperApps.neverAsk.saveToDisk",
-        "text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml,application/json");
-                profile.SetPreference("webdriver.log.file", "C:\\Users\\User\\Downloads\\firefox.log");
-               
+        //        FirefoxOptions profile = new FirefoxOptions();
+        //        profile.SetPreference("browser.download.folderList", 2);
+        //        profile.SetPreference("browser.download.manager.showWhenStarting", false);
+        //        profile.SetPreference("browser.helperApps.neverAsk.openFile", "text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml");
+        //        profile.SetPreference("browser.helperApps.neverAsk.saveToDisk",
+        //"text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml,application/json");
+        //        profile.SetPreference("webdriver.log.file", "C:\\Users\\User\\Downloads\\firefox.log");
+
                 //profile.SetPreference("browser.helperApps.alwaysAsk.force", false);
                 //profile.SetPreference("browser.download.manager.alertOnEXEOpen", false);
                 //profile.SetPreference("browser.download.manager.focusWhenStarting", false);
                 //profile.SetPreference("browser.download.manager.useWindow", false);
                 //profile.SetPreference("browser.download.manager.showAlertOnComplete", false);
                 //profile.SetPreference("browser.download.manager.closeWhenDone", false);
+                //Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+               // driver = new FirefoxDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), profile);
+                driver = new FirefoxDriver();
 
-                driver = new FirefoxDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), profile);
-                
+
             }
             else if (Browser.Equals("OPERA", StringComparison.InvariantCultureIgnoreCase))
             {
