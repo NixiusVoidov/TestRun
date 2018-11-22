@@ -226,6 +226,7 @@ namespace TestRun
 
         static void Main(string[] args)
         {
+            PerformanceProfiler.Profiler.Init();
             RegisterPrograms();
             if ((args.Length == 1) && (args[0] == "auto"))
             {

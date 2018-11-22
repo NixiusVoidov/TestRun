@@ -169,7 +169,10 @@ namespace TestRun
         {
             try
             {
-                return driver.FindElement(By.XPath(xPath));
+                PerformanceProfiler.Profiler.Start("FindWebElement");
+                IWebElement element = driver.FindElement(By.XPath(xPath));
+                PerformanceProfiler.Profiler.Stage("driver.FindElement(ByXPath)");
+                return element;
             }
             catch (Exception)
             {
@@ -242,15 +245,22 @@ namespace TestRun
 
         protected void ClickWebElement(string xPath, string elementCaptionInNominative, string elementCaptionInGenitive)
         {
+            PerformanceProfiler.Profiler.Start("ClickWebElement");
             try
             {
                 By by = By.XPath(xPath);
+                PerformanceProfiler.Profiler.Stage("By.XPath");
                 LogStartAction(String.Format("Клик {0}", elementCaptionInGenitive));
+                PerformanceProfiler.Profiler.Stage("LogStartAction");
                 IWebElement element = driver.FindElement(by);
+                PerformanceProfiler.Profiler.Stage("driver.FindElement");
                 var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
                 wait.Until(ExpectedConditions.ElementToBeClickable(by));
+                PerformanceProfiler.Profiler.Stage("wait web driver");
                 element.Click();
+                PerformanceProfiler.Profiler.Stage("Element.Click");
                 LogActionSuccess();
+                PerformanceProfiler.Profiler.Stage("LogActionSuccess");
 
             }
             catch (NoSuchElementException)
