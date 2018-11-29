@@ -401,8 +401,7 @@ namespace TestRun.fonbet
             if (!button.GetAttribute("class").Contains("state_disabled"))
                 throw new Exception("Возможно продолжить без телефона");
             Thread.Sleep(500);
-            SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[2]//input", Keys.Home, "Поле Номер телефона", "поля Номер телефона");
-            SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[2]//input", "000000001", "Поле Номер телефона", "поля Номер телефона");
+            SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[2]//input", Keys.Home+ "000000001", "Поле Номер телефона", "поля Номер телефона");
             ClearBeforeInput(".//*[@class='reg-v4__form-column--31oQE']/div[3]//input");
             driver.FindElement(By.XPath(".//*[@class='reg-v4__form-column--31oQE']/div[3]//input")).SendKeys("a");
             driver.FindElement(By.XPath(".//*[@class='reg-v4__form-column--31oQE']/div[3]//input")).SendKeys(Keys.Backspace);
@@ -452,13 +451,17 @@ namespace TestRun.fonbet
             VerificationStatusCheck();
 
             LogStage("Проверка createProcess по тестовому сценарию");
-            if (!WebElementExist(".//*[@href='#!/account/verification/qiwi']"))
+            if (WebElementExist(".//*[@class='verification__notice-types-wrap']//*[@class='toolbar__btn-text']"))
             {
-                ClickWebElement(".//*[@class='verification__notice-types-wrap']/a[1]", "Кнопка Сброса верификации",
-                    "кнопки Сброса верификации");
+                ClickWebElement(".//*[@class='verification__notice-types-wrap']//*[@class='toolbar__btn-text']", "Кнопка Продолжить верификацию",
+                    "кнопки Продолжить верификацию");
+                ClickWebElement(".//*[@class='verification__form-row']/div[2]/a", "Кнопка Отменить",
+                   "кнопки Отменить");
+                ClickWebElement(".//*[@class='confirm__foot--3H8gD']/div[2]/a", "Кнопка Подтверждения отмены",
+                  "кнопки Подтверждения отмены");
             }
 
-            ClickWebElement(".//*[@class='verification__tab-wrap']/div[3]", "Кнопка Верификации по киви",
+            ClickWebElement(".//*[@class='verification__tab']/div[3]", "Кнопка Верификации по киви",
                 "кнопки Верификации по киви");
             IWebElement inputData = GetWebElement(".//*[@class='ui__field-wrap-inner']//input", "Нет поля для ввода");
             Thread.Sleep(1500);
@@ -514,19 +517,20 @@ namespace TestRun.fonbet
         public override void Run()
         {
             base.Run();
-            //VerificationStatusCheck();
+            VerificationStatusCheck();
 
-            //LogStage("Проверка createProcess по тестовому сценарию");
-            //if (WebElementExist(".//*[@class='verification__notice-types-wrap']//span")) //если процесс уже существует
-            //{
-            //    ClickWebElement(".//*[@class='verification__notice-types-wrap']//span", "Кнопка Продолжить",
-            //        "кнопки Продолжить");
-            //    if (WebElementExist(".//*[@class='toolbar__btn-text'][text()='Отменить']")){
-            //        ClickWebElement(".//*[@class='toolbar__btn-text'][text()='Отменить']", "Кнопка Отменить", "кнопки Отменить");
-            //        ClickWebElement("//div[contains(@class,'confirm__foot--3H8gD')]/div[2]//a", "Кнопка Да", "кнопки Да");
-            //    }
-            //    else ExecuteJavaScript("app.accountManager.cancelWaitingVerificationProcess();", "Не убился процесс идентификации");
-            //}
+            LogStage("Проверка createProcess по тестовому сценарию");
+            if (WebElementExist(".//*[@class='verification__notice-types-wrap']//span")) //если процесс уже существует
+            {
+                ClickWebElement(".//*[@class='verification__notice-types-wrap']//span", "Кнопка Продолжить",
+                    "кнопки Продолжить");
+                if (WebElementExist(".//*[@class='toolbar__btn-text'][text()='Отменить']"))
+                {
+                    ClickWebElement(".//*[@class='toolbar__btn-text'][text()='Отменить']", "Кнопка Отменить", "кнопки Отменить");
+                    ClickWebElement("//div[contains(@class,'confirm__foot--3H8gD')]/div[2]//a", "Кнопка Да", "кнопки Да");
+                }
+                else ExecuteJavaScript("app.accountManager.cancelWaitingVerificationProcess();", "Не убился процесс идентификации");
+            }
 
             ClickWebElement(".//*[@class='verification__tab']/div[2]", "Кнопка Верификации по БК",
                 "кнопки Верификации по БК");
@@ -548,12 +552,12 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
 
 
-            //CreateProcessVerificationBk("3", "rejected", "0", "12");
-            //CreateProcessVerificationBk("4", "rejected", "0", "13");
-            //CreateProcessVerificationBk("5", "rejected", "0", "18");
-            //CreateProcessVerificationBk("6", "rejected", "0", "4");
-            //CreateProcessVerificationBk("7", null, "2", null);
-            //CreateProcessVerificationBk("8", "rejected", "0", "14");
+            CreateProcessVerificationBk("3", "rejected", "0", "12");
+            CreateProcessVerificationBk("4", "rejected", "0", "13");
+            CreateProcessVerificationBk("5", "rejected", "0", "18");
+            CreateProcessVerificationBk("6", "rejected", "0", "4");
+            CreateProcessVerificationBk("7", null, "2", null);
+            CreateProcessVerificationBk("8", "rejected", "0", "14");
             CreateProcessVerificationBk("9", "rejected", "0", "10");
             Thread.Sleep(1000);
             driver.FindElement(By.XPath(".//*[@class='verification__form-inner']/div/div[2]//input")).SendKeys(Keys.Backspace);
@@ -596,9 +600,11 @@ namespace TestRun.fonbet
                 }
                 else
                     ClickWebElement("//*[@class='verification__tab']/div[1]", "Кнопка Удаленной идентификации", "кнопки Удаленной идентификации");
+                MakeDisplayInhert("//*[@class='verification__form-lock-container']/div[1]//input");
 
                 SendKeysToWebElement("//*[@class='verification__form-lock-container']/div[1]//input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Главный разворот страницы", "поля Главный разворот страницы");
                 LogStage("Проверка на валидность аттача");
+                MakeDisplayInhert("//*[@class='verification__form-lock-container']/div[2]//input");
                 SendKeysToWebElement("//*[@class='verification__form-lock-container']/div[2]//input", "C:\\Users\\User\\Downloads\\auto-tests.zip", "Поле Разворот с регистрацией", "поля Разворот с регистрацией");
                 if (!driver.FindElement(By.XPath("//*[@class='verification__form-lock-container']/div[2]//*[@class='upload-file__inner--ds5yK']/div[2]")).GetAttribute("class").Contains("error"))
                     throw new Exception("Получилось прикрепить зип фаил");
@@ -622,7 +628,9 @@ namespace TestRun.fonbet
             }
             driver.Navigate().GoToUrl("http://fonred5051.dvt24.com/?test=6#!/account/verification/remote-verification");
             ClickWebElement("//*[@class='verification__tab']/div[1]", "Кнопка Удаленной идентификации", "кнопки Удаленной идентификации");
+            MakeDisplayInhert("//*[@class='verification__form-lock-container']/div[1]//input");
             SendKeysToWebElement("//*[@class='verification__form-lock-container']/div[1]//input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Главный разворот страницы", "поля Главный разворот страницы");
+            MakeDisplayInhert("//*[@class='verification__form-lock-container']/div[2]//input");
             SendKeysToWebElement("//*[@class='verification__form-lock-container']/div[2]//input", "C:\\Users\\User\\Documents\\24H soft.png", "Поле Разворот с регистрацией", "поля Разворот с регистрацией");
 
 
@@ -632,6 +640,8 @@ namespace TestRun.fonbet
                     {"4", "0","rejected","16" }, {"5", "0","rejected","17" }, {"6", "0","rejected","19" } };
             for (int i = 0; i < 5; i++)
             {
+                WaitTillElementisDisplayed(driver, "//*[@class='toolbar__item _reg-button']", 10);
+                Thread.Sleep(1000);
                 ClickWebElement("//*[@class='toolbar__item _reg-button']", "Кнопка Далее", "кнопки Далее");
                 WaitTillElementisDisplayed(driver, ".//*[@class='ui__field verification__sms-field']", 10);
                 SendKeysToWebElement(".//*[@class='ui__field verification__sms-field']", arraySms[i, 0], "Поле SMS кода", "поля SMS кода");
@@ -659,27 +669,29 @@ namespace TestRun.fonbet
 
             driver.Navigate().GoToUrl("http://fonred5051.dvt24.com/?test=6#!/account/verification/remote-verification");
             ClickWebElement("//*[@class='verification__tab']/div[1]", "Кнопка Удаленной идентификации", "кнопки Удаленной идентификации");
+            MakeDisplayInhert("//*[@class='verification__form-lock-container']/div[1]//input");
             SendKeysToWebElement("//*[@class='verification__form-lock-container']/div[1]//input", "C:\\Users\\User\\Downloads\\саша.jpg", "Поле Главный разворот страницы", "поля Главный разворот страницы");
+            MakeDisplayInhert("//*[@class='verification__form-lock-container']/div[2]//input");
             SendKeysToWebElement("//*[@class='verification__form-lock-container']/div[2]//input", "C:\\Users\\User\\Documents\\24H soft.png", "Поле Разворот с регистрацией", "поля Разворот с регистрацией");
             ClickWebElement("//*[@class='toolbar__item _reg-button']", "Кнопка Далее", "кнопки Далее");
             WaitTillElementisDisplayed(driver, ".//*[@class='ui__field verification__sms-field']", 10);
             SendKeysToWebElement(".//*[@class='ui__field verification__sms-field']", "7", "Поле SMS кода", "поля SMS кода");
             Thread.Sleep(1000);
             ClickWebElement(".//*[@class='toolbar__item _reg-button']/button", "Кнопка Отправить", "кнопки Отправить");
-            SelectSkypeLogin("2");
+            SelectSkypeLogin("22222");
             var error = GetWebElement(".//*[@id='rv-error']", "Нет модуля с ошибкой");
             if (!(error.GetAttribute("data-errorcode").Equals("10") && error.GetAttribute("data-processstate").Equals("waitForSelectCallTime")))
                 throw new Exception("Неверная обработка ошибки, когда логин=2");
             ClickWebElement("//*[@class='verification__error-buttons']/div[1]", "Кнопка Повторить", "кнопки Повторить");
-            SelectSkypeLogin("3");
+            SelectSkypeLogin("33333");
             Thread.Sleep(20000);
             if (!driver.FindElement(By.XPath("//*[@class='verification__call-comment']")).Text.Contains("все операторы были заняты"))
                 throw new Exception("Неверная обработка ошибки, когда логин=3");
-            SelectSkypeLogin("4");
+            SelectSkypeLogin("44444");
             Thread.Sleep(20000);
             if (!driver.FindElement(By.XPath("//*[@class='verification__call-comment']")).Text.Contains("не смогли до вас дозвониться"))
                 throw new Exception("Неверная обработка ошибки, когда логин=4");
-            SelectSkypeLogin("5");
+            SelectSkypeLogin("55555");
             Thread.Sleep(20000);
             var msg = GetWebElement(".//*[@id='rv-error']", "Нет модуля с ошибкой");
             if (!(msg.GetAttribute("data-errorcode").Equals("0") && msg.GetAttribute("data-processstate").Equals("rejected") && msg.GetAttribute("data-rejectioncode").Equals("18")))
@@ -690,10 +702,18 @@ namespace TestRun.fonbet
             SendKeysToWebElement(".//*[@class='ui__field verification__sms-field']", "7", "Поле SMS кода", "поля SMS кода");
             Thread.Sleep(1000);
             ClickWebElement(".//*[@class='toolbar__item _reg-button']/button", "Кнопка Отправить", "кнопки Отправить");
-            SelectSkypeLogin("7");
-            Thread.Sleep(20000);
-            if (!driver.FindElement(By.XPath("account-header__title")).Text.Contains("завершения идентификации остался один шаг"))
+            SelectSkypeLogin("77777");
+            //Thread.Sleep(20000);
+            WaitTillElementisDisplayed(driver, "//*[@class='verification__qiwi-instruction-wrap']", 30);
+            if (!driver.FindElement(By.XPath("//*[@class='account-header__title']")).Text.Contains("завершения идентификации остался один шаг"))
                 throw new Exception("Неверная обработка ошибки, когда логин=7");
+        }
+
+        private void MakeDisplayInhert(string xpath)
+        {
+            IJavaScriptExecutor jse = (IJavaScriptExecutor)driver;
+            IWebElement element = driver.FindElement(By.XPath(xpath));
+            jse.ExecuteScript("arguments[0].setAttribute('style', 'display: inherit')", element);
         }
 
         private void SelectSkypeLogin(string s)
@@ -701,6 +721,7 @@ namespace TestRun.fonbet
             WaitTillElementisDisplayed(driver, "//*[@class='verification__time-slot-wrap']", 10);
             ClearBeforeInput("//*[@class='ui__field-inner']/input");
             SendKeysToWebElement("//*[@class='ui__field-inner']/input", s, "Поле Логина", "поля Логина");
+            Thread.Sleep(1000);
             ClickWebElement("//*[@class='verification__form-row _gap-30']/div[1]", "Кнопка Отправить", "кнопки Отправить");
         }
     }

@@ -31,8 +31,8 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='matrix-form__header-actions']/div[2]", "Кнопка случайный выбор", "кнопки случайный выбор");
             IWebElement defaultBet = GetWebElement(".//*[@class='new-coupon__box-sum']/span[1]", "Не указан нижний порог ставки");
             string defaultBetValue = defaultBet.Text;
-            if (!defaultBetValue.Equals("100"))
-                throw new Exception("Минимальная ставка по умолчанию не равна 100");
+            if (!defaultBetValue.Equals("50"))
+                throw new Exception("Минимальная ставка по умолчанию не равна 50");
             MarkedBoxCounter(15, " _marked");
             IWebElement optionCount = GetWebElement(".//*[@class='new-coupon__label-value _value']", "Не указано число вариантов");
             string optionCountValue = optionCount.Text;
@@ -45,7 +45,7 @@ namespace TestRun.fonbet
             if (!optionCountValues.Equals("2"))
                 throw new Exception("Не работает счетчик числа вариантов");
             string BetValue = defaultBet.Text;
-            if (!BetValue.Equals("200"))
+            if (!BetValue.Equals("100"))
                 throw new Exception("Не увеличивается минимальная сумма ставки при увеличении числа вариантов");
             IWebElement doBet = GetWebElement(".//*[@class='new-coupon__box-footer']/a", "Не найдена кнопка с заключить пари");
             var doBetClass = doBet.GetAttribute("class");

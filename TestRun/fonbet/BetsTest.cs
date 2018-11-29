@@ -43,7 +43,7 @@ namespace TestRun.fonbet
             Thread.Sleep(500);
             grid[6].Click();
             grid[4].Click();
-            grid[8].Click();
+            grid[5].Click();
             ClickWebElement(".//*[@class='coupons']/div[1]//*[@class='coupon__info-item-inner--1Deii']/div", "Кнопка выбора типа пари", "кнопки выбора типа пари");
             Thread.Sleep(500);
             ClickWebElement(".//*[@id='popup']/li[2]", "Строка Система 2/3", "строки Систима 2/3");
@@ -213,13 +213,13 @@ namespace TestRun.fonbet
             IList<IWebElement> grid = driver.FindElements(By.XPath(".//*[@class='table']/tbody//td[5]")); //все ставки из одного столбца грида событий
             grid[6].Click();
             WaitForPageLoad();
-            if(!WebElementExist(".//*[@class='coupon__freebet-switcher-head']"))
+            if(!WebElementExist("//div[contains(@class, 'coupon__freebet-switcher-head')]"))
                 throw new Exception("Отсутсвтуют фрибеты на аккаунте");
-            ClickWebElement(".//*[@class='coupon__freebet-switcher-head']", "Кнопка использовать фрибет", "кнопки использовать фрибет");
-            IWebElement titleBet = GetWebElement(".//*[@class='coupons']/div[1]//*[@class='coupon__title']", "Не отображается title купона");
+            ClickWebElement("//div[contains(@class, 'coupon__freebet-switcher-head')]", "Кнопка использовать фрибет", "кнопки использовать фрибет");
+            IWebElement titleBet = GetWebElement(".//*[@class='coupons']/div[1]//div[contains(@class,'coupon__title')]", "Не отображается title купона");
             if(titleBet.Text!="Новое пари Фрибет")
                 throw new Exception("Не верный тайтл у фрибета");
-            IList<IWebElement> fbButton = driver.FindElements(By.XPath(".//*[@class='coupon__foot-freebet-button-list']/div/span[2]")); //все кнопки с фрибетами
+            IList<IWebElement> fbButton = driver.FindElements(By.XPath("//div[contains(@class,'coupon__foot-freebet-button-list')]/div/span[2]")); //все кнопки с фрибетами
             int basicCount = fbButton.Count;
 
             LogStage("Перебираем подходящий по сумме фрибет и ставим его");
@@ -227,7 +227,7 @@ namespace TestRun.fonbet
             for (var i = 0; i < fbButton.Count; i++)  
             {
                 fbButton[i].Click();
-                IWebElement fbPlaceButton = GetWebElement(".//*[@class='coupon__foot-freebet']/a", "Нет кнопки поставить фрибет");
+                IWebElement fbPlaceButton = GetWebElement("//div[contains(@class,'coupon__foot-freebet')]/a", "Нет кнопки поставить фрибет");
                 if (!fbPlaceButton.GetAttribute("class").Contains("disabled"))
                 {
                     myBet = fbButton[i].Text;
@@ -241,12 +241,12 @@ namespace TestRun.fonbet
                 }
                 
             }
-            if(WebElementExist(".//*[@class='coupon__error']"))
+            if(WebElementExist("//div[contains(@class, 'coupon__error')]"))
                 throw new Exception("Возникла ошибка при ставки купона");
             LogStage("Проверяю что фрибет не остался и пропал из списка фрибетов");
             grid[6].Click();
-            ClickWebElement(".//*[@class='coupon__freebet-switcher-head']", "Кнопка использовать фрибет", "кнопки использовать фрибет");
-            IList<IWebElement> newFbButton = driver.FindElements(By.XPath(".//*[@class='coupon__foot-freebet-button-list']/div/span[2]")); //все кнопки с фрибетами
+            ClickWebElement("//div[contains(@class, 'coupon__freebet-switcher-head')]", "Кнопка использовать фрибет", "кнопки использовать фрибет");
+            IList<IWebElement> newFbButton = driver.FindElements(By.XPath("//div[contains(@class,'coupon__foot-freebet-button-list')]/div/span[2]")); //все кнопки с фрибетами
             int newCount = newFbButton.Count;
 
             if(newCount!=basicCount-1)

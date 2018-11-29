@@ -129,6 +129,7 @@ namespace TestRun
             FabricateProgram programFabric = CustomProgram.FindProgram(data.program);
             try
             {
+                
                 if (programFabric == null)
                     throw new Exception(String.Format("Программа {0} не найдена", data.program));
                 CustomProgram program = programFabric();
@@ -235,8 +236,9 @@ namespace TestRun
             else
             try
             {
-                // Понять какой тест запускать
-                if (args.Length == 0)
+                   
+                    // Понять какой тест запускать
+                    if (args.Length == 0)
                     throw new Exception("Неуказана программа первым параметром командной строки.");
 
                 string programName = args[0];
@@ -301,7 +303,8 @@ namespace TestRun
                         File.WriteAllText(@"lastReport.json", report);
                     }
                 }
-            }
+                    
+                }
             catch (Exception e)
             {
                 Console.ForegroundColor = ConsoleColor.DarkRed;

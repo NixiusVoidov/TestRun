@@ -211,6 +211,7 @@ namespace TestRun.backoffice
         {
             for(int i=1;i<10;i++)
             {
+                
                 ClickWebElement(".//*[@id='js-toolbar']/div[2]/div/div[2]", "Фильтр Приложения", "фильтра Приложения");
                 ClickWebElement(".//*[@class='ui-dropdown__items']/div["+i+"]", "Строка приложения", "строки  приложения");
                 ClickWebElement(".//*[@id='curtain']/div/div[2]//li[1]", "Строка из выпадающего списка", "строки из выпадающего списка");

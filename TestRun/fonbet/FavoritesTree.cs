@@ -31,16 +31,16 @@ namespace TestRun.fonbet
             LogStage("Проверка работы звездочки в футболе");
             ClickWebElement(".//*[@href='#!/bets/football']", "Звездочка у футбола в фильтре событий", "звездочки у футбола в фильтре событий");
             Thread.Sleep(900);
-            ClickWebElement(".//*[@class='events__filter _type_segment']", "Конкретный турнир по футболу", "конкретного турнира по футболу");
+            ClickWebElement(".//*[@class='line-header__menu--GWd-F']/div[3]", "Конкретный турнир по футболу", "конкретного турнира по футболу");
             ClickWebElement(".//*[@id='popup']/li[1]/span", "Звездочка первого в списке турнира по футболу в фильтре", "звездочки первого в списке турнира по футболу в фильтре");
             IWebElement footbalTournamentStar = GetWebElement(".//*[@id='popup']/li[1]/span", "Не найдена звезда в фильтре турнира по футболу");
-            if (footbalTournamentStar.GetAttribute("class") !="events__filter-star")
+            if (footbalTournamentStar.GetAttribute("class").Contains("icon_on"))
                 throw new Exception("Звездочки в дочерних событиях футбола не работают");
 
             LogStage("Проверка работы полузвездочки");
-            ClickOnSportType();
+            OpenBetsEventFilter();
             IWebElement footballFilterWithSemistar = GetWebElement(".//*[@href='#!/bets/football']/../span", "не найден футбол в фильтре");
-            if (footballFilterWithSemistar.GetAttribute("class") != "events__filter-star _icon_semi")
+            if (!footballFilterWithSemistar.GetAttribute("class").Contains("_icon_semi"))
                 throw new Exception("Полузвездочки в меню футбола не работают");
 
             LogStage("Проверка что футбол попал в избранное");
@@ -50,16 +50,16 @@ namespace TestRun.fonbet
                 throw new Exception("Нет заголовка в футбольных турнирах");
 
             LogStage("Проверка работы АнонсЛайф");
-            ClickOnSportType();
+            OpenBetsEventFilter();
             ClickWebElement(".//*[@href='#!/bets/announcements']", "Анонс Лайв в фильтре событий", "по анонсу лайф в фильтре событий");
-            string sortByTime = GetWebElement(".//*[@class='events__announce-filter']", "Не найдена кнопка сортировать по времени").Text;
-            ClickWebElement(".//*[@class='events__announce-filter']", "Фильтр сортировки по времени/соревнованию", "Фильтра сортировки по времени/соревнованию");
-            string sortByCompetiton = GetWebElement(".//*[@class='events__announce-filter']", "Не найдена кнопка сортировать по соревнованию").Text;
+            string sortByTime = GetWebElement("//div[contains(@class, 'line-header__announce-filter')]", "Не найдена кнопка сортировать по времени").Text;
+            ClickWebElement("//div[contains(@class, 'line-header__announce-filter')]", "Фильтр сортировки по времени/соревнованию", "Фильтра сортировки по времени/соревнованию");
+            string sortByCompetiton = GetWebElement("//div[contains(@class, 'line-header__announce-filter')]", "Не найдена кнопка сортировать по соревнованию").Text;
             if (sortByTime == sortByCompetiton)
                 throw new Exception("Не работает кнопка фильтрации по времени/совернованию");
 
             LogStage("Проверка работы скрола в меню фильтра");
-            ClickOnSportType();
+            OpenBetsEventFilter();
             CheckScrollinFilterTopMenu(580,480);
 
         }
@@ -144,29 +144,29 @@ namespace TestRun.fonbet
             SwitchPageToBets();
 
             LogStage("Выбор событий в 12 ближ часов");
-            ClickWebElement(".//*[@class='events__filter _type_time']", "Меню времени в фильтре", "меню времени в фильтре");
+            ClickWebElement(".//*[@class='line-header__menu--GWd-F']/div[1]", "Меню времени в фильтре", "меню времени в фильтре");
             ClickWebElement(".//*[@id='popup']/li[6]", "Значение ближайших 12 часов", "значения ближайших 12 часов");
             if (WebElementExist(".//*[@class='table__empty table__flex-container']"))
                 throw new Exception("Нет событий чтобы выполнить тест");
 
             LogStage("Развернуть все дочерние события");
-            ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
+            ClickWebElement(".//*[@class='line-header__head--1D5p_']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
             ClickWebElement(".//*[@id='popup']/li[2]", "Графа разворота всех дочерних событий", "графы разоворота всех дочерних событий");
             if (!WebElementExist(".//*[@class='table__star _type_empty']"))
                 throw new Exception("Не работает развертка дочерних событий");
 
             LogStage("Свернуть все дочерние события");
-            ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
+            ClickWebElement(".//*[@class='line-header__head--1D5p_']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
             ClickWebElement(".//*[@id='popup']/li[3]", "Графа сворачивания всех дочерних событий", "графы сворачивания всех дочерних событий");
 
             LogStage("Развернуть все дополнительные пари");
-            ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
+            ClickWebElement(".//*[@class='line-header__head--1D5p_']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
             ClickWebElement(".//*[@id='popup']/li[4]", "Графа разворота всех дополнительных пари", "графы разоворота всех дополнительных пари");
             if (!WebElementExist(".//*[@class='table__match-title _type_with-details _indent_1 _state_expanded']"))
                 throw new Exception("Не работает развертка дополнительных пари");
 
             LogStage("Свернуть все дополнительные пари");
-            ClickWebElement(".//*[@class='page__line-header']//*[@class='events__head _page_line']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
+            ClickWebElement(".//*[@class='line-header__head--1D5p_']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
             ClickWebElement(".//*[@id='popup']/li[5]", "Графа сворачивания всех дополнительных пари", "графы сворачивания всех дополнительных пари");
 
         }

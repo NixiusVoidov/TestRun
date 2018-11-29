@@ -219,8 +219,10 @@ class NewsAndWinnerClub : FonbetWebProgram
             MakeDefaultSettings();
             LogStage("Проверка лайф событий");
             ClickWebElement("//*[@href='/#']", "Переход на главную", "перехода на главную");
-            ClickWebElement("//i[contains(@class,'supertop')]", "Иконка супертоп", "иконки супертоп");
             ClickWebElement("//div[contains(@class, 'top-event-selector__live')]", "Иконка Лайв", "иконки Лайв");
+            if (WebElementExist("//div[contains(@class,'top-event-list__smart--')]"))
+            driver.FindElements(By.XPath("//div[contains(@class,'top-event-list__smart--')]"))[0].Click();
+
             var scores = driver.FindElements(By.XPath("//div[contains(@class, 'top-event-item__score-container')]"));
             var events = driver.FindElements(By.XPath("//i[contains(@class,'icon_star')]"));
             if (scores.Count != events.Count)
@@ -238,12 +240,12 @@ class NewsAndWinnerClub : FonbetWebProgram
             // stars[0].Click();
             LogStartAction("Проверяем избранное");
             SwitchPageToBets();
-            ClickWebElement("//*[@class='events__filter _type_sport']", "Меню Все события", "меню Все события");
+            ClickWebElement("//div[contains(@class,'line-header__menu')]/div[2]", "Меню Все события", "меню Все события");
             ClickWebElement("//*[@href='#!/bets/favorites']", "Меню Избранное", "меню Избранное");
             if (driver.FindElements(By.XPath("//i[contains(@class,'icon_star')]")).Count != 1)
                 throw new Exception("В избранном линии больше чем 1 событие");
             SwitchPageToLive();
-            ClickWebElement("//*[@class='events__filter _type_sport']", "Меню Все события", "меню Все события");
+            ClickWebElement("//div[contains(@class,'line-header__menu')]/div", "Меню Все события", "меню Все события");
             Thread.Sleep(1000);
             ClickWebElement("//*[@href='#!/live/favorites']", "Меню Избранное", "меню Избранное");
             if (driver.FindElements(By.XPath("//i[contains(@class,'icon_star')]")).Count != 1)
@@ -264,7 +266,7 @@ class NewsAndWinnerClub : FonbetWebProgram
                 throw new Exception("Турниров больше одного");
 
             LogStartAction("Проверяем eventView");
-            var eventsName = driver.FindElements(By.XPath("//div[contains(@class,'top-event-item__title-teams')]/a"));
+            var eventsName = driver.FindElements(By.XPath("//div[contains(@class,'top-event-item__title-container')]/a"));
             eventsName[0].Click();
             if (!WebElementExist("//span[contains(@class,'back-button')]"))
                 throw new Exception("Не открыл eventView");
@@ -279,6 +281,8 @@ class NewsAndWinnerClub : FonbetWebProgram
 
             LogStartAction("Проверяем Подборки");
             ClickWebElement("//*[@data-sport='-1']/i", "Кнопка Подборки", "кнопки Подборки");
+            if(WebElementExist("//div[contains(@class,'top-event-selector__smart-icon-container')]"))
+                driver.FindElement(By.XPath("//div[contains(@class,'top-event-selector__smart-icon-container')]/span")).Click();
             if (!WebElementExist("//div[contains(@class,'top-event-list__smart-container')]"))
                 throw new Exception("На текущий момент нет подборок");
             Thread.Sleep(1000);

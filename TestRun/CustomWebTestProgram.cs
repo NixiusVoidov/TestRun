@@ -102,23 +102,21 @@ namespace TestRun
             }
             else if (Browser.Equals("FIREFOX", StringComparison.InvariantCultureIgnoreCase))
             {
-        //        FirefoxOptions profile = new FirefoxOptions();
-        //        profile.SetPreference("browser.download.folderList", 2);
-        //        profile.SetPreference("browser.download.manager.showWhenStarting", false);
-        //        profile.SetPreference("browser.helperApps.neverAsk.openFile", "text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml");
-        //        profile.SetPreference("browser.helperApps.neverAsk.saveToDisk",
-        //"text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml,application/json");
-        //        profile.SetPreference("webdriver.log.file", "C:\\Users\\User\\Downloads\\firefox.log");
-
-                //profile.SetPreference("browser.helperApps.alwaysAsk.force", false);
-                //profile.SetPreference("browser.download.manager.alertOnEXEOpen", false);
-                //profile.SetPreference("browser.download.manager.focusWhenStarting", false);
-                //profile.SetPreference("browser.download.manager.useWindow", false);
-                //profile.SetPreference("browser.download.manager.showAlertOnComplete", false);
-                //profile.SetPreference("browser.download.manager.closeWhenDone", false);
-                //Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-               // driver = new FirefoxDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), profile);
-                driver = new FirefoxDriver();
+                FirefoxOptions profile = new FirefoxOptions();
+                profile.SetPreference("browser.download.folderList", 2);
+                profile.SetPreference("browser.download.manager.showWhenStarting", false);
+                profile.SetPreference("browser.helperApps.neverAsk.openFile", "text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml");
+                profile.SetPreference("browser.helperApps.neverAsk.saveToDisk",
+        "text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml,application/json");
+                profile.SetPreference("browser.helperApps.alwaysAsk.force", false);
+                profile.SetPreference("browser.download.manager.alertOnEXEOpen", false);
+                profile.SetPreference("browser.download.manager.focusWhenStarting", false);
+                profile.SetPreference("browser.download.manager.useWindow", false);
+                profile.SetPreference("browser.download.manager.showAlertOnComplete", false);
+                profile.SetPreference("browser.download.manager.closeWhenDone", false);
+               
+                driver = new FirefoxDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), profile);
+              
 
 
             }
@@ -171,9 +169,8 @@ namespace TestRun
         {
             try
             {
-                PerformanceProfiler.Profiler.Start("FindWebElement");
-                IWebElement element = driver.FindElement(By.XPath(xPath));
-                PerformanceProfiler.Profiler.Stage("driver.FindElement(ByXPath)");
+                By xp = By.XPath(xPath);
+                IWebElement element = driver.FindElement(xp);
                 return element;
             }
             catch (Exception)
@@ -247,22 +244,17 @@ namespace TestRun
 
         protected void ClickWebElement(string xPath, string elementCaptionInNominative, string elementCaptionInGenitive)
         {
-            PerformanceProfiler.Profiler.Start("ClickWebElement");
+
             try
             {
                 By by = By.XPath(xPath);
-                PerformanceProfiler.Profiler.Stage("By.XPath");
                 LogStartAction(String.Format("Клик {0}", elementCaptionInGenitive));
-                PerformanceProfiler.Profiler.Stage("LogStartAction");
                 IWebElement element = driver.FindElement(by);
-                PerformanceProfiler.Profiler.Stage("driver.FindElement");
                 var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
                 wait.Until(ExpectedConditions.ElementToBeClickable(by));
-                PerformanceProfiler.Profiler.Stage("wait web driver");
                 element.Click();
-                PerformanceProfiler.Profiler.Stage("Element.Click");
                 LogActionSuccess();
-                PerformanceProfiler.Profiler.Stage("LogActionSuccess");
+              
 
             }
             catch (NoSuchElementException)

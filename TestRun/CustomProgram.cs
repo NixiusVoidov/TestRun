@@ -160,28 +160,32 @@ namespace TestRun
 
         protected void LogStartAction(string actionCaption)
         {
-            if (ActionStarted)
-                LogActionSuccess();
-            Console.Write(" ({0})\t {1}", ++ActionCounter, actionCaption);
-            ActionStarted = true;
 
-            CurrentStep = new ProgramStepReport
-            {
-                Time = DateTime.UtcNow,
-                Type = ProgramStepReportType.Step,
-                Text = actionCaption,
-                Index = ActionCounter
-            };
+           
+                if (ActionStarted)
+                    LogActionSuccess();
+                Console.Write(" ({0})\t {1}", ++ActionCounter, actionCaption);
+                ActionStarted = true;
 
-            Console.CursorLeft = Console.WindowWidth - 5;
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.BackgroundColor = ConsoleColor.Yellow;
-            Console.Write("[??]");
-            Console.ResetColor();
+                CurrentStep = new ProgramStepReport
+                {
+                    Time = DateTime.UtcNow,
+                    Type = ProgramStepReportType.Step,
+                    Text = actionCaption,
+                    Index = ActionCounter
+                };
+
+                Console.CursorLeft = Console.WindowWidth - 5;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.Write("[??]");
+                Console.ResetColor();
+                
         }
 
         protected void LogActionSuccess()
         {
+            
             if (ActionStarted)
             {
                 Console.CursorLeft = Console.WindowWidth - 5;
@@ -198,10 +202,12 @@ namespace TestRun
                     CurrentStep = null;
                 }
             }
+           
         }
 
         protected void LogStage(string stageCaption)
         {
+           
             if (ActionStarted)
                 LogActionSuccess();
             Console.ForegroundColor = ConsoleColor.White;
@@ -215,6 +221,7 @@ namespace TestRun
                 Type = ProgramStepReportType.Stage
             };
             Report.Steps.Add(step);
+           
         }
 
         protected void LogHint(string hintCaption)
