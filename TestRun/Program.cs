@@ -72,6 +72,8 @@ namespace TestRun
             CustomProgram.Register("fonbet_compressionmenu", fonbet.CompressionMenu.FabricateCompressionMenu); //Проверка шапки меню на сжатие
             CustomProgram.Register("fonbet_evlive", fonbet.EventViewLive.FabricateEventViewLive); //Функционал EventView в Лайв событиях
             CustomProgram.Register("fonbet_topthreeevents", fonbet.TopThreeEvents.FabricateTopThreeEvents); //Ставки из приоритетных событий линии и лайва с главной страницы
+            CustomProgram.Register("fonbet_searchbar", fonbet.SeachBar.FabricateSeachBar); //Модуль поиска
+
 
 
             CustomProgram.Register("backoffice_clientcontrol", backoffice.СlientControl.FabricateСlientControl);

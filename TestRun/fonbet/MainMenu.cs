@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
@@ -294,5 +296,164 @@ class NewsAndWinnerClub : FonbetWebProgram
 
         }
     }
+
+    class SeachBar : FonbetWebProgram
+    {
+        public static CustomProgram FabricateSeachBar()
+        {
+            return new SeachBar();
+        }
+
+        protected override bool NeedLogin()
+        {
+            return false;
+        }
+
+        public override void Run()
+        {
+            ClickWebElement("//*[@class='search__link']", "Кнопка Поиска в шапке", "кнопки Поиска в шапке");
+
+            LogStage("Проверка фильтров команд");
+            SendKeysToWebElement("//*[@id='search-component']/input", "Ф", "Поле поиска", "поля поиска");
+            var filterType =
+                driver.FindElements(
+                    By.XPath("//*[@id='search-filter']//div[contains(@class,'search-filter__item-header')]"));
+            if (filterType.Count != 3)
+            {
+                throw new Exception("Кол-во фильтров не равно 3ем");
+            }
+
+            SendKeysToWebElement("//*[@id='search-component']/input", "у", "Поле поиска", "поля поиска");
+            Thread.Sleep(1000);
+            if (driver.FindElements(
+                    By.XPath("//*[@id='search-filter']//div[contains(@class,'search-filter__item-header')]")).Count !=
+                2)
+            {
+                throw new Exception("Кол-во фильтров не равно 2м");
+            }
+
+            ClickWebElement("//*[@id='search-filter']/div[1]/*[@id='search-filter__item']", "1ая строка вида спорт",
+                "1ой строки вида спорта");
+            SendKeysToWebElement("//*[@id='search-component']/input", "л", "Поле поиска", "поля поиска");
+            Thread.Sleep(1000);
+            ClickWebElement("//*[@id='search-filter']/div[1]/*[@id='search-filter__item']", "1ая строка соревнования",
+                "1ой строки соревнования");
+
+            var eventNames = driver.FindElements(By.XPath("//a[contains(@class, 'search-result__event-name')]"));
+            string[] values = eventNames[0].Text.Split('—');
+            SendKeysToWebElement("//*[@id='search-component']/input", values[0], "Поле поиска", "поля поиска");
+            Thread.Sleep(1000);
+            if (driver.FindElements(
+                    By.XPath("//*[@id='search-filter']//div[contains(@class,'search-filter__item-header')]")).Count !=
+                1)
+            {
+                throw new Exception("Кол-во фильтров не равно 1у");
+            }
+
+            ClickWebElement("//*[@id='search-filter']/div[1]/*[@id='search-filter__item']",
+                "1ая строка фильтра по команде", "1ой строки  фильтра по команде");
+
+            LogStage("Проверка удаления фильтров и закртытия поиска");
+            var searchTagDelete =
+                driver.FindElements(
+                    By.XPath("//div[contains(@class,'search__tag-list')]//*[@id='search__tag-delete']"));
+            searchTagDelete[2].Click();
+            Thread.Sleep(1000);
+            if (driver.FindElements(By.XPath("//div[contains(@class,'search__tag-list')]//*[@id='search__tag-delete']"))
+                    .Count != 2)
+                throw new Exception("Не удалился серч тэг");
+
+            ClickWebElement(".//*[@id='search__input-delete']", "Крестик закрывающий поиск",
+                "крестика закрывающий поиск");
+            if (WebElementExist("//*[@id='search-container']"))
+                throw new Exception("Поиск не закрылся");
+
+            ClickWebElement("//*[@class='search__link']", "Кнопка Поиска в шапке", "кнопки Поиска в шапке");
+            WaitTillElementisDisplayed(driver, "//*[@id='search-component']/input", 15);
+            SendKeysToWebElement("//*[@id='search-component']/input", Keys.Escape, "Поле поиска", "поля поиска");
+            if (WebElementExist("//*[@id='search-container']"))
+                throw new Exception("Поиск не закрылся");
+
+            LogStage("Проверка на дублирование команд");
+            ClickWebElement("//*[@class='search__link']", "Кнопка Поиска в шапке", "кнопки Поиска в шапке");
+            SendKeysToWebElement("//*[@id='search-component']/input", Keys.Escape, "Поле поиска", "поля поиска");
+            ClickWebElement("//*[@class='search__link']", "Кнопка Поиска в шапке", "кнопки Поиска в шапке");
+            SendKeysToWebElement("//*[@id='search-component']/input", "сп", "Поле поиска", "поля поиска");
+
+            var allSports = driver.FindElements(By.XPath("//*[@class='search-filter__sport-header--QEFQi']"));
+            for (var i = 1; i <= allSports.Count; i++)
+            {
+                string dataSport = string.Format("//*[@id='search-filter']//*[@data-sport={0}]", i);
+                var eventValues = driver.FindElements(By.XPath(dataSport));
+                List<string> myCollection = new List<string>();
+                foreach (var team in eventValues)
+                {
+                    myCollection.Add(team.Text);
+                }
+
+                if (myCollection.Count != myCollection.Distinct().Count()) //проверка на дубликаты
+                {
+                    throw new Exception("В поиске выдает две одинаковые команды");
+                } 
+            }
+
+            LogStage("Проверка на дублирование фильтров");
+            SendKeysToWebElement("//*[@id='search-component']/input", "артак", "Поле поиска", "поля поиска");
+            Thread.Sleep(1000);
+            var allevents = driver.FindElements(By.XPath("//*[@id='search-filter__item']"));
+            List<string> myArr = new List<string>();
+            foreach (var a in allevents)
+            {
+                myArr.Add(a.Text);
+            }
+           string maxLenthTeam = myArr.OrderByDescending(s => s.Length).First();
+            ClearBeforeInput("//*[@id='search-component']/input");
+            SendKeysToWebElement("//*[@id='search-component']/input", maxLenthTeam, "Поле поиска", "поля поиска");
+            ClickWebElement("//*[@id='search-filter']/div[1]/*[@id='search-filter__item']",
+                "1ая строка фильтра по команде", "1ой строки  фильтра по команде");
+            SendKeysToWebElement("//*[@id='search-component']/input", maxLenthTeam, "Поле поиска", "поля поиска");
+            Thread.Sleep(1000);
+            if(WebElementExist("//*[@id='search-filter']"))
+                throw new Exception("Идет дублирование фильтров");
+
+            LogStage("Проверка поиска по номеру события и отображение лайв события");
+            ClickWebElement("//*[@id='settings-popup']","Кнопка настроек сайта", "кнопки Настроек сайта");
+            ClickWebElement("//*[@class='settings__rows']/div[1]//input", "Чекбокс отображать номера событий", "чекбокса отображать номера событий");
+            ClickWebElement("//*[@class='settings__head']/a", "Крестик закрыть меню настроек", "крестика закрыть меню настроек");
+            SwitchPageToLive();
+
+            var eventNumber = driver.FindElement(By.XPath("//table/tbody[1]/tr[2]/td[2]/div[1]/span")).Text;
+            var eventName = driver.FindElement(By.XPath("//table/tbody[1]/tr[2]/td[2]/div[1]/a")).Text;
+            var eventScore = driver.FindElement(By.XPath("//table/tbody[1]/tr[2]/td[2]/div[2]/*[@class='table__score']/span")).Text;
+            var eventFlag = driver.FindElement(By.XPath("//table/tbody[1]/tr[1]/th[1]/div/span[2]")).GetAttribute("style");
+            ClickWebElement("//*[@class='search__link']", "Кнопка Поиска в шапке", "кнопки Поиска в шапке");
+            WaitTillElementisDisplayed(driver, "//*[@id='search-component']/input", 15);
+            SendKeysToWebElement("//*[@id='search-component']/input", eventNumber, "Поле поиска", "поля поиска");
+            if(driver.FindElement(By.XPath("//*[@class='search-result__item--lp1SU']/div[1]//span")).GetAttribute("style")!=eventFlag)
+                throw new Exception("Неправильный флаг в выдаче");
+            if (driver.FindElement(By.XPath("//*[@class='search-result__item--lp1SU']/div[2]/a")).Text != eventName)
+                throw new Exception("Неправильное имя события");
+            if (driver.FindElement(By.XPath("//*[@class='search-result__item--lp1SU']/div[2]//div[contains(@class,'search-result__event-score')]")).Text.Replace(" ", string.Empty) != eventScore)
+                throw new Exception("Неправильный счет в поиске");
+
+            LogStage("Проверка eventView");
+            ClickWebElement("//*[@class='search-result--3VqTJ']//a",
+                "Строка с событием", "строки с событием");
+            if(!WebElementExist(".//*[@class='ev-scoreboard__event-logo--3hMJr']"))
+                throw new Exception("Не открылся eventView");
+            ClickWebElement(".//*[@class='ev-scoreboard__back-button--4V1iz']", "Кнопка \"Назад\"", "кнопки \"Назад\"");
+
+            LogStage("Проверка eng выдачи");
+
+
+            ClickWebElement("//*[@class='header__lang-set']//i", "Иконка выбора языка", "иконки выбора языка");
+            ClickWebElement("//*[@class='header__lang-list _state_visible']/a[2]", "Иконка англ языка", "иконки англ языка");
+            ClickWebElement("//*[@class='search__link']", "Кнопка Поиска в шапке", "кнопки Поиска в шапке");
+            SendKeysToWebElement("//*[@id='search-component']/input", "foot", "Поле поиска", "поля поиска");
+            if(driver.FindElement(By.XPath("//*[@id='search-filter__item']")).Text!="Football")
+                throw new Exception("Нет выдачи на англ");
+        }
+    }
+
 
 }

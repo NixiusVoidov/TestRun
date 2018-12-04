@@ -2,7 +2,7 @@
   "profiles": {
     "TestRun": {
       "commandName": "Project",
-      "commandLineArgs": "fonbet_broadcast"
+      "commandLineArgs": "fonbet_searchbar"
     }
   }
 }
