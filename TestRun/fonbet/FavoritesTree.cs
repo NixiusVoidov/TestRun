@@ -203,6 +203,10 @@ namespace TestRun.fonbet
             {
                 LogStage(String.Format("Проверка фильтра \"{0}\"", item.Value));
                 TimeFilterChecker(item.Key, item.Value);
+                ClickWebElement("//*[@class='line-header__menu--GWd-F']//div[contains(@class, 'type_sport')]","Дропдаун весь спорт","Дропдауна Весь спорт");
+                if(!WebElementExist("//*[@id='popup']"))
+                    throw new Exception("Не открылось меню весь спорт");
+
             }
             
             LogStage("Проверка работы скрола в меню фильтра");

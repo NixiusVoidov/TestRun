@@ -2,6 +2,7 @@
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -170,7 +171,7 @@ namespace TestRun
          // Метод открывает фильтр событий
         protected void OpenBetsEventFilter()
         {
-            LogStage("Открытие фильтра событий");
+            LogStage("Открытие фильтра событий в линии");
             ClickWebElement("//div[contains(@class,'line-header__menu')]/div[2]", "Фильтр событий", "фильтра событий");
         }
 
@@ -826,6 +827,7 @@ namespace TestRun
                 if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-processstate").Equals(process) && messageData.GetAttribute("data-rejectioncode").Equals(rejcode)))
                     throw new Exception("Неверная обработка ошибки");
             }
+           
             if (smsValue != "0")
                 ClickWebElement(".//*[@class='reg-v4__error-buttons--1X_YP']", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
             if (smsValue == "2")

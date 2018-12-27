@@ -42,7 +42,7 @@ namespace TestRun.fonbet
             LogStage("Проверка чекбокса Только текущие");
             ClickWebElement(".//*[@class='all_menu results__menu']/div[2]/div[2]//input", "Чекбокс \"Только текущие\"", "чекбокса \"Только текущие\"");
             IList<IWebElement> live = driver.FindElements(By.XPath(".//*[@class='table__label _style_green']")); //все элементы с припиской ЛАЙФ
-            IList<IWebElement> allgrid = driver.FindElements(By.XPath(".//*[@class='table__time']/span[2]")); // все элементы на странице
+            IList<IWebElement> allgrid = driver.FindElements(By.XPath(".//*[@class='table__time']/span")); // все элементы на странице
             if (live.Count != allgrid.Count)
                 throw new Exception("Чекбокс только текущие -  не работает");
 
@@ -58,7 +58,6 @@ namespace TestRun.fonbet
             LogStage("Проверка логаута");
             ClickWebElement(".//*[@class='header__login-head']/div[1]", "ФИО в шапке", "ФИО в шапке");
             ClickWebElement(".//*[@id='popup']/li[last()]", "Кнопка Выйти из аккаунта", "кнопки выйти из аккаунта");
-            WaitTillElementisDisplayed(driver, ".//*[@class='header__login-head']/a", 5);
             Thread.Sleep(1500);
             IWebElement loginButton = GetWebElement(".//*[@class='header__login-head']/a", "Нет кнопки логина");
             string bloginButtonClass = loginButton.GetAttribute("class");

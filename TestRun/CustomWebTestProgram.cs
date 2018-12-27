@@ -232,6 +232,7 @@ namespace TestRun
             driver.FindElement(By.XPath(xpath)).SendKeys(Keys.Delete);
             Thread.Sleep(1000);
             wait.Until(drv => drv.FindElement(By.XPath(xpath))).GetAttribute("value").Equals("");
+            Thread.Sleep(1000);
         }
 
         protected IWebElement GetWebElement(string xPath, string errorIfNotExists)

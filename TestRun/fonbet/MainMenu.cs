@@ -201,20 +201,6 @@ class NewsAndWinnerClub : FonbetWebProgram
         //    return false;
         //}
 
-        private bool IsElementPresent(By by)
-        {
-            try
-            {
-                driver.FindElements(by);
-                return true;
-            }
-            catch (NoSuchElementException)
-            {
-                Console.WriteLine("error!");
-                return false;
-            }
-        }
-
         public override void Run()
         {
             base.Run();
@@ -222,8 +208,24 @@ class NewsAndWinnerClub : FonbetWebProgram
             LogStage("Проверка лайф событий");
             ClickWebElement("//*[@href='/#']", "Переход на главную", "перехода на главную");
             ClickWebElement("//div[contains(@class, 'top-event-selector__live')]", "Иконка Лайв", "иконки Лайв");
-            if (WebElementExist("//div[contains(@class,'top-event-list__smart--')]"))
+            if (WebElementExist("//div[contains(@class,'top-event-list__smart--')]")) //если попали на подборки, то кликаем
             driver.FindElements(By.XPath("//div[contains(@class,'top-event-list__smart--')]"))[0].Click();
+
+            LogStartAction("Проверка МЦ");
+            driver.FindElements(By.XPath("//div[contains(@class,'top-event-tv__container-')]/div[1]"))[0].Click(); //проверка МЦ
+            if (WebElementExist("//*[@class='tv__head']"))
+            {
+                LogHint("МЦ открылся");
+            }
+            else if(WebElementExist(".//*[@id='app']"))
+            {
+                LogHint("МЦ открылся");
+            }
+            else
+            {
+                throw new Exception("МЦ не открывается");
+            }
+                LogActionSuccess();
 
             var scores = driver.FindElements(By.XPath("//div[contains(@class, 'top-event-item__score-container')]"));
             var events = driver.FindElements(By.XPath("//i[contains(@class,'icon_star')]"));
@@ -231,7 +233,7 @@ class NewsAndWinnerClub : FonbetWebProgram
                 throw new Exception("Мы не на лайве");
             LogStage("Проверка попадание в избранное");
             LogStartAction("Выбираем событие из лайва");
-            events[1].Click();
+            events[0].Click();
             ClickWebElement("//div[contains(@class, 'top-event-selector__live')]", "Иконка Лайв", "иконки Лайв");
             LogStartAction("Выбираем событие из линии");
             ClickWebElement("//*[@data-sport='1']/i", "Иконка Футбола", "иконки Футбола");

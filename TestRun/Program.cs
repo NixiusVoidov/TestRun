@@ -102,7 +102,7 @@ namespace TestRun
             program.ReadParamsFromJson(jsonText);
 
             // Читаем настройки из параметров командной строки.
-            for(int paramIndex = 1; paramIndex < args.Length; paramIndex++)
+            for (int paramIndex = 1; paramIndex < args.Length; paramIndex++)
             {
                 string str = args[paramIndex];
                 string[] values = str.Split('=');
@@ -131,7 +131,7 @@ namespace TestRun
             FabricateProgram programFabric = CustomProgram.FindProgram(data.program);
             try
             {
-                
+
                 if (programFabric == null)
                     throw new Exception(String.Format("Программа {0} не найдена", data.program));
                 CustomProgram program = programFabric();
@@ -162,7 +162,7 @@ namespace TestRun
                     }
                     catch (Exception e)
                     {
-                        
+
                         program.Report.Success = false;
                         program.Report.ErrorText = e.Message;
                         program.OnError(e);
@@ -236,89 +236,90 @@ namespace TestRun
                 MainLooped(args);
             }
             else
-            try
-            {
-                   
-                    // Понять какой тест запускать
-                    if (args.Length == 0)
-                    throw new Exception("Неуказана программа первым параметром командной строки.");
-
-                string programName = args[0];
-
-                Console.Write("\nИнициализация программы {0}...", programName);
-
-                FabricateProgram programFabric = CustomProgram.FindProgram(programName);
-                if (programFabric == null)
-                    throw new Exception(String.Format("Программа {0} неопределена.", programName));
-                // Создаем тест
-                CustomProgram program = programFabric();
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("[OK]");
-                Console.ResetColor();
-                // Передать параметры
-                ApplyParams(program, args);
-
-                program.VerifyParameters();
-                program.WriteParametersToReport();
-
-                // Запустить тест
                 try
                 {
-                    program.Report.ProgramName = programName;
-                    program.Report.StartTime = DateTime.UtcNow;
 
-                    Console.WriteLine(" - Предпусковая подготовка...");
-                    program.BeforeRun();
-                    Console.WriteLine(" - Выполнение...");
-                    program.Run();
-                    program.Report.Success = true;
-                    // Передать результат
-                    
-                }
-                catch (Exception exception)
-                {
-                    program.Report.Success = false;
-                    program.Report.ErrorText = exception.Message;
-                    program.OnError(exception);
-                    throw;
-                }
-                finally
-                {
-                    Console.WriteLine(" - Завершение...");
+                    // Понять какой тест запускать
+                    if (args.Length == 0)
+                        throw new Exception("Неуказана программа первым параметром командной строки.");
+
+                    string programName = args[0];
+
+                    Console.Write("\nИнициализация программы {0}...", programName);
+
+                    FabricateProgram programFabric = CustomProgram.FindProgram(programName);
+                    if (programFabric == null)
+                        throw new Exception(String.Format("Программа {0} неопределена.", programName));
+                    // Создаем тест
+                    CustomProgram program = programFabric();
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("[OK]");
+                    Console.ResetColor();
+                    // Передать параметры
+                    ApplyParams(program, args);
+
+                    program.VerifyParameters();
+                    program.WriteParametersToReport();
+
+                    // Запустить тест
                     try
                     {
-                        program.AfterRun();
+                        program.Report.ProgramName = programName;
+                        program.Report.StartTime = DateTime.UtcNow;
+
+                        Console.WriteLine(" - Предпусковая подготовка...");
+                        program.BeforeRun();
+                        Console.WriteLine(" - Выполнение...");
+                        program.Run();
+                        program.Report.Success = true;
+                        // Передать результат
+
+                    }
+                    catch (Exception exception)
+                    {
+                        program.Report.Success = false;
+                        program.Report.ErrorText = exception.Message;
+                        program.OnError(exception);
+                        throw;
                     }
                     finally
                     {
-                        program.Report.FinishTime = DateTime.UtcNow;
-                        string report = program.ReportText();
+                        Console.WriteLine(" - Завершение...");
                         try
                         {
-                            Console.WriteLine("Отправка отчета");
-                            ProjectManagerWebClient.SendReport(program.Report);
-                        } catch (Exception)
-                        {
-                            // stub
+                            program.AfterRun();
                         }
-                        Console.WriteLine("Сохранение отчета в файл lastresult.json");
-                        File.WriteAllText(@"lastReport.json", report);
+                        finally
+                        {
+                            program.Report.FinishTime = DateTime.UtcNow;
+                            string report = program.ReportText();
+                            try
+                            {
+                                Console.WriteLine("Отправка отчета");
+                                ProjectManagerWebClient.SendReport(program.Report);
+                            }
+                            catch (Exception)
+                            {
+                                // stub
+                            }
+                            Console.WriteLine("Сохранение отчета в файл lastresult.json");
+                            File.WriteAllText(@"lastReport.json", report);
+                        }
                     }
+
                 }
-                    
+                catch (Exception e)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.BackgroundColor = ConsoleColor.Yellow;
+                    Console.Write("\n\n [!] ");
+                    Console.ResetColor();
+                    Console.WriteLine(" Ошибка выполнения - {0}", e.Message);
                 }
-            catch (Exception e)
-            {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.BackgroundColor = ConsoleColor.Yellow;
-                Console.Write("\n\n [!] ");
-                Console.ResetColor();
-                Console.WriteLine(" Ошибка выполнения - {0}", e.Message);
-            }
-            finally
-            {
-                Console.ResetColor(); 
-            }
+                finally
+                {
+                    Console.ResetColor();
+                }
         }
     }
 }

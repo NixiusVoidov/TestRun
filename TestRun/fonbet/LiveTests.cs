@@ -16,70 +16,7 @@ namespace TestRun.fonbet
             return new BroadCastCheck();
         }
 
-        //public  void Lol()
-        //{
-        //    driver = new FirefoxDriver();
-        //    driver.Navigate().GoToUrl("http://fonred5051.dvt24.com/#!/");
-        //    driver.Manage().Window.Maximize();
-        //    driver.FindElementWait(By.XPath(".//*[@class='header__login-head']/a"), 11).Click();
-        //    driver.FindElementWait(By.XPath(".//*[@class='login-form__form']/div[1]/input"), 11).SendKeys("11");
-        //    driver.FindElementWait(By.XPath(".//*[@class='login-form__form']/div[2]/input"), 11).SendKeys("ueueue11");
-        //    driver.FindElementWait(By.XPath(".//*[@class='login-form__form-row _right']/div[2]/button"), 11).Click();
-        //    driver.FindElementWait(By.XPath(".//*[@id='settings-popup']"), 6).Click();
-        //    driver.FindElementWait(By.XPath(".//*[@class='settings__restore-btn']"), 6).Click();
-        //    LogStage("Установка настроек по умолчанию");
-        //    driver.FindElement(By.XPath(".//*[@id='settings-popup']")).Click();
-        //    driver.FindElement(By.XPath(".//*[@class='settings__restore-btn']")).Click();
-        //    driver.FindElement(By.XPath(".//*[@class='settings__head']/a")).Click();
-        //    LogActionSuccess();
-
-        //    LogStage("Переход в Лайф");
-        //    driver.FindElement(By.XPath(".//*[@href='/#!/live']")).Click();
-
-
-        //    LogStage("Выбор трансляции");
-        //    driver.FindElement(By.XPath("//div[contains(@class,'line-header__menu')]/div[1]")).Click();
-        //    driver.FindElement(By.XPath("//*[@href='#!/live/broadcast']")).Click();
-        //    IList<IWebElement> grid = driver.FindElements(By.XPath("//*[@class='icon _type_normal _size_17 _icon_channel-external']")); //все элементы с иконками трансляций 1ого типа
-        //    grid[1].Click();
-
-        //    LogStage("Проверка что трансляция открывается в новом окне");
-        //    var popup = driver.WindowHandles[1];
-        //    if (string.IsNullOrEmpty(popup))
-        //        throw new Exception("Не открылась запись в новом окне");
-        //    driver.SwitchTo().Window(driver.WindowHandles[0]);
-        //    driver.SwitchTo().Window(driver.WindowHandles[1]);
-        //    if (!(driver.Title.Contains("YouTube") || driver.Title.Contains("Twitch")))
-        //        throw new Exception("Ссылка ведет не ютуб или не твич");
-        //    driver.SwitchTo().Window(driver.WindowHandles[1]).Close();
-        //    driver.SwitchTo().Window(driver.WindowHandles[0]);
-
-        //    LogStage("Проверка встроенной трансляции");
-        //    IList<IWebElement> tv = driver.FindElements(By.XPath("//*[@class='table__channels'][2]/div")); //все элементы с иконками трансляций 2ого типа
-        //    tv[1].Click();
-        //    if (!WebElementExist(".//*[@class='tv']"))
-        //        throw new Exception("Не работает встронный экран в фрейме с купонами");
-        //    driver.FindElement(By.XPath(".//*[@class='tv__action _type_close']")).Click();
-
-        //    LogStage("Проверка клика на заблокированное событие");
-        //    if (WebElementExist(".//*[@class='table__col _type_btn _state_blocked']"))
-        //    {
-        //        IList<IWebElement> list = driver.FindElements(By.XPath(".//*[@class='table__col _type_btn _state_blocked']")); //все заблокированные события
-        //        list[0].Click();
-        //        if (WebElementExist(".//*[@class='coupons']/div[1]//*[@class='coupon__title']"))
-        //            throw new Exception("Можно кликнуть на заблокированное событие");
-        //    }
-
-        //    LogStage("Проверка трансляции неавторизованным пользователем");
-        //    driver.FindElement(By.XPath("//*[@class='header__item header__login']/div/div[1]")).Click();
-        //    driver.FindElement(By.XPath(".//*[@id='popup']/li[last()]")).Click();
-        //    IList<IWebElement> tv2 = driver.FindElements(By.XPath("//*[@class='table__channels'][2]/div")); //все элементы с иконками трансляций 2ого типа
-        //    tv2[1].Click();
-        //    if (!WebElementExist(".//*[@class='tv']"))
-        //        throw new Exception("Не работает встронный экран в фрейме с купонами");
-        //    driver.FindElement(By.XPath(".//*[@class='tv__action _type_close']")).Click();
-
-        //}
+        
         public override void Run()
         {
             base.Run();
@@ -90,7 +27,7 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@href='/#!/live']", "Вкладка \"Лайв\"", "вкладки \"Лайв\"");
 
             LogStage("Выбор трансляции");
-            OpenBetsEventFilter();
+            ClickWebElement("//div[contains(@class,'line-header__menu')]/div", "Фильтр событий", "фильтра событий");
             ClickWebElement("//*[@href='#!/live/broadcast']", "Меню \"Трансляции\"", "меню \"Трансляции\"");
             IList<IWebElement> grid = driver.FindElements(By.XPath("//*[@class='icon _type_normal _size_17 _icon_channel-external']")); //все элементы с иконками трансляций 1ого типа
             grid[1].Click();
@@ -196,7 +133,12 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='table__match-title-text']", "Событие из грида", "события из грида");
             ClickWebElement("//div[contains(@class, 'ev-scoreboard__channel--2wTx7')]", "Кнопка трансляции", "кнопки трансляции");
             if (!WebElementExist(".//*[@class='tv']"))
-                throw new Exception("Событие не добавилось в избранное");
+                throw new Exception("Не открылся телевизор");
+            ClickWebElement("//a[contains(@href, 'sportradar')]", "Кнопка СпортРадар", "кнопки СпортРадар");
+            var popup = driver.WindowHandles[1];
+            if (string.IsNullOrEmpty(popup))
+                throw new Exception("Не открылся спортрадар в новом окне");
+            driver.SwitchTo().Window(driver.WindowHandles[0]);
             LogActionSuccess();
 
             LogStartAction("Проверяем возврат на предыдущий шаг");
