@@ -69,40 +69,49 @@ namespace TestRun.fonbet
         {
             ExecuteJavaScript("window.location.reload()", "Дж скрипт тупит");
             Thread.Sleep(4000);
-            IJavaScriptExecutor jse = (IJavaScriptExecutor)driver;
+            IJavaScriptExecutor jse = (IJavaScriptExecutor) driver;
             jse.ExecuteScript("document.getElementsByClassName('home-slider__switch-wrap')[0].style.opacity = 1");
             if (!WebElementExist(".//*[@class='home-slider__switch-wrap']/div[1]"))
                 throw new Exception("На главной странице нет слайдера");
 
             LogStage("Проверка переключения слайдера по кнопкам");
             IWebElement slider = driver.FindElement(By.XPath(".//*[@class='home-slider']"));
-            ClickWebElement(".//*[@class='home-slider__switch-wrap']/div[1]", "Кнопка первой страницы слайдера", "кнопки первой страницы слайдера");
+            ClickWebElement(".//*[@class='home-slider__switch-wrap']/div[1]", "Кнопка первой страницы слайдера",
+                "кнопки первой страницы слайдера");
             var sliderButton = GetWebElement(".//*[@class='home-slider__switch-wrap']/div[1]", "Нет кнопки у слайдера");
             var sliderButtonClass = sliderButton.GetAttribute("class");
             if (!sliderButtonClass.Contains("selected"))
                 throw new Exception("Проблемы со слайдером на главной странице");
-            ClickWebElement(".//*[@class='home-slider__switch-wrap']/div[2]", "Кнопка второй страницы слайдера", "кнопки второй страницы слайдера");
-            var sliderSecondButton = GetWebElement(".//*[@class='home-slider__switch-wrap']/div[2]", "У слайдера только одна кнопка");
+            ClickWebElement(".//*[@class='home-slider__switch-wrap']/div[2]", "Кнопка второй страницы слайдера",
+                "кнопки второй страницы слайдера");
+            var sliderSecondButton = GetWebElement(".//*[@class='home-slider__switch-wrap']/div[2]",
+                "У слайдера только одна кнопка");
             var sliderSecondButtonClass = sliderSecondButton.GetAttribute("class");
             if (!sliderSecondButtonClass.Contains("selected"))
                 throw new Exception("Проблемы со слайдером на главной странице");
 
             LogStage("Проверка ставки через слайдер");
-            ClickWebElement(".//*[@class='home-slider__bets']/div[1]", "Модуль ставки на странице слайдера", "модуля ставки на странице сладера");
-            if (!WebElementExist(".//*[@class='authorization__inner']"))
-                throw new Exception("Не появилось окно авторизации");
+            ClickWebElement(".//*[@class='home-slider__bets']/div[1]", "Модуль ставки на странице слайдера",
+                "модуля ставки на странице сладера");
+            if (WebElementExist(".//*[@class='authorization__inner']"))
+                throw new Exception("Появилось окно авторизации");
+            ClickWebElement("//div[contains(@class,'coupon__foot')]//a", "Кнопка Заключить пари",
+                "кнопки Заключить пари");
             SendKeysToWebElement(".//*[@class='login-form__form']/div[1]/input", Login, "поле логина", "поля логина");
-            SendKeysToWebElement(".//*[@class='login-form__form']/div[2]/input", Password, "поле пароля", "поля пароля");
-            ClickWebElement(".//*[@class='login-form__form-row _right']/div[2]/button", "Кнопка логина", "кнопки логина");
+            SendKeysToWebElement(".//*[@class='login-form__form']/div[2]/input", Password, "поле пароля",
+                "поля пароля");
+            ClickWebElement(".//*[@class='login-form__form-row _right']/div[2]/button", "Кнопка логина",
+                "кнопки логина");
             Thread.Sleep(4000);
-            jse.ExecuteScript("document.getElementsByClassName('home-slider__switch-wrap')[0].style.opacity = 1");
-            ClickWebElement(".//*[@class='home-slider__switch-wrap']/div[2]", "Кнопка второй страницы слайдера", "кнопки второй страницы слайдера");
-            ClickWebElement(".//*[@class='home-slider__bets']/div[1]", "Модуль ставки на странице слайдера", "модуля ставки на странице сладера");
-            if (!WebElementExist(".//*[@class='coupons']/div[1]//*[@class='coupon__title']"))
-                throw new Exception("Не появилась новая ставка");
+            if (!WebElementExist("//*[@class='coupons__list-inner']/article/div[1]"))
+                throw new Exception("Не сохранился набраный купон");
+
+            LogStage("Проверка перехода в eventView");
+            ClickWebElement("//*[@class='home-slider__event-link']", "Баннер ставки дня", "баннера ставки дня");
+            if(!WebElementExist("//div[contains(@class,'ev-scoreboard--')]"))
+                throw new Exception("Не перешел в eventView");
 
         }
-       
     }
    
 class NewsAndWinnerClub : FonbetWebProgram

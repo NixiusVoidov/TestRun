@@ -291,10 +291,31 @@ namespace TestRun.backoffice
             SendKeysToWebElement(".//*[@class='tabs__content-inner _state_visible']//textarea", "AutoTestAdditionalInfo", "Поле Комментарий к изменениями", "поля Комментарий к изменениями");
             ClickWebElement(".//*[button]//*[text()='Сохранить']", "Кнопка Сохранить", "кнопки Сохранить");
         }
+        protected void ProfileTab()
+        {
+            LogStage("Проверка работы вкладки Профиль");
+            ClickWebElement(".//*[@class='tabs__nav'][2]", "Вкладка Профиль", "вкладки Профиль");
+            ClickWebElement(".//*[@class='tabs__content-inner _state_visible']//*[text()='Редактировать']", "Кнопка Редактировать", "кнопки Редактировать");
+            SendKeysToWebElement("//*[@class='ui__field-inner']/textarea", "здесь был автотест", "Комментарий к изменениям", "Комментария к изменениям");
+            if(!driver.FindElement(By.XPath("//*[@class='toolbar__item']/button")).GetAttribute("class").Contains("state_disabled"))
+             throw new Exception("Активна кнопка Сохранить без изменений");
+
+            var spamCheckbox = GetWebElement("//*[@class='form__col-wide']/form/div[1]//input"," Чекбокс на согласие с рассылками");
+            if (!spamCheckbox.GetAttribute("class").Contains("_state_checked")) 
+            ClickWebElement("//*[@class='form__col-wide']/form/div[1]//input", "Чекбокс на согласие с рассылками", "чекбокса на согласие с рассылками");
+            if (driver.FindElement(By.XPath("//*[@class='form__col-wide']/form/div[2]/div/div[3]//input")).GetAttribute("checked")==null)
+            {
+                ClickWebElement("//*[@class='form__col-wide']/form/div[2]/div/div[3]//input", "Радиобатан рассылка по email", "Радиобатана рассылка по email");
+            }
+            if (!driver.FindElement(By.XPath("//*[@class='toolbar__item']/button")).GetAttribute("class").Contains("state_disabled"))
+                ClickWebElement("//*[@class='toolbar__item']/button", "Кнопка Сохранить", "кнопки Сохранить");
+
+        }
+
         protected void OperationTab()
         {
             LogStage("Проверка работы вкладки Операции");
-            ClickWebElement(".//*[@class='tabs__nav'][2]", "Вкладка Операции", "вкладки Операции");
+            ClickWebElement(".//*[@class='tabs__nav'][3]", "Вкладка Операции", "вкладки Операции");
             ClickWebElement(".//*[@class='toolbar__item']//*[text()='Загрузить ещё']", "Кнопка Загрузить еще", "кнопки Загрузить еще");
             Thread.Sleep(1000);
             IWebElement countSearch= GetWebElement(".//*[@class='clients__operations-toolbar-row']/span/span","Не отображается число операций");
@@ -332,13 +353,11 @@ namespace TestRun.backoffice
         protected void FreeBet()
         {
             LogStage("Проверка работы вкладки Фрибет");
-            ClickWebElement(".//*[@class='tabs__nav'][4]", "Фильтр Фрибеты", "фильтр Фрибеты");
-            WaitTillElementisDisplayed(driver, ".//*[@class='toolbar__item']//*[text()='Добавить']", 5);
+            ClickWebElement(".//*[@class='tabs__nav'][5]", "Фильтр Фрибеты", "фильтр Фрибеты");
             ClickWebElement(".//*[@class='toolbar__item']//*[text()='Добавить']", "Кнопка Добавить", "кнопка Добавить");
             SendKeysToWebElement(".//*[text()='СУММА']/..//input", "500", "Поле Сумма фрибета", "поля Сумма фрибета");
             SendKeysToWebElement(".//*[text()='Комментарий']/..//textarea", "test comment", "Поле Комменнтарий", "поля Сумма фрибета");
             ClickWebElement(".//*[text()='Добавить']", "Кнопка Добавить", "кнопка Добавить");
-            ElementIsClickable(By.XPath(".//*[@class='cl']/div[1]//*[text()='удалить']"));
            
             ClickWebElement(".//*[@class='cl']/div[1]//*[text()='удалить']", "Кнопка Удалить", "кнопка Удалить");
             Thread.Sleep(500);
@@ -362,14 +381,7 @@ namespace TestRun.backoffice
                 ClickWebElement(".//*[@id='js-toolbar']/div[2]/div/div[1]", "Кнопка Показывать только активные", "кнопки Показывать только активные");
         }
 
-        public static Func<IWebDriver, IWebElement> ElementIsClickable(By locator)
-        {
-            return driver =>
-            {
-                var element = driver.FindElement(locator);
-                return (element != null && element.Displayed && element.Enabled) ? element : null;
-            };
-        }
+       
     }
     
 }

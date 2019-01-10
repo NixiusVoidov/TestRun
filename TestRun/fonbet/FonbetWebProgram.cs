@@ -698,7 +698,7 @@ namespace TestRun
                 Thread.Sleep(500);
                 SendKeysToWebElement(".//*[@class='reg-v4__form-bottom--3bcYA']//input", "1", "Поле Капча", "поля Капча");
                 ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']//button", "Кпонка Далее", "кпонки Далее");
-                ClickWebElement(".//*[@class='toolbar__item reg-v4__resend-sms--3aJCm']/button", "Кпонка Изменить номер телефона", "кпонки Изменить номер телефона");
+                ClickWebElement(".//*[@class='toolbar__item']/div/a", "Кпонка Изменить номер телефона", "кпонки Изменить номер телефона");
                 return;
             }
             Thread.Sleep(500);
@@ -831,7 +831,7 @@ namespace TestRun
             if (smsValue != "0")
                 ClickWebElement(".//*[@class='reg-v4__error-buttons--1X_YP']", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
             if (smsValue == "2")
-                ClickWebElement(".//*[@class='toolbar__item reg-v4__resend-sms--3aJCm']/button", "Кнопка Изменить номер телефона", "кнопки Изменить номер телефона");
+                ClickWebElement(".//*[@class='toolbar__item']/div/a", "Кнопка Изменить номер телефона", "кнопки Изменить номер телефона");
             
              //  ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']//button", "Кпонка Продолжить", "кпонки Продолжить");
             if (smsValue == "3" || smsValue == "4")

@@ -207,7 +207,7 @@ namespace TestRun
                         wait.Until(drv => drv.FindElement(By.XPath(xpath)));
 
                     }
-                    elementDisplayed = driver.FindElement(By.XPath(xpath)).Displayed;
+                    elementDisplayed = driver.FindElement(By.XPath(xpath)).Displayed && driver.FindElement(By.XPath(xpath)).Enabled;
                 }
                 catch
                 {
@@ -251,8 +251,12 @@ namespace TestRun
                 By by = By.XPath(xPath);
                 LogStartAction(String.Format("Клик {0}", elementCaptionInGenitive));
                 IWebElement element = driver.FindElement(by);
-                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
-                wait.Until(ExpectedConditions.ElementToBeClickable(by));
+                WaitTillElementisDisplayed(driver, xPath, 10);
+                //var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+                //wait.Until(ExpectedConditions.ElementToBeClickable(by));
+                //wait.Until(drv => drv.FindElement(by));
+                
+                
                 element.Click();
                 LogActionSuccess();
               

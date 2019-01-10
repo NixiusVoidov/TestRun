@@ -11,10 +11,7 @@ namespace TestRun.fonbet
 {
     class BetsSettings : FonbetWebProgram
     {
-        public static  CustomProgram FabricateBetsSettings()
-        {
-            return new BetsSettings();
-        }
+        public static CustomProgram FabricateBetsSettings() => new BetsSettings();
 
         public override void Run()
         {
@@ -29,18 +26,18 @@ namespace TestRun.fonbet
             //Выбор ставки из грида
             SwitchPageToBets();
             Thread.Sleep(1500);
-            IList<IWebElement> events = driver.FindElements(By.XPath(".//*[@class='table']/tbody//td[5]"));
-            events[6].Click();
+            IList<IWebElement> events = driver.FindElements(By.XPath(".//*[@class='table']/tbody//td[5][@class='table__col _type_btn _type_normal']"));
+            events[0].Click();
             WaitTillElementisDisplayed(driver, "//div[contains(@class, 'coupon__foot-sum')]/input", 5);
             ClearBeforeInput("//div[contains(@class,'coupon__foot-sum')]/input");
             SendKeysToWebElement("//div[contains(@class, 'coupon__foot-sum')]/input", "99", "поле ввода значения ставки", "поля ввода значения ставки");
             Thread.Sleep(1000);
             ClickWebElement("//a[contains(@class, 'coupon__foot-btn')]", "Кнопка сделать ставку", "кнопки сделать ставку");
-            Thread.Sleep(1000);
+            Thread.Sleep(2000);
             for (int i = 2; i < events.Count; i++)
             {
                 var a = events[i].Text;
-                double kef = Convert.ToDouble(a, CultureInfo.GetCultureInfo("en-US").NumberFormat);
+                double kef = Convert.ToDouble(a, CultureInfo.InvariantCulture);
                 var kef2 = Math.Round(kef);
                 if (kef2 <= 3 && (!events[i].GetAttribute("class").Contains("_state_blocked")))
                 {
@@ -173,10 +170,7 @@ namespace TestRun.fonbet
 
     class CashOutAndDialogsSettings : FonbetWebProgram
     {
-        public static CustomProgram FabricateCashOutAndDialogsSettings()
-        {
-            return new CashOutAndDialogsSettings();
-        }
+        public static CustomProgram FabricateCashOutAndDialogsSettings() => new CashOutAndDialogsSettings();
 
         public override void Run()
         {
@@ -231,10 +225,7 @@ namespace TestRun.fonbet
 
     class View : FonbetWebProgram
     {
-        public static CustomProgram FabricateView()
-        {
-            return new View();
-        }
+        public static CustomProgram FabricateView() => new View();
 
         public override void Run()
         {

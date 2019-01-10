@@ -20,7 +20,6 @@ namespace TestRun.backoffice
             SendKeysToWebElement(".//*[text()='Идентификатор клиента']/../div//input", "11", "Поле Идентификатор клиента", "поля Идентификатор клиента");
             Thread.Sleep(500);
             ClickWebElement(".//*[@class='clients__btn-inner']//button", "Кнопка Найти","кнопки Найти");
-            WaitTillElementisDisplayed(driver, ".//*[@class='clients__result-stats']", 5);
             IWebElement result = GetWebElement(".//*[@class='clients__result-stats']", "Нет результата поиска");
             if (!result.Text.Contains("Найден 1 Клиент"))
               throw new Exception("В поисковой выдаче больше одного клиента");
@@ -47,8 +46,20 @@ namespace TestRun.backoffice
             if (!fioText.Contains("Найден"))
                 throw new Exception("В поисковой выдаче клиентов нет");
 
+            LogStage("Проверка фильтра UID");
+            ClickWebElement(".//*[text()='Критерий поиска']/../div", "Меню Критерий поиска", "меню Критерий поиска");
+            ClickWebElement("//*[@class='ui-dropdown__items']/div[last()]", "Значение По UID", "значения По UID");
+            Thread.Sleep(500);
+            ClearBeforeInput("//*[@class='clients__fields']/label[1]//input");
+            SendKeysToWebElement("//*[@class='clients__fields']/label[1]//input", "0491EDCA802280", "Поле UID", "поля UID");
+            ClickWebElement(".//*[@class='clients__btn-inner']//button", "Кнопка Найти", "кнопки Найти");
+            String uidText = driver.FindElement(By.XPath(".//*[@class='clients__result-stats']")).Text;
+            if (!uidText.Contains("Найден"))
+                throw new Exception("В поисковой выдаче клиентов нет");
+
             GeneralTab();
             AdditionalTab();
+            ProfileTab();
             OperationTab();
             FreeBet();
 
