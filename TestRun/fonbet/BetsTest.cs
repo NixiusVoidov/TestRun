@@ -35,7 +35,6 @@ namespace TestRun.fonbet
             }
             else LogHint("Нету ставок на продажу выше исходного");
           
-
             SwitchPageToBets();
 
             LogStage("Выбор событий на систему 2/3");
@@ -44,10 +43,10 @@ namespace TestRun.fonbet
             grid[6].Click();
             grid[4].Click();
             grid[5].Click();
-            ClickWebElement("//*[@class='coupons']/div[1]/article//div[contains(@class, 'coupon__info-item-inner')]/div", "Кнопка выбора типа пари", "кнопки выбора типа пари");
+            ClickWebElement("//div[contains(@class,'coupon-info')]/div[1]/span[2]", "Кнопка выбора типа пари", "кнопки выбора типа пари");
             Thread.Sleep(500);
-            ClickWebElement(".//*[@id='popup']/li[2]", "Строка Система 2/3", "строки Систима 2/3");
-            ClickWebElement(".//*[@class='coupons']/div[1]/article//div[contains(@class, 'coupon__info-item-inner')]/i", "Иконка Калькулятор", "иконка Калькулятор");
+            ClickWebElement(".//*[@id='popup']/div[2]", "Строка Система 2/3", "строки Систима 2/3");
+            ClickWebElement("//div[contains(@class,'coupon-info')]/div[2]/span", "Иконка Калькулятор", "иконка Калькулятор");
 
             LogStage("Проверка калькулятора");
             Thread.Sleep(2000);
@@ -180,12 +179,12 @@ namespace TestRun.fonbet
             {
                 string x = data[i];
                 btns[i].Click();
-                IWebElement couponRate = GetWebElement("//*[@class='coupons__list-inner']/article//div[contains(@class, 'type_items')]/div/i[2]", "Не отображается кэф ставки в купоне");
+                IWebElement couponRate = GetWebElement("//*[@class='coupons__list-inner']/div[1]//tbody/tr/td[4]/span", "Не отображается кэф ставки в купоне");
                 string couponRateValue = couponRate.Text;
                 if(btns[i].Text != couponRateValue)
                     throw new Exception("Коэффициенты в гриде и в купоне отличаются");
                 
-                IWebElement couponResult = GetWebElement("//*[@class='coupons']//article[1]//tbody/tr/td[3]/span", "Не отображается исход ставки в купоне");
+                IWebElement couponResult = GetWebElement("//*[@class='coupons__list-inner']/div[1]//tbody/tr/td[3]", "Не отображается исход ставки в купоне");
                 string couponResultValue = couponResult.Text;
                 if(couponResultValue != "" + x + "")
                     throw new Exception("Исход события в гриде и в купоне отличаются");

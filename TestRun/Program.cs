@@ -73,7 +73,7 @@ namespace TestRun
             CustomProgram.Register("fonbet_evlive", fonbet.EventViewLive.FabricateEventViewLive); //Функционал EventView в Лайв событиях
             CustomProgram.Register("fonbet_topthreeevents", fonbet.TopThreeEvents.FabricateTopThreeEvents); //Ставки из приоритетных событий линии и лайва с главной страницы
             CustomProgram.Register("fonbet_searchbar", fonbet.SeachBar.FabricateSeachBar); //Модуль поиска
-
+            CustomProgram.Register("fonbet_marketdistribution", fonbet.MarketingDistribution.FabricateMarketingDistribution); //Модуль проверки расссылок и уведомлений
 
 
             CustomProgram.Register("backoffice_clientcontrol", backoffice.СlientControl.FabricateСlientControl);

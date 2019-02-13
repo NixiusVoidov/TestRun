@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
 using OpenQA.Selenium.Support.Extensions;
@@ -595,6 +597,9 @@ namespace TestRun
         protected void VerificationStatusCheck()
         {
             ClickOnAccount();
+           
+            if(!driver.Url.Contains("5051"))
+                throw new Exception("Тест запущен не на тестовом сервере");
             LogStage("Проверка на статус верификации");
             if (!driver.FindElement(By.XPath("//*[@class='account-profile__row-value _ident-status']")).GetAttribute("data-status").Equals("noIdent"))
             {

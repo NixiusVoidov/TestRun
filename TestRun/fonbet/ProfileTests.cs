@@ -40,7 +40,8 @@ namespace TestRun.fonbet
             LogStage("Проверка фильтра \"Тип пари\"");
             ClickWebElement(".//*[@class='account-calendar__row'][1]/div[1]", "Дата первого видимого дня календаря", "даты первого видимого дня календаря"); //подгружаю события минимум за прошедший месяц
             ClickWebElement(".//*[@class='ui__checkbox-text']/*[text()='Линия']", "Чекбокс Линия", "чекбокса Линия");
-            IWebElement betTypeGrid = GetWebElement(".//*[@class='wrap'][1]//*[@class='operation-row _odd']/div[4]", "Не отображается Тип пари в гриде");
+            WaitTillElementisDisplayed(driver, ".//*[@class='wrap']//*[@class='operation-row _odd']/div[4]",15);
+            IWebElement betTypeGrid = GetWebElement(".//*[@class='wrap']//*[@class='operation-row _odd']/div[4]", "Не отображается Тип пари в гриде");
             string betTypeGridText = betTypeGrid.Text;
             if (!(betTypeGridText.Equals("Фрибет") || betTypeGridText.Equals("Суперэкспресс")))
                 throw new Exception("Добавился новый тип пари, кроме фрибета и линии");
@@ -109,6 +110,45 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@id='popup']/li[4]", "Кнопка Скрыть баланс", "кнопки Скрыть баланс");
             if (WebElementExist("//*[@href='/#!/account/deposit']"))
                 throw new Exception("Не работают скрытие Баланса аккаунта");
+        }
+    }
+    class MarketingDistribution : FonbetWebProgram
+    {
+        public static CustomProgram FabricateMarketingDistribution()
+        {
+            return new MarketingDistribution();
+        }
+
+        public override void Run()
+        {
+            base.Run();
+            LogStage("Проврека работы настройки рассылок и уведомлений");
+            ClickOnAccount();
+            var firstPageValue =
+                driver.FindElements(
+                    By.XPath("//*[@class='account-profile__inner']/div[3]//*[@class='account-profile__row-text']"));
+
+            var advertiseValue = firstPageValue[0].Text;
+            var receiptValue = firstPageValue[1].Text;
+
+
+            ClickWebElement("//*[@class='account-tabs']/a[last()]","Вкладка Рассылки и уведомления", "вкладки Рассылок и уведомлений");
+            ClickWebElement("//*[@class='change-password__form-inner']/div/div[1]//input", "Чекбокс Рассылки и уведомления", "чекбокса Рассылок и уведомлений");
+            var defaultValue = GetWebElement("//*[@class='change-password__form-inner']/div/div[2]//input[@checked]",
+                "Нет выбранного чекбокса").GetAttribute("value");
+            var dataPlus = String.Format("//*[@class='change-password__form-inner']/div/div[2]//input[@value={0}]", Convert.ToInt32(defaultValue) + 1);
+            var dataMinus = String.Format("//*[@class='change-password__form-inner']/div/div[2]//input[@value={0}]", Convert.ToInt32(defaultValue) + 1);
+            if (defaultValue!="2")
+                driver.FindElement(By.XPath(dataPlus)).Click();
+            else
+                driver.FindElement(By.XPath(dataMinus)).Click();
+            ClickWebElement("//*[@class='toolbar__item']/button", "Кнопка Сохранить", "кнопки Сохранить");
+
+            ClickWebElement("//*[@class='account-tabs']/a[1]", "Вкладка Основные данные", "вкладки Основные данные");
+            if(advertiseValue== driver.FindElements(By.XPath("//*[@class='account-profile__inner']/div[3]//*[@class='account-profile__row-text']"))[0].Text)
+                throw new Exception("Чекбокс рассылок не изменился");
+            if (receiptValue == driver.FindElements(By.XPath("//*[@class='account-profile__inner']/div[3]//*[@class='account-profile__row-text']"))[1].Text)
+                throw new Exception("Радиобатан по доствке не сработал");
         }
     }
 
@@ -351,10 +391,10 @@ namespace TestRun.fonbet
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", "1234", "Поле ввода кода", "поля ввода кода");
             Thread.Sleep(1000);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки отправить");
-            WaitTillElementisDisplayed(driver, ".//*[@classid='account-error__btn-inner']//span", 5);
+            WaitTillElementisDisplayed(driver, ".//*[@class='account-error__btn-inner']//span", 5);
            if(!WebElementExist(".//*[@class='account-error _type_success _style_bordered']"))
                 throw new Exception("Ошибка на финальном шаге. Нет поздравительного сообщения");
-            ClickWebElement(".//*[@classid='account-error__btn-inner']//span", "Кнопка Вернуться к профилю", "кнопки Вернуться к профилю");
+            ClickWebElement(".//*[@class='account-error__btn-inner']//span", "Кнопка Вернуться к профилю", "кнопки Вернуться к профилю");
             var mainTab = GetWebElement(".//*[@class='account-tabs']/a[1]", "Нет вкладки Основные данные");
             var mainTabClass = mainTab.GetAttribute("class");
             if (!mainTabClass.Contains("state_active"))
@@ -410,6 +450,7 @@ namespace TestRun.fonbet
             SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[3]//input", "4000100@mail.ru", "Поле email", "поля email");
             Thread.Sleep(500);
             ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']//button", "Кпонка Продолжить", "кпонки Продолжить");
+            WaitTillElementisDisplayed(driver, ".//*[@id='reg-v4-cupis-error']", 5);
             var errorMessage = GetWebElement(".//*[@id='reg-v4-cupis-error']", "Нет модуля с ошибкой");
             if (!errorMessage.GetAttribute("data-rejectioncode").Equals("4") && !errorMessage.GetAttribute("data-processstate").Equals("rejected") && !errorMessage.GetAttribute("data-errorcode").Equals("0"))
                 throw new Exception("Неверная обработка ошибки");

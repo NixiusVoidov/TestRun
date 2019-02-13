@@ -134,8 +134,6 @@ class NewsAndWinnerClub : FonbetWebProgram
             LogStage("Проверка наличия блока новостей");
             if (!WebElementExist(".//*[@class='home-news__items']"))
                 throw new Exception("Нет блока новостей на главной странице сайта");
-            //waitTillElementisDisplayed(driver, ".//*[@class='home-news__items']/article[1]/h1", 5);
-            //Thread.Sleep(2000);
             LogStage("Проверка отображения и корретной работы блока новостей");
             ClickWebElement(".//*[@class='home-news__items']/article[1]/h1/a", "1ый топик из ленты новостей", "1ого топика из ленты новостей");
             Thread.Sleep(1500);
@@ -167,7 +165,7 @@ class NewsAndWinnerClub : FonbetWebProgram
             ClickWebElement(".//*[@href='#!/news/fnl']", "Ссылка на ВСЕ новости", "ссылки на ВСЕ новости");
             var titleNews = GetWebElement(".//*[@class='content-page__title']", "Нет тайтала на странице \"Новости\"");
             var titleNewsText = titleNews.Text;
-            if (!titleNewsText.Contains("Новости"))
+            if (!titleNewsText.Contains("Благотворительные проекты"))
                 throw new Exception("Тайтл не соответсвует странице");
         }
     }
