@@ -263,10 +263,8 @@ namespace TestRun.fonbet
             LogActionSuccess();
 
             LogStartAction("Проверка отображения статусов купонов цветом");
-            ClickWebElement("//*[@id='coupons__inner']/div[2]/div[1]", "Иконка на гамбургер", "иконки гамбургера");
+            ClickWebElement("//*[@class='coupons-toolbar--3wv_Z _mode_compact--2egXJ']/div[1]", "Иконка на гамбургер", "иконки гамбургера");
             ClickWebElement("//*[@id='popupLineMenu']/li[2]", "Строка отображение недавних купонов", "Строка отображения недавних купонов");
-            //ClickWebElement("//div[contains(@class, 'coupons-toolbar')]/div[3]", "Меню \"Нерасчитанные\"",
-            //       "меню \"Нерасчитанные\"");
             IWebElement couponLable = GetWebElement("//div[contains(@class,'coupon__info-head')]/div[3]", "Нет результата купона");
             var couponLableClass = couponLable.GetAttribute("class");
             if (couponLableClass.Contains("style_colored"))
@@ -316,12 +314,10 @@ namespace TestRun.fonbet
             ClickWebElement("//div[contains(@class,'place-button')]/div[1]", "Кнопка заключить пари", "кнопки заключить пари");
             // WaitTillElementisDisplayed(driver, ".//*[@class='coupons__list-inner']/div[1]/article[1]/div[1]/div[1]", 15);
             Thread.Sleep(1000);
-            IWebElement couponArrow = GetWebElement(".//*[@class='coupons__list-inner']/div[2]/article[1]/div[1]/div[1]", "Нет стрелки разворота у купона");
+            IWebElement couponArrow = GetWebElement(".//*[@class='coupons__list-inner']/div/article[1]/div[1]/div[1]", "Нет стрелки разворота у купона");
             var couponArrowClass = couponArrow.GetAttribute("class");
             if (!couponArrowClass.Contains("expanded"))
                 throw new Exception("Не работает автосворачивание купонов");
-
-
         }
 
     }
@@ -482,7 +478,7 @@ namespace TestRun.fonbet
 
             ClickWebElement(".//*[@id='popupLineMenu']/li[3]", "Кнопка Развернуть все купоны",
                 "кнопки Развернуть все купоны");
-            ClickWebElement("//*[@id='coupons__inner']/div[2]/div[3]", "Меню \"Нерасчитанные\"",
+            ClickWebElement("//*[@id='coupons__inner']/div[3]/div[3]", "Меню \"Нерасчитанные\"",
                 "меню \"Нерасчитанные\"");
             if (WebElementExist("//div[contains(@class, 'coupon__info-label')]"))
             {
@@ -494,7 +490,7 @@ namespace TestRun.fonbet
             LogStage("Проверка вкладки На продажу");
             if (WebElementExist(".//*[@class='coupon--367FJ _type_list--2aBkW']"))
             {
-                ClickWebElement("//*[@id='coupons__inner']/div[2]/div[4]", "Меню \"На продажу\"", "меню \"На продажу\"");
+                ClickWebElement("//*[@id='coupons__inner']/div[3]/div[4]", "Меню \"На продажу\"", "меню \"На продажу\"");
                 IList<IWebElement> grid = driver.FindElements(By.XPath(".//*[@class='coupon--367FJ _type_list--2aBkW']")); //общее кол-во купонов
                 IList<IWebElement> gridSell = driver.FindElements(By.XPath(".//*[@class='coupon__sell-button-area--3BXdB']")); //купоны которые можно продать
                 if (grid.Count != gridSell.Count)
@@ -554,7 +550,7 @@ namespace TestRun.fonbet
 
         private void ClickOnHamburger()
         {
-            ClickWebElement("//*[@id='coupons__inner']/div[2]/div[1]", "Меню отображения списка ставок", "меню отображения списка ставок");
+            ClickWebElement("//div[contains(@class, 'coupons-toolbar--3wv_Z')]/div[1]", "Меню отображения списка ставок", "меню отображения списка ставок");
         }
     }
 }

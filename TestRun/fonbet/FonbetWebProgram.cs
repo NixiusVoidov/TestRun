@@ -648,7 +648,7 @@ namespace TestRun
             var messageData = GetWebElement(".//*[@id='set-email-error']", "Нет модуля с ошибкой");
             if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-processstate").Equals(process) && messageData.GetAttribute("data-rejectioncode").Equals(rejcode)))
                 throw new Exception("Неверная обработка ошибки");
-            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
+            ClickWebElement("//div[contains(@class,'account-error__actions')]//a", "Кнопка Повторить", "кнопки Повторить");
         }
 
         // Метод принимает на вход  ожидаемый номер ошибки и почту и проверяет правильность работы функции подтверждения email по тестовому сценарию на тестовых данных
@@ -672,7 +672,7 @@ namespace TestRun
                     ((proccode == null && process != null) || (proccode != null && !proccode.Equals(process)))
                )
                 throw new Exception("Неверная обработка ошибки");
-            ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Повторить", "кнопки Повторить");
+            ClickWebElement("//div[contains(@class,'account-error__actions')]//a", "Кнопка Повторить", "кнопки Повторить");
         }
 
         protected void FillRegistrationForm()
@@ -1272,7 +1272,7 @@ namespace TestRun
                     var error = GetWebElement(".//*[@id='change-phone-error']", "Нет модуля с ошибкой");
                     if (!(error.GetAttribute("data-errorcode").Equals(array2Db[i, 1]) && error.GetAttribute("data-processstate").Equals(array2Db[i, 2]) && error.GetAttribute("data-rejectioncode").Equals(array2Db[i, 3])))
                         throw new Exception("Неверная обработка ошибки");
-                    ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+                    ClickWebElement("//div[contains(@class,'account-error__actions')]//a", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
                     ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки Отправить");
                 }
                 WaitTillElementisDisplayed(driver, ".//*[@class='ui__desc']", 5);
@@ -1297,7 +1297,7 @@ namespace TestRun
                 var error = GetWebElement(".//*[@id='change-phone-error']", "Нет модуля с ошибкой");
                 if (!(error.GetAttribute("data-errorcode").Equals("0") && error.GetAttribute("data-processstate").Equals("rejected") && error.GetAttribute("data-rejectioncode").Equals("12")))
                  throw new Exception("Неверная обработка ошибки");
-                ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+                ClickWebElement("//div[contains(@class,'account-error__actions')]//a", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
                 ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки Отправить");
                 
                 WaitTillElementisDisplayed(driver, ".//*[@class='ui__desc']", 5);
@@ -1318,14 +1318,14 @@ namespace TestRun
                 var errormsg = GetWebElement(".//*[@id='change-phone-error']", "Нет модуля с ошибкой");
                 if (!(errormsg.GetAttribute("data-errorcode").Equals(code)))
                     throw new Exception("Неверная обработка ошибки");
-                ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+                ClickWebElement("//div[contains(@class,'account-error__actions')]//a", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
             }
             else
             {
                 var errormsg = GetWebElement(".//*[@id='change-phone-error']", "Нет модуля с ошибкой");
                 if (!(errormsg.GetAttribute("data-errorcode").Equals(code) && errormsg.GetAttribute("data-processstate").Equals(process) && errormsg.GetAttribute("data-rejectioncode").Equals(rejcode)))
                     throw new Exception("Неверная обработка ошибки");
-                ClickWebElement(".//*[@class='account-error__actions']//span", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
+                ClickWebElement("//div[contains(@class,'account-error__actions')]//a", "Кнопка Закрыть/Повторить", "кнопки Закрыть/Повторить");
             }
         }
 

@@ -50,12 +50,12 @@ namespace TestRun.fonbet
 
             LogStage("Проверка калькулятора");
             Thread.Sleep(2000);
-            IWebElement possibleWin = GetWebElement(".//*[@class='calculator__head--1EwKY']/div[3]", "Не отображается возможный выигрыш в калькуляторе");
-            IWebElement firstBetfirstEv = GetWebElement("//*[@class='calculator__table--1ECj5 _right--C0RVE']/tbody/tr[1]/td[1]", "Не отображается первая ставка первого события");
-            IWebElement firstBetSecEv = GetWebElement("//*[@class='calculator__table--1ECj5 _right--C0RVE']/tbody/tr[2]/td[1]", "Не отображается первая ставка второго события");
+            IWebElement possibleWin = GetWebElement(".//*[@class='calculator__head--1EwKY']/div[4]", "Не отображается возможный выигрыш в калькуляторе");
+            IWebElement firstBetfirstEv = GetWebElement("//*[@class='calculator__table--1ECj5 _right--C0RVE']//tbody/tr[1]/td[1]", "Не отображается первая ставка первого события");
+            IWebElement firstBetSecEv = GetWebElement("//*[@class='calculator__table--1ECj5 _right--C0RVE']//tbody/tr[2]/td[1]", "Не отображается первая ставка второго события");
             IWebElement betSumm = GetWebElement(".//*[@class='calculator__head--1EwKY']/div[2]", "Не отображается сумма пари");
-            IWebElement combinationRate = GetWebElement("//*[@class='calculator__table--1ECj5 _right--C0RVE']/tbody/tr[6]/td[1]", "Не отображается коэффициент комбинации");
-            IWebElement winRate = GetWebElement("//*[@class='calculator__table--1ECj5 _right--C0RVE']/tbody/tr[7]/td[1]", "Не отображается выигрыш комбинации");
+            IWebElement combinationRate = GetWebElement("//*[@class='calculator__table--1ECj5 _right--C0RVE']//tbody/tr[6]/td[1]", "Не отображается коэффициент комбинации");
+            IWebElement winRate = GetWebElement("//*[@class='calculator__table--1ECj5 _right--C0RVE']//tbody/tr[7]/td[1]", "Не отображается выигрыш комбинации");
 
             string possibleWinText = possibleWin.Text;
             string firstBetfirstEvText = firstBetfirstEv.Text;

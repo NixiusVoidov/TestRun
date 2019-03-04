@@ -228,6 +228,10 @@ class NewsAndWinnerClub : FonbetWebProgram
             {
                 LogHint("МЦ открылся");
             }
+            else if (WebElementExist("//iframe[contains(@class,'line-mc__frame')]"))
+            {
+                LogHint("МЦ открылся");
+            }
             else
             {
                 throw new Exception("МЦ не открывается");
@@ -292,16 +296,12 @@ class NewsAndWinnerClub : FonbetWebProgram
 
             LogStartAction("Проверяем Подборки");
             ClickWebElement("//*[@data-sport='-1']/i", "Кнопка Подборки", "кнопки Подборки");
-            if(WebElementExist("//div[contains(@class,'top-event-selector__smart-icon-container')]"))
-                driver.FindElement(By.XPath("//div[contains(@class,'top-event-selector__smart-icon-container')]/span")).Click();
-            if (!WebElementExist("//div[contains(@class,'top-event-list__smart-container')]"))
+            if(WebElementExist("//div[contains(@class,'smart__list')]"))
+                driver.FindElement(By.XPath("//div[contains(@class,'smart__list')]/div[2]")).Click();
+            if(!driver.FindElement(By.XPath("//div[contains(@class,'smart__list')]/div[2]")).GetAttribute("class").Contains("style_selected"))
+            throw new Exception("Подборка не выбирается");
+            if (!WebElementExist("//div[contains(@class,'smart__list')]"))
                 throw new Exception("На текущий момент нет подборок");
-            Thread.Sleep(1000);
-            ClickWebElement("//div[contains(@class,'top-event-list__smart-container')]/div[1]/div", "Первая подборка в списке", "первой подборки в списке");
-            // Thread.Sleep(1000);
-            ClickWebElement("//div[contains(@class,'top-event-selector__smart-container')]/div/span", "Крестик у выбранной подборки", "крестика у выбранной подборки");
-            if (!WebElementExist("//div[contains(@class,'top-event-list__smart-container')]"))
-                throw new Exception("Подборка не закрывается");
 
         }
     }

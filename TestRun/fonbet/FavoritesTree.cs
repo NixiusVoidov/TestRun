@@ -7,7 +7,7 @@ namespace TestRun.fonbet
 {
     class FavoritesTree : FonbetWebProgram
     {
-        public static  CustomProgram FabricateFavoritesTreeTop()
+        public static CustomProgram FabricateFavoritesTreeTop()
         {
             return new FavoritesTree();
         }
@@ -25,23 +25,46 @@ namespace TestRun.fonbet
             var beforeFilterClickClass = footballFilter.GetAttribute("class");
             ClickWebElement(".//*[@href='#!/bets/football']/../span", "Звездочка у футбола в фильтре событий", "звездочки у футбола в фильтре событий");
             var afterFilterClickClass = footballFilter.GetAttribute("class");
-            if (beforeFilterClickClass == afterFilterClickClass) { 
-                throw new Exception("Функция избранных видов событий в фильтре не работают");}
+            if (beforeFilterClickClass == afterFilterClickClass)
+            {
+                throw new Exception("Функция избранных видов событий в фильтре не работают");
+            }
 
-            LogStage("Проверка работы звездочки в футболе");
+            LogStage("Проверка работы суперзвездочки в футболе и черного списка турнира");
             ClickWebElement(".//*[@href='#!/bets/football']", "Звездочка у футбола в фильтре событий", "звездочки у футбола в фильтре событий");
-            Thread.Sleep(900);
             ClickWebElement(".//*[@class='line-header__menu--GWd-F']/div[3]", "Конкретный турнир по футболу", "конкретного турнира по футболу");
-            ClickWebElement(".//*[@id='popup']/li[1]/span", "Звездочка первого в списке турнира по футболу в фильтре", "звездочки первого в списке турнира по футболу в фильтре");
-            IWebElement footbalTournamentStar = GetWebElement(".//*[@id='popup']/li[1]/span", "Не найдена звезда в фильтре турнира по футболу");
-            if (footbalTournamentStar.GetAttribute("class").Contains("icon_on"))
-                throw new Exception("Звездочки в дочерних событиях футбола не работают");
 
-            LogStage("Проверка работы полузвездочки");
+            var allStars = driver.FindElements(By.XPath(".//*[@id='popup']/li/span"));
+            for (var i = 0; i < allStars.Count; i++)
+            {
+                if (!allStars[i].GetAttribute("class").Contains("icon_on"))
+                    throw new Exception("Не все турниры выбраны суперзвездой");
+            }
+            IWebElement footbalTournamentStar = GetWebElement(".//*[@id='popup']/li[1]/span", "Не найдена звезда в фильтре турнира по футболу");
+            footbalTournamentStar.Click();
+            if (!footbalTournamentStar.GetAttribute("class").Contains("icon_black-list"))
+                throw new Exception("Турнир не попал в черный список");
+
+            LogStage("Проверка что черный список снял звезды с матчей турнира");
+            ClickWebElement(".//*[@class='line-header__menu--GWd-F']/div[3]", "Конкретный турнир по футболу", "конкретного турнира по футболу");
+            var firstTourStars = driver.FindElements(By.XPath(".//*[@class='table']/tbody[1]//*[@class='table__star']/i"));
+            for (var i = 0; i < firstTourStars.Count; i++)
+            {
+                if (firstTourStars[i].GetAttribute("class").Contains("state_checked"))
+                    throw new Exception("Черный список не убирает звездочки с матчей");
+            }
+
+            LogStage("Проверка работы полузвездочки в футболе и белого списка в турнире");
             OpenBetsEventFilter();
-            IWebElement footballFilterWithSemistar = GetWebElement(".//*[@href='#!/bets/football']/../span", "не найден футбол в фильтре");
-            if (!footballFilterWithSemistar.GetAttribute("class").Contains("_icon_semi"))
-                throw new Exception("Полузвездочки в меню футбола не работают");
+            IWebElement footballFilterStart = GetWebElement(".//*[@href='#!/bets/football']/../span", "не найден футбол в фильтре");
+            footballFilterStart.Click();
+            ClickWebElement(".//*[@class='line-header__menu--GWd-F']/div[3]", "Конкретный турнир по футболу", "конкретного турнира по футболу");
+            driver.FindElement(By.XPath(".//*[@id='popup']/li[1]/span")).Click();
+            if(!driver.FindElement(By.XPath(".//*[@id='popup']/li[1]/span")).GetAttribute("class").Contains("icon_white-list"))
+                throw new Exception("Турнир не попал в белый список");
+            OpenBetsEventFilter();
+            if(!driver.FindElement(By.XPath(".//*[@href='#!/bets/football']/../span")).GetAttribute("class").Contains("icon_semi"))
+                throw new Exception("У футбола нет полузвездочки");
 
             LogStage("Проверка что футбол попал в избранное");
             ClickWebElement(".//*[@href='#!/bets/favorites']", "Переход к избранному в фильтре", "перехода к избранному в фильтре");
@@ -60,7 +83,7 @@ namespace TestRun.fonbet
 
             LogStage("Проверка работы скрола в меню фильтра");
             OpenBetsEventFilter();
-            CheckScrollinFilterTopMenu(580,480);
+            CheckScrollinFilterTopMenu(580, 480);
 
         }
     }
@@ -80,6 +103,8 @@ namespace TestRun.fonbet
             SwitchPageToBets();
             SwitchToLeftTypeMenu();
 
+
+
             LogStage("Проверка работы звездочки в футболе");
             IWebElement footballFilter = GetWebElement(".//*[@href='#!/bets/football']/div/div[3]", "Не найден футбол в фильтре");
             var beforeFilterClickClass = footballFilter.GetAttribute("class");
@@ -90,20 +115,30 @@ namespace TestRun.fonbet
                 throw new Exception("Функция избранных видов событий в фильтре не работают");
             }
 
-            LogStage("Проверка работы звездочки в дочерних событиях");
-            ClickWebElement(".//*[@href='#!/bets/football']", "Меню футбола", "меню футбола");
-            //Thread.Sleep(5000);
-            WaitTillElementisDisplayed(driver,".//*[@class='event-v-list__icon-expander _state_opened']",5);
-            //ClickWebElement(".//*[@class='list-view-new__table-body']/tr[4]/td/div", "Разворот всех турниров по футболу", "разворот всех турниров по футболу");
-            ClickWebElement(".//*[@class='list-view-new__table-body']//tr[8]//a/div/div[last()]", "Исключение одного турнира из всего футбола", "на исключение одного турнира из всего футбола");
-            IWebElement footbalTournamentStar = GetWebElement(".//*[@class='list-view-new__table-body']//tr[8]//a/div/div[last()]", "не найдена звезда в фильтре конкретного турнира по футболу");
-            if (!footbalTournamentStar.GetAttribute("class").Contains("_state_off"))
-                throw new Exception("Звездочки в дочерних событиях футбола не работают");
+            LogStage("Проверка работы суперзвездочки в футболе и черного списка турнира");
+            ClickWebElement(".//*[@href='#!/bets/football']", "Звездочка у футбола в фильтре событий", "звездочки у футбола в фильтре событий");
 
-            LogStage("Проверка работы полузвездочки");
-            ClickWebElement(".//*[@class='event-v-list__icon-expander _state_opened']", "Сворачивание грида всех турниров по футболу", "на сворачивание грида всех турниров по футболу");
-            if (!footballFilter.GetAttribute("class").Contains("_state_semi"))
-                throw new Exception("Полузвездочка в футболе не работает");
+            IWebElement footbalTournamentStar = GetWebElement(".//*[@class='list-view-new__table-body']//tr[8]//a/div/div[last()]", "Не найдена звезда в фильтре турнира по футболу");
+            footbalTournamentStar.Click();
+            if (!footbalTournamentStar.GetAttribute("class").Contains("state_blackList"))
+                throw new Exception("Турнир не попал в черный список");
+
+            LogStage("Проверка что черный список снял звезды с матчей турнира");
+            var firstTourStars = driver.FindElements(By.XPath(".//*[@class='table']/tbody[3]//*[@class='table__star']/i"));
+            for (var i = 0; i < firstTourStars.Count; i++)
+            {
+                if (firstTourStars[i].GetAttribute("class").Contains("state_checked"))
+                    throw new Exception("Черный список не убирает звездочки с матчей");
+            }
+
+            LogStage("Проверка работы полузвездочки в футболе и белого списка в турнире");
+            IWebElement footballFilterStart = GetWebElement(".//*[@href='#!/bets/football']/div/div[3]", "не найден футбол в фильтре");
+            footballFilterStart.Click();
+            ClickWebElement(".//*[@class='list-view-new__table-body']//tr[8]//a/div/div[last()]", "Конкретный турнир по футболу", "конкретного турнира по футболу");
+            if (!driver.FindElement(By.XPath(".//*[@class='list-view-new__table-body']//tr[8]//a/div/div[last()]")).GetAttribute("class").Contains("state_whiteList"))
+                throw new Exception("Турнир не попал в белый список");
+            if (!driver.FindElement(By.XPath(".//*[@href='#!/bets/football']/div/div[3]")).GetAttribute("class").Contains("state_semi"))
+                throw new Exception("У футбола нет полузвездочки");
 
             LogStage("Проверка что футбол попал в избранное");
             ClickWebElement(".//*[@href='#!/bets/favorites']", "Переход к избранному в фильтре", "перехода к избранному в фильтре");
@@ -144,6 +179,7 @@ namespace TestRun.fonbet
             SwitchPageToBets();
 
             LogStage("Выбор событий в 12 ближ часов");
+
             ClickWebElement(".//*[@class='line-header__menu--GWd-F']/div[1]", "Меню времени в фильтре", "меню времени в фильтре");
             ClickWebElement(".//*[@id='popup']/li[6]", "Значение ближайших 12 часов", "значения ближайших 12 часов");
             if (WebElementExist(".//*[@class='table__empty table__flex-container']"))
@@ -152,7 +188,7 @@ namespace TestRun.fonbet
             LogStage("Развернуть все дочерние события");
             ClickWebElement(".//*[@class='line-header__head--1D5p_']/div[1]", "Разворот меню фильтра", "разворота меню фильтра");
             ClickWebElement(".//*[@id='popup']/li[2]", "Графа разворота всех дочерних событий", "графы разоворота всех дочерних событий");
-            if (!WebElementExist(".//*[@class='table__star _type_empty']"))
+            if (!WebElementExist(".//*[@class='table__col _pos_first _indent_2']"))
                 throw new Exception("Не работает развертка дочерних событий");
 
             LogStage("Свернуть все дочерние события");
@@ -181,10 +217,10 @@ namespace TestRun.fonbet
 
 
         public override void Run()
-        {   
+        {
             base.Run();
 
-           
+
             MakeDefaultSettings();
             SwitchPageToBets();
 
@@ -199,16 +235,16 @@ namespace TestRun.fonbet
                 { 2880, "Ближайшие 2 дня" }
             };
 
-            foreach(KeyValuePair<int, string> item in times)
+            foreach (KeyValuePair<int, string> item in times)
             {
                 LogStage(String.Format("Проверка фильтра \"{0}\"", item.Value));
                 TimeFilterChecker(item.Key, item.Value);
-                ClickWebElement("//*[@class='line-header__menu--GWd-F']//div[contains(@class, 'type_sport')]","Дропдаун весь спорт","Дропдауна Весь спорт");
-                if(!WebElementExist("//*[@id='popup']"))
+                ClickWebElement("//*[@class='line-header__menu--GWd-F']//div[contains(@class, 'type_sport')]", "Дропдаун весь спорт", "Дропдауна Весь спорт");
+                if (!WebElementExist("//*[@id='popup']"))
                     throw new Exception("Не открылось меню весь спорт");
 
             }
-            
+
             LogStage("Проверка работы скрола в меню фильтра");
             ClickWebElement("//div[contains(@class,'line-header__menu')]/div[1]", "Меню времени в фильтре", "меню времени в фильтре");
             CheckScrollinFilterTopMenu(480, 350);
