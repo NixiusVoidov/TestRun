@@ -137,7 +137,7 @@ namespace TestRun.fonbet
             var defaultValue = GetWebElement("//*[@class='change-password__form-inner']/div/div[2]//input[@checked]",
                 "Нет выбранного чекбокса").GetAttribute("value");
             var dataPlus = String.Format("//*[@class='change-password__form-inner']/div/div[2]//input[@value={0}]", Convert.ToInt32(defaultValue) + 1);
-            var dataMinus = String.Format("//*[@class='change-password__form-inner']/div/div[2]//input[@value={0}]", Convert.ToInt32(defaultValue) + 1);
+            var dataMinus = String.Format("//*[@class='change-password__form-inner']/div/div[2]//input[@value={0}]", Convert.ToInt32(defaultValue) - 1);
             if (defaultValue!="2")
                 driver.FindElement(By.XPath(dataPlus)).Click();
             else

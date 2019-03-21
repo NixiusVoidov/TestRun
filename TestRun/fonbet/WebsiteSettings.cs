@@ -248,6 +248,12 @@ namespace TestRun.fonbet
             }
             LogActionSuccess();
 
+            LogStartAction("Проверка компактного режима отображения подвала сайта");
+            IWebElement footerSidebar = GetWebElement(".//*[@id='footerContainer']//footer/div[1]", "Не сворачивается футер");
+            var footerSidebarClass = footerSidebar.GetAttribute("class");
+            if (!footerSidebarClass.Contains("compact"))
+                throw new Exception("Не работает компактный режим отображения подвала сайта");
+
             LogStage("Перевод меню в отображение слева");
             ClickWebElement(".//*[@class='settings__section']//span[text()='Слева']/../input", "Радиобатон отображения меню слева", "радиобатона отображения меню слева");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
@@ -284,11 +290,7 @@ namespace TestRun.fonbet
             if (!accountSidebarClass.Contains("compact"))
                 throw new Exception("Не работает компактный режим отображения меню в личном кабинете");
 
-            LogStartAction("Проверка компактного режима отображения подвала сайта");
-            IWebElement footerSidebar = GetWebElement(".//*[@id='footerContainer']//footer/div[1]", "Не сворачивается футер");
-            var footerSidebarClass = footerSidebar.GetAttribute("class");
-            if (!footerSidebarClass.Contains("compact"))
-                throw new Exception("Не работает компактный режим отображения подвала сайта");
+            
 
 
             SwitchPageToBets();

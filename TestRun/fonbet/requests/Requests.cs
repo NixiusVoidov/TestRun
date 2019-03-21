@@ -1,5 +1,7 @@
 ﻿
 
+using OpenQA.Selenium;
+
 namespace TestRun.fonbet.requests
 {
     class DepositQiwi : FonbetWebProgram
@@ -187,9 +189,27 @@ namespace TestRun.fonbet.requests
             MakeDefaultSettings();
             ClickOnAccount();
             OpenRequests();
-            CreateNewRequest("Вопрос по расчету", "Вопросы по расчету", "Пари", "Пари");
-            FillAndCreateFormBuilder(32);
-            CheckRequestFilter("Пари");
+            ClickWebElement(".//*[@class='toolbar__item _left']", "Кнопка Новый запрос", "кнопки Новый запрос");
+            WaitTillElementisDisplayed(driver, ".//*[@class='ui__field-inner']", 10);
+            ClickWebElement(".//*[@class='ui__field-inner']", "Меню Тип запроса", "меню тип запроса");
+            WaitTillElementisDisplayed(driver, ".//span[text()='Вопрос по расчету']", 10);
+            driver.FindElement(By.XPath(".//span[text()='Вопрос по расчету']")).Click();
+            ClickWebElement(".//*[@class='account-form__window _icon_img']//label[2]", "Меню Тема запроса", "меню Тема запроса");
+            if (WebElementExist(".//span[text()='Ставки']"))
+            {
+                ClickWebElement("//*[@class='account-form__close-btn']","крестик закрытия темы","крестика закрытия темы");
+                CreateNewRequest("Вопрос по расчету", "Вопрос по расчету", "Ставки", "Ставки");
+                FillAndCreateFormBuilder(32);
+                CheckRequestFilter("Пари");
+            }
+            else
+            {
+                ClickWebElement("//*[@class='account-form__close-btn']", "крестик закрытия темы", "крестика закрытия темы");
+                CreateNewRequest("Вопрос по расчету", "Вопрос по расчету", "Пари", "Пари");
+                FillAndCreateFormBuilder(32);
+                CheckRequestFilter("Пари"); 
+            }
+            
         }
     }
     class IncreasedMax : FonbetWebProgram

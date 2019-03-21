@@ -251,7 +251,7 @@ namespace TestRun
                 By by = By.XPath(xPath);
                 LogStartAction(String.Format("Клик {0}", elementCaptionInGenitive));
                 IWebElement element = driver.FindElement(by);
-                WaitTillElementisDisplayed(driver, xPath, 10);
+                WaitTillElementisDisplayed(driver, xPath, 20);
                 //var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
                 //wait.Until(ExpectedConditions.ElementToBeClickable(by));
                 //wait.Until(drv => drv.FindElement(by));

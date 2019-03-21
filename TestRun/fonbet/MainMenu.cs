@@ -93,9 +93,10 @@ namespace TestRun.fonbet
             LogStage("Проверка ставки через слайдер");
             ClickWebElement(".//*[@class='home-slider__bets']/div[1]", "Модуль ставки на странице слайдера",
                 "модуля ставки на странице сладера");
+            SendKeysToWebElement("//input[contains(@class,'sum-panel')]","30","Значение ставки","значения ставки");
             if (WebElementExist(".//*[@class='authorization__inner']"))
                 throw new Exception("Появилось окно авторизации");
-            ClickWebElement("//div[contains(@class,'coupon__foot')]//a", "Кнопка Заключить пари",
+            ClickWebElement("//div[contains(@class, 'place-button')]/div[1]", "Кнопка Заключить пари",
                 "кнопки Заключить пари");
             SendKeysToWebElement(".//*[@class='login-form__form']/div[1]/input", Login, "поле логина", "поля логина");
             SendKeysToWebElement(".//*[@class='login-form__form']/div[2]/input", Password, "поле пароля",
@@ -103,7 +104,7 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='login-form__form-row _right']/div[2]/button", "Кнопка логина",
                 "кнопки логина");
             Thread.Sleep(4000);
-            if (!WebElementExist("//*[@class='coupons__list-inner']/article/div[1]"))
+            if (!WebElementExist("//div[contains(@class, 'new-coupon--')]"))
                 throw new Exception("Не сохранился набраный купон");
 
             LogStage("Проверка перехода в eventView");
@@ -148,25 +149,41 @@ class NewsAndWinnerClub : FonbetWebProgram
             ClickWebElement(".//*[@class='home-news__items']/article[2]//a", "2ой топик из ленты новостей", "2ого топика из ленты новостей");
             WaitTillElementisDisplayed(driver, ".//*[@id='popupModal']", 5);
             ClickWebElement(".//*[@class='news-modal__close']", "Кнопка закрытия popup", "кнопки закрытия popup");
+            if (WebElementExist(".//*[@class='home-news__source-box']/span[3]"))
+            {
+                ClickWebElement(".//*[@class='home-news__source-box']/span[3]", "Вкладка \"Спорт с Фонтбет\"", "вкладки \"Спорт с Фонтбет\"");
+                var sport = GetWebElement(".//*[@class='home-news__source-box']/span[3]", "Нет вкладки \"Прогнозы\"");
+                var sportClass = sport.GetAttribute("class");
+                if (!sportClass.Contains("_selected"))
+                    throw new Exception("Не переключается на вкладку Прогнозы в шапке новостей");
+                ClickWebElement(".//*[@class='home-news__items']/article[3]//a", "3ий топик из ленты новостей", "3ого топика из ленты новостей");
+                WaitTillElementisDisplayed(driver, ".//*[@id='popupModal']", 5);
+                ClickWebElement(".//*[@class='news-modal__close']", "Кнопка закрытия popup", "кнопки закрытия popup");
+            }
 
-            ClickWebElement(".//*[@class='home-news__source-box']/span[3]", "Вкладка \"Спорт с Фонтбет\"", "вкладки \"Спорт с Фонтбет\"");
-            var sport = GetWebElement(".//*[@class='home-news__source-box']/span[3]", "Нет вкладки \"Прогнозы\"");
-            var sportClass = sport.GetAttribute("class");
-            if (!sportClass.Contains("_selected"))
-                throw new Exception("Не переключается на вкладку Прогнозы в шапке новостей");
-            ClickWebElement(".//*[@class='home-news__items']/article[3]//a", "3ий топик из ленты новостей", "3ого топика из ленты новостей");
-            WaitTillElementisDisplayed(driver, ".//*[@id='popupModal']", 5);
-            ClickWebElement(".//*[@class='news-modal__close']", "Кнопка закрытия popup", "кнопки закрытия popup");
-            Thread.Sleep(1000);
-            ClickWebElement(".//*[@class='top-win__items']/article[1]//a", "Топик в модуле \"Клуб победителей\"", "топика в модуле \"Клуб победителей\"");
-            WaitTillElementisDisplayed(driver, ".//*[@id='popupModal']", 5);
-            ClickWebElement(".//*[@class='news-modal__close']", "Кнопка закрытия popup", "кнопки закрытия popup");
+            if (WebElementExist(".//*[@class='top-win__items']/article[1]//a"))
+            {
+                ClickWebElement(".//*[@class='top-win__items']/article[1]//a", "Топик в модуле \"Клуб победителей\"", "топика в модуле \"Клуб победителей\"");
+                WaitTillElementisDisplayed(driver, ".//*[@id='popupModal']", 5);
+                ClickWebElement(".//*[@class='news-modal__close']", "Кнопка закрытия popup", "кнопки закрытия popup");
+            }
 
-            ClickWebElement(".//*[@href='#!/news/fnl']", "Ссылка на ВСЕ новости", "ссылки на ВСЕ новости");
-            var titleNews = GetWebElement(".//*[@class='content-page__title']", "Нет тайтала на странице \"Новости\"");
-            var titleNewsText = titleNews.Text;
-            if (!titleNewsText.Contains("Благотворительные проекты"))
-                throw new Exception("Тайтл не соответсвует странице");
+            if (WebElementExist(".//*[@href='#!/news/fnl']"))
+            {
+                ClickWebElement(".//*[@href='#!/news/fnl']", "Ссылка на ВСЕ новости", "ссылки на ВСЕ новости");
+                var titleNews = GetWebElement(".//*[@class='content-page__title']", "Нет тайтала на странице \"Новости\"");
+                var titleNewsText = titleNews.Text;
+                if (!titleNewsText.Contains("Благотворительные проекты"))
+                    throw new Exception("Тайтл не соответсвует странице");
+            }
+            else
+            {
+                ClickWebElement(".//*[@href='#!/news/sport']", "Ссылка на ВСЕ новости", "ссылки на ВСЕ новости");
+                var titleNews = GetWebElement(".//*[@class='content-page__title']", "Нет тайтала на странице \"Новости\"");
+                var titleNewsText = titleNews.Text;
+                if (!titleNewsText.Contains("Прогнозы на спорт"))
+                    throw new Exception("Тайтл не соответсвует странице");
+            }
         }
     }
 
@@ -332,8 +349,8 @@ class NewsAndWinnerClub : FonbetWebProgram
                 throw new Exception("Кол-во фильтров не равно 3ем");
             }
 
-            SendKeysToWebElement("//*[@id='search-component']/input", "у", "Поле поиска", "поля поиска");
-            Thread.Sleep(1000);
+            SendKeysToWebElement("//*[@id='search-component']/input", "ут", "Поле поиска", "поля поиска");
+            Thread.Sleep(3000);
             if (driver.FindElements(
                     By.XPath("//*[@id='search-filter']//div[contains(@class,'search-filter__item-header')]")).Count !=
                 2)
@@ -347,11 +364,26 @@ class NewsAndWinnerClub : FonbetWebProgram
             Thread.Sleep(1000);
             ClickWebElement("//*[@id='search-filter']/div[1]/*[@id='search-filter__item']", "1ая строка соревнования",
                 "1ой строки соревнования");
-
+            Thread.Sleep(1000);
             var eventNames = driver.FindElements(By.XPath("//a[contains(@class, 'search-result__event-name')]"));
             string[] values = eventNames[0].Text.Split('—');
-            SendKeysToWebElement("//*[@id='search-component']/input", values[0], "Поле поиска", "поля поиска");
+            LogStartAction("Убираем пробелы с названия команды, если они есть");
+            int countSpaces = values[0].Count(Char.IsWhiteSpace);
+            string[] newString;
+            if (countSpaces != 0 && countSpaces!=1)
+            {
+                 newString = values[0].Split(" ");
+                 SendKeysToWebElement("//*[@id='search-component']/input", newString[1], "Поле поиска", "поля поиска");
+            }
+            else
+            {
+                SendKeysToWebElement("//*[@id='search-component']/input", values[0], "Поле поиска", "поля поиска");
+            }
+            LogActionSuccess();
             Thread.Sleep(1000);
+
+           
+
             if (driver.FindElements(
                     By.XPath("//*[@id='search-filter']//div[contains(@class,'search-filter__item-header')]")).Count !=
                 1)
@@ -438,8 +470,12 @@ class NewsAndWinnerClub : FonbetWebProgram
             ClickWebElement("//*[@class='search__link']", "Кнопка Поиска в шапке", "кнопки Поиска в шапке");
             WaitTillElementisDisplayed(driver, "//*[@id='search-component']/input", 15);
             SendKeysToWebElement("//*[@id='search-component']/input", eventNumber, "Поле поиска", "поля поиска");
-            if(driver.FindElement(By.XPath("//*[@class='search-result__item--lp1SU']/div[1]//span")).GetAttribute("style")!=eventFlag)
-                throw new Exception("Неправильный флаг в выдаче");
+            if (eventFlag != "")
+            {
+                if (driver.FindElement(By.XPath("//*[@class='search-result__item--lp1SU']/div[1]//span")).GetAttribute("style") != eventFlag)
+                    throw new Exception("Неправильный флаг в выдаче");
+            }
+           
             if (driver.FindElement(By.XPath("//*[@class='search-result__item--lp1SU']/div[2]/a")).Text != eventName)
                 throw new Exception("Неправильное имя события");
             if (driver.FindElement(By.XPath("//*[@class='search-result__item--lp1SU']/div[2]//div[contains(@class,'search-result__event-score')]")).Text.Replace(" ", string.Empty) != eventScore)
@@ -448,9 +484,9 @@ class NewsAndWinnerClub : FonbetWebProgram
             LogStage("Проверка eventView");
             ClickWebElement("//*[@class='search-result--3VqTJ']//a",
                 "Строка с событием", "строки с событием");
-            if(!WebElementExist(".//*[@class='ev-scoreboard__event-logo--3hMJr']"))
+            if(!WebElementExist("//span[contains(@class, 'ev-scoreboard__back-button')]"))
                 throw new Exception("Не открылся eventView");
-            ClickWebElement(".//*[@class='ev-scoreboard__back-button--4V1iz']", "Кнопка \"Назад\"", "кнопки \"Назад\"");
+            ClickWebElement("//span[contains(@class, 'ev-scoreboard__back-button')]", "Кнопка \"Назад\"", "кнопки \"Назад\"");
 
             LogStage("Проверка eng выдачи");
 
@@ -462,6 +498,8 @@ class NewsAndWinnerClub : FonbetWebProgram
             if(driver.FindElement(By.XPath("//*[@id='search-filter__item']")).Text!="Football")
                 throw new Exception("Нет выдачи на англ");
         }
+
+       
     }
 
 

@@ -442,6 +442,7 @@ namespace TestRun
             string secondErrorValueTwo = string.Format("cтроки \"{0}\"", secondError);
            
             ClickWebElement(".//*[@class='toolbar__item _left']", "Кнопка Новый запрос", "кнопки Новый запрос");
+            WaitTillElementisDisplayed(driver, ".//*[@class='ui__field-inner']", 10);
             ClickWebElement(".//*[@class='ui__field-inner']", "Меню Тип запроса", "меню тип запроса");
             ClickWebElement(firstMenuValue, firstErrorValue, firstErrorValueTwo);
             ClickWebElement(".//*[@class='account-form__window _icon_img']//label[2]", "Меню Тема запроса", "меню Тема запроса");
