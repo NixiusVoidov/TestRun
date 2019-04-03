@@ -52,7 +52,7 @@ namespace TestRun.fonbet
             ClickWebElement("//div[contains(@class,'coupon__header-clear')]", "Крестик закрыть купон", "крестика закрыть купон");
 
             ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
-            ClickWebElement(".//*[@class='settings__content']/div[1]//*[@class='settings__rows']/div[2]//input", "Чекбокс Подставлять сумму предыщудего пари", "чекбокса Подставлять сумму предыщудего пари");
+            ClickWebElement(".//*[@class='settings__content']/div[3]/div[1]//input", "Чекбокс Подставлять сумму предыщудего пари", "чекбокса Подставлять сумму предыщудего пари");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
             events[6].Click();
             if (!driver.FindElement(By.XPath("//div[contains(@class, 'sum-panel')]//input")).GetAttribute("class").Contains("state_error"))
@@ -63,18 +63,18 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
             Thread.Sleep(1500);
             ClickWebElement(".//*[@class='settings__section'][1]/div/div[1]//*[@class='header-ui__checkbox-label']/input", "Чекбокс быстрое пари", "чекбокса быстрое пари");
-            ClearBeforeInput(".//*[@class='settings__section'][1]/div/div//*[@class='settings__row']//input");
+            ClearBeforeInput(".//*[@class='settings__section'][1]/div[1]/div/div[2]//input");
             Thread.Sleep(1500);
-            SendKeysToWebElement(".//*[@class='settings__section'][1]/div/div//*[@class='settings__row']//input", "100", "поле ввода значения быстрой ставки", "поля ввода значения быстрой ставки");
+            SendKeysToWebElement(".//*[@class='settings__section'][1]/div[1]/div/div[2]//input", "100", "поле ввода значения быстрой ставки", "поля ввода значения быстрой ставки");
 
             LogStage("Добавление любимого пари");
-            ClickWebElement("//*[@class='settings__section'][1]/div/div//*[@value='showPercent']", "Радиобатон любимого пари в % от баланса", "радиобатона любимого пари в % от баланса");
+            ClickWebElement("//*[@value='showPercent']", "Радиобатон любимого пари в % от баланса", "радиобатона любимого пари в % от баланса");
             ClickWebElement(".//*[@class='settings__row _type_normal _type_columns']//*[@class='settings__fields-action _type_add']", "Кнопка добавления нового поля для быстрой ставки", "кнопки добавления нового поля для быстрой ставки");
             SendKeysToWebElement(".//*[@class='settings__row _type_normal _type_columns']/div/div[4]//input", "50", "новое поле ввода для любимого пари", "нового поля ввода для любимого пари");
 
             LogStage("Разрешение на прием любимого пари");
-            ClickWebElement("//*[@class='settings__section'][1]/div/div[7]//input", "Чекбокс принимать пари с измененными коэффициентами", "чекбокса принимать пари с измененными коэффициентами");
-            ClickWebElement("//*[@class='settings__section'][1]/div/div[9]//input", "Чекбокс принимать пари с измененными тоталами / форами", "чекбокса принимать пари с измененными тоталами / форами");
+            ClickWebElement("//*[@class='settings__section'][1]/div/div[3]//input", "Чекбокс принимать пари с измененными коэффициентами", "чекбокса принимать пари с измененными коэффициентами");
+            ClickWebElement("//*[@class='settings__section'][1]/div/div[5]//input", "Чекбокс принимать пари с измененными тоталами / форами", "чекбокса принимать пари с измененными тоталами / форами");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
 
             LogStartAction("Проверка работы быстрой ставки");
@@ -187,12 +187,11 @@ namespace TestRun.fonbet
             ClickWebElement(".//*[@class='settings__section'][1]/div/div[1]//*[@class='header-ui__checkbox-label']/input", "Чекбокс быстрое пари", "чекбокса быстрое пари");
 
             LogStage("Редактирование Продажи пари");
-            ClickWebElement("//*[@class='settings__section'][2]/div[1]//input", "Чекбокс изменение суммы продажи", "чекбокса изменения суммы продажи");
-            ClickWebElement("//*[@class='settings__section'][2]/div[3]//input", "Чекбокс показывать продажу на всех вкладках", "чекбокса проказывать продажу на всех вкладках");
+            ClickWebElement("//*[@class='settings__section'][2]/div[3]//input", "Чекбокс изменение суммы продажи", "чекбокса изменения суммы продажи");
 
             LogStage("Редактирование меню Диалоги");
-            ClickWebElement("//*[@class='settings__section'][3]/div[1]//input", "Чекбокс 'Не спрашивать подтверждение для быстрого пари'", "чекбокса 'Не спрашивать подтверждение для быстрого пари'");
-            ClickWebElement("//*[@class='settings__section'][3]/div[2]//input", "Чекбокс 'Не спрашивать подтверждение для продажи'", "чекбокса 'Не спрашивать подтверждение для продажи'");
+            ClickWebElement("//*[@class='settings__section'][4]/div[1]//input", "Чекбокс 'Не спрашивать подтверждение для быстрого пари'", "чекбокса 'Не спрашивать подтверждение для быстрого пари'");
+            ClickWebElement("//*[@class='settings__section'][4]/div[2]//input", "Чекбокс 'Не спрашивать подтверждение для продажи'", "чекбокса 'Не спрашивать подтверждение для продажи'");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
 
             LogStage("Проверка работы настроек Продажи пари");
@@ -237,12 +236,16 @@ namespace TestRun.fonbet
             LogStage("Установка настроек по умолчанию");
             ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
             ClickWebElement(".//*[@class='settings__restore-btn']", "Кнопка восстановления настроек по умолчанию", "кнопки восстановления настроек по умолчанию");
-
+            Thread.Sleep(1000);
             // LogStage("Установка чекбоксов меню Вид");
             LogStartAction("Установка чекбоксов меню Вид");
-            for (var i = 1; i <= 8; i++)
+            for (var i = 1; i <= 12; i++)
             {
-                string nameTofind = string.Format("//*[@class='settings__section'][4]/div/div[{0}]//input", i);
+                if (i == 4 || i==7||i == 8 || i == 9)
+                {
+                    continue;
+                }
+                string nameTofind = string.Format("//*[@class='settings__section'][5]/div/div[{0}]//input", i);
                 var element = driver.FindElement(By.XPath(nameTofind));
                 element.Click();
             }
@@ -273,7 +276,7 @@ namespace TestRun.fonbet
             ClickWebElement("//*[@id='popupLineMenu']/li[2]", "Строка отображение недавних купонов", "Строка отображения недавних купонов");
             IWebElement couponLable = GetWebElement("//div[contains(@class,'coupon__info-head')]/div[3]", "Нет результата купона");
             var couponLableClass = couponLable.GetAttribute("class");
-            if (couponLableClass.Contains("style_colored"))
+            if (!couponLableClass.Contains("style_colored"))
                 throw new Exception("Не работает отображения статусов купонов цветом");
             LogActionSuccess();
 

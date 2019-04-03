@@ -25,7 +25,7 @@ namespace TestRun.fonbet
             Dictionary<string,string> menu = new Dictionary<string,string>()
             {
                 {"profile", "Мой профиль" },
-                {"deposit","Пополнение счёта" },
+                {"deposit","Пополнение счета" },
                 {"withdrawal","Получение выигрыша" },
                 {"history","История" },
             };

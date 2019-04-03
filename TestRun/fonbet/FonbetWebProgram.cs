@@ -590,6 +590,8 @@ namespace TestRun
             ClickWebElement(".//*[@class='toolbar__item']//button", "Кнопка Отправить", "кнопки Отправить");
             WaitTillElementisDisplayed(driver, ".//*[@class='account__heading-close']", 5);
             var messageData = GetWebElement(".//*[@id='restore-password-error']", "Нет модуля с ошибкой");
+            if(driver.FindElement(By.XPath("//div[contains(@class, 'account-error__text')]")).Text.Contains("Введенный вами код не совпадает с изображением"))
+                throw new Exception("Капча не равна 1");
             if (!(messageData.GetAttribute("data-errorcode").Equals(code) && messageData.GetAttribute("data-rejectioncode").Equals(rejcode)))
                 throw new Exception("Неверная обработка ошибки");
             ClickWebElement(".//*[@class='account__heading-close']", "Крестик Закрыть окно", "Крестика Закрыть оно");

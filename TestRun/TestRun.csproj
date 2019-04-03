@@ -12,10 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Selenium.Firefox.WebDriver" Version="0.22.0" />
+    <PackageReference Include="Selenium.Firefox.WebDriver" Version="0.23.0" />
     <PackageReference Include="Selenium.Support" Version="3.141.0" />
     <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.44.0" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="73.0.3683.68" />
   </ItemGroup>
 
 </Project>
