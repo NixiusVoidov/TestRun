@@ -136,7 +136,7 @@ namespace TestRun
             LogStartAction("Переход браузера на стартовую страницу");
 
             driver.Navigate().GoToUrl(HomeURL);
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+           // driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
             LogActionSuccess();
         }
 
@@ -182,6 +182,7 @@ namespace TestRun
         // Метод проверяет существование элемента в DOM
         protected bool WebElementExist(string element)
         {
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
             try
             {
                 driver.FindElement(By.XPath(string.Format(element)));
@@ -190,6 +191,10 @@ namespace TestRun
             catch (NoSuchElementException)
             {
                 return false;
+            }
+            finally
+            {
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
             }
         }
 
@@ -208,6 +213,7 @@ namespace TestRun
 
                     }
                     elementDisplayed = driver.FindElement(By.XPath(xpath)).Displayed && driver.FindElement(By.XPath(xpath)).Enabled;
+                   // new WebDriverWait(driver, TimeSpan.FromSeconds(0));
                 }
                 catch
                 {
@@ -230,9 +236,9 @@ namespace TestRun
             }
                else driver.FindElement(By.XPath(xpath)).SendKeys(Keys.Control + "a");
             driver.FindElement(By.XPath(xpath)).SendKeys(Keys.Delete);
-            Thread.Sleep(1000);
+           // Thread.Sleep(1000);
             wait.Until(drv => drv.FindElement(By.XPath(xpath))).GetAttribute("value").Equals("");
-            Thread.Sleep(1000);
+           // Thread.Sleep(1000);
         }
 
         protected IWebElement GetWebElement(string xPath, string errorIfNotExists)
@@ -289,6 +295,7 @@ namespace TestRun
         {
             try
             {
+                ClearBeforeInput(xPath);
                 LogStartAction(String.Format("Ввод \"{0}\" в {1}", keys, elementCaptionInNominative));
                 IWebElement element = driver.FindElement(By.XPath(xPath));
                 element.SendKeys(keys);

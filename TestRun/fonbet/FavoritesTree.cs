@@ -106,9 +106,9 @@ namespace TestRun.fonbet
 
 
             LogStage("Проверка работы звездочки в футболе");
-            IWebElement footballFilter = GetWebElement(".//*[@href='#!/bets/football']/div/div[3]", "Не найден футбол в фильтре");
+            IWebElement footballFilter = GetWebElement(".//*[@href='#!/bets/football']/div/div[2]", "Не найден футбол в фильтре");
             var beforeFilterClickClass = footballFilter.GetAttribute("class");
-            ClickWebElement(".//*[@href='#!/bets/football']/div/div[3]", "Звездочка у футбола в фильтре событий", "звездочки у футбола в фильтре событий");
+            ClickWebElement(".//*[@href='#!/bets/football']/div/div[2]", "Звездочка у футбола в фильтре событий", "звездочки у футбола в фильтре событий");
             var afterFilterClickClass = footballFilter.GetAttribute("class");
             if (beforeFilterClickClass == afterFilterClickClass)
             {
@@ -132,12 +132,12 @@ namespace TestRun.fonbet
             }
 
             LogStage("Проверка работы полузвездочки в футболе и белого списка в турнире");
-            IWebElement footballFilterStart = GetWebElement(".//*[@href='#!/bets/football']/div/div[3]", "не найден футбол в фильтре");
+            IWebElement footballFilterStart = GetWebElement(".//*[@href='#!/bets/football']/div/div[2]", "не найден футбол в фильтре");
             footballFilterStart.Click();
             ClickWebElement(".//*[@class='list-view-new__table-body']//tr[8]//a/div/div[last()]", "Конкретный турнир по футболу", "конкретного турнира по футболу");
             if (!driver.FindElement(By.XPath(".//*[@class='list-view-new__table-body']//tr[8]//a/div/div[last()]")).GetAttribute("class").Contains("state_whiteList"))
                 throw new Exception("Турнир не попал в белый список");
-            if (!driver.FindElement(By.XPath(".//*[@href='#!/bets/football']/div/div[3]")).GetAttribute("class").Contains("state_semi"))
+            if (!driver.FindElement(By.XPath(".//*[@href='#!/bets/football']/div/div[2]")).GetAttribute("class").Contains("state_semi"))
                 throw new Exception("У футбола нет полузвездочки");
 
             LogStage("Проверка что футбол попал в избранное");

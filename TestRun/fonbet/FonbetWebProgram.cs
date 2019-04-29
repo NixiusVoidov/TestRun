@@ -643,7 +643,6 @@ namespace TestRun
         protected void CreateProcessemailChecker(string emailValue, string process, string code, string rejcode)
         {
             LogStage("Проверка creatProcess по тестовому сценарию");
-            ClearBeforeInput(".//*[@class='ui__field-inner']/input");
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", emailValue, "Поле email", "поля email");
             var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
             wait.Until(drv => drv.FindElement(By.XPath(".//*[@class='ui__field-inner']/input")).GetAttribute("value").Contains(emailValue));
@@ -658,7 +657,6 @@ namespace TestRun
         protected void SendEmailCodeChecker(string smsValue, string process, string code, string rejcode)
         {
            
-            ClearBeforeInput(".//*[@class='ui__field-inner']/input");
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", smsValue, "Поле Код подтверждения", "поля Код подтверждения");
             Thread.Sleep(500);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Отправить", "кнопки отправить");
@@ -698,7 +696,6 @@ namespace TestRun
             {
                 
                 Thread.Sleep(500);
-                ClearBeforeInput(".//*[@class='reg-v4__form-column--31oQE']/div[2]//input");
                 SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[2]//input", Keys.Home + phoneValue, "Поле Номер телефона", "поля Номер телефона");
                 ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']//button", "Кпонка Продолжить", "кпонки Продолжить");
                 if (!WebElementExist(".//*[@class='reg-v4__captcha--a9ACp']"))
@@ -710,7 +707,6 @@ namespace TestRun
                 return;
             }
             Thread.Sleep(500);
-            ClearBeforeInput(".//*[@class='reg-v4__form-column--31oQE']/div[2]//input");
             SendKeysToWebElement(".//*[@class='reg-v4__form-column--31oQE']/div[2]//input", Keys.Home + phoneValue, "Поле Номер телефона", "поля Номер телефона");
             ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']//button", "Кпонка Продолжить", "кпонки Продолжить");
             var errorMessage = GetWebElement(".//*[@id='reg-v4-cupis-error']", "Нет модуля с ошибкой");
@@ -738,7 +734,6 @@ namespace TestRun
             {
                 LogStage("Проверка sendSmsCode по тестовому сценарию");
 
-                ClearBeforeInput(".//*[@class='reg-v4__form-bottom--3bcYA']//input");
                 SendKeysToWebElement(".//*[@class='reg-v4__form-bottom--3bcYA']//input", smsValue, "Поле СМС код", "поля СМС код");
                 ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']", "Кнопка Отправить", "Кнопка Отправить");
                // WaitTillElementisDisplayed(driver, ".//*[@class='ident-instruction--3wvHY']", 10);
@@ -776,7 +771,6 @@ namespace TestRun
                 LogStage("Проверка sendSmsCode по тестовому сценарию");
                 
                 FillRegistrationForm();
-                ClearBeforeInput(".//*[@class='reg-v4__form-bottom--3bcYA']//input");
                 SendKeysToWebElement(".//*[@class='reg-v4__form-bottom--3bcYA']//input", smsValue, "Поле СМС код", "поля СМС код");
                 ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']", "Кнопка Отправить", "Кнопка Отправить");
                 if (WebElementExist(".//*[@class='ident-instruction--3wvHY']"))
@@ -803,7 +797,6 @@ namespace TestRun
             if (smsValue == "0")
             {
                 FillRegistrationForm();
-                ClearBeforeInput(".//*[@class='reg-v4__form-bottom--3bcYA']//input");
                 SendKeysToWebElement(".//*[@class='reg-v4__form-bottom--3bcYA']//input", smsValue, "Поле СМС код", "поля СМС код");
                 ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']", "Кнопка Отправить", "Кнопка Отправить");
                 if (WebElementExist(".//*[@class='ident-instruction--3wvHY']"))
@@ -820,7 +813,6 @@ namespace TestRun
             if(smsValue == "3")
                 
             ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']//button", "Кпонка Продолжить", "кпонки Продолжить");
-            ClearBeforeInput(".//*[@class='reg-v4__form-bottom--3bcYA']//input");
             SendKeysToWebElement(".//*[@class='reg-v4__form-bottom--3bcYA']//input", smsValue, "Поле СМС код", "поля СМС код");
             ClickWebElement(".//*[@class='reg-v4__form-row--1HvrA _form-buttons--3mZsY']", "Кнопка Отправить", "Кнопка Отправить");
 
@@ -872,7 +864,6 @@ namespace TestRun
                 //pasNumber.SendKeys("2222222222");
                 SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input", Keys.Home + pasportnumber, "Поле Номер паспорта", "поля Номер паспорта");
                 Thread.Sleep(800);
-                ClearBeforeInput(".//*[@class='reg-v4__form-column-100--3R_QL']/div[2]//input");
                 //jse.ExecuteScript("arguments[0].value='01-01-2000';", dateValue);
                 //dateValue.SendKeys(Keys.Enter);
                  SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[2]//input", Keys.Home + "01012000", "Поле Дата выдачи","поля Дата выдачи");
@@ -887,7 +878,6 @@ namespace TestRun
             if (pasportnumber == "3333333333")
             {
                 LogStage("Проверка sendPasport qiwi по тестовому сценарию");
-                ClearBeforeInput("//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input");
                // jse.ExecuteScript("arguments[0].value='3333333333';", pasNumber);
                 SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input", Keys.Home + pasportnumber, "Поле Номер паспорта", "поля Номер паспорта");
                 Thread.Sleep(800);
@@ -901,7 +891,6 @@ namespace TestRun
             if (pasportnumber == "4444444444")
             {
                 LogStage("Проверка sendPasport qiwi по тестовому сценарию");
-                ClearBeforeInput("//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input");
                // jse.ExecuteScript("arguments[0].value='4444444444';", pasNumber);
                 SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input", Keys.Home + pasportnumber, "Поле Номер паспорта", "поля Номер паспорта");
                 Thread.Sleep(800);
@@ -980,7 +969,6 @@ namespace TestRun
             {
                 LogStage("Проверка sendPasport бк по тестовому сценарию");
 
-                ClearBeforeInput(".//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input");
                 SendKeysToWebElement(".//*[@class='reg-v4__form-column-100--3R_QL']/div[1]//input", Keys.Home + pasportnumber, "Поле Серия и номер", "поля Серия и номер");
                 ClickWebElement(".//*[@class='toolbar__item _reg-button']", "Кнопка Отправить данные по бк", "кнопки Отправить данные по бк");
                 var messageData = GetWebElement(".//*[@id='reg-v4-cupis-error']", "Нет модуля с ошибкой");
@@ -1054,7 +1042,6 @@ namespace TestRun
             if (smsValue == "2")
             {
                 
-                ClearBeforeInput(".//*[@class='ui__field-wrap-inner']//input");
                 SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", smsValue, "Поле Код смс", "поля Код смс");
                 Thread.Sleep(1000);
                 ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
@@ -1068,7 +1055,6 @@ namespace TestRun
             }
 
             WaitTillElementisDisplayed(driver, ".//*[@class='ui__field-wrap-inner']//input", 10);
-            ClearBeforeInput(".//*[@class='ui__field-wrap-inner']//input");
             SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", smsValue, "Поле Код смс", "поля Код смс");
             Thread.Sleep(1000);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
@@ -1164,7 +1150,6 @@ namespace TestRun
         protected void SendSmsVerificationQiwi(string smsValue, string process, string code, string rejcode)
         {
             LogStage("Проверка SendSmsCode по тестовому сценарию");
-            ClearBeforeInput(".//*[@class='ui__field-wrap-inner']//input");
             SendKeysToWebElement(".//*[@class='ui__field-wrap-inner']//input", smsValue, "Поле Номер телефона", "поля Номер телефона");
             Thread.Sleep(1000);
             ClickWebElement(".//*[@class='toolbar__item']/button", "Кнопка Подтвердить", "кнопки Подтвердить");
@@ -1255,7 +1240,6 @@ namespace TestRun
         {
             WaitTillElementisDisplayed(driver, ".//*[@class='ui__field-inner']/input", 5);
             Thread.Sleep(1000);
-            ClearBeforeInput(".//*[@class='ui__field-inner']/input");
             Thread.Sleep(1000);
             SendKeysToWebElement(".//*[@class='ui__field-inner']/input", phoneValue, "Поле Номер телефона", "поля Номер телефона");
             Thread.Sleep(1000);

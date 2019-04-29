@@ -627,6 +627,7 @@ namespace TestRun.backoffice
                 { 2, "Текст 2" },
                 { 3, "Текст 3" },
             };
+            
             foreach (KeyValuePair<int, string> item in text)
                 SendKeysToWebElement(".//*[@class='role-form__inner']/label[" + item.Key + "]//textarea", item.Value, "Поле " + item.Value + "", "поля " + item.Value + "");
             SendKeysToWebElement(".//*[@class='role-form__inner']/label[4]//input", "Тестовая электронная почта", "Поле электронная почта", "поля электронная почта");

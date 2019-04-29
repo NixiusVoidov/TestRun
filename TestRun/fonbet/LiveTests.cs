@@ -134,7 +134,7 @@ namespace TestRun.fonbet
             ClickWebElement("//div[contains(@class, 'ev-scoreboard__channel--2wTx7')]", "Кнопка трансляции", "кнопки трансляции");
             if (!WebElementExist(".//*[@class='tv']"))
                 throw new Exception("Не открылся телевизор");
-            ClickWebElement("//a[contains(@href, 'sportradar')]", "Кнопка СпортРадар", "кнопки СпортРадар");
+            ClickWebElement("//span[contains(@class, 'icon_betradar--')]", "Кнопка СпортРадар", "кнопки СпортРадар");
             var popup = driver.WindowHandles[1];
             if (string.IsNullOrEmpty(popup))
                 throw new Exception("Не открылся спортрадар в новом окне");

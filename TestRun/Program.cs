@@ -74,6 +74,9 @@ namespace TestRun
             CustomProgram.Register("fonbet_topthreeevents", fonbet.TopThreeEvents.FabricateTopThreeEvents); //Ставки из приоритетных событий линии и лайва с главной страницы
             CustomProgram.Register("fonbet_searchbar", fonbet.SeachBar.FabricateSeachBar); //Модуль поиска
             CustomProgram.Register("fonbet_marketdistribution", fonbet.MarketingDistribution.FabricateMarketingDistribution); //Модуль проверки расссылок и уведомлений
+            CustomProgram.Register("fonbet_couponsettings", fonbet.CouponSettings.FabricateCouponSettings); //Проверка настроек и ленты купонов
+            CustomProgram.Register("fonbet_deplimits", fonbet.DepositLimits.FabricateDepositLimits); //Тестовый сценарий лимитов на депозиты
+
 
 
             CustomProgram.Register("backoffice_clientcontrol", backoffice.СlientControl.FabricateСlientControl);

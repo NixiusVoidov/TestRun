@@ -448,7 +448,6 @@ class NewsAndWinnerClub : FonbetWebProgram
                 myArr.Add(a.Text);
             }
            string maxLenthTeam = myArr.OrderByDescending(s => s.Length).First();
-            ClearBeforeInput("//*[@id='search-component']/input");
             SendKeysToWebElement("//*[@id='search-component']/input", maxLenthTeam, "Поле поиска", "поля поиска");
             ClickWebElement("//*[@id='search-filter']/div[1]/*[@id='search-filter__item']",
                 "1ая строка фильтра по команде", "1ой строки  фильтра по команде");
