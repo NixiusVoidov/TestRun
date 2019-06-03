@@ -101,7 +101,7 @@ namespace TestRun.fonbet
 
             //Выбор ставки из грида с кэф<2
             IList<IWebElement> grid = driver.FindElements(By.XPath(".//*[@class='table']/tbody//td[10]"));
-            for (int i = 2; i < grid.Count; i++)
+            for (int i = 4; i < grid.Count; i++)
             {
                 var a = grid[i].Text;
                 double kef = Convert.ToDouble(a, CultureInfo.GetCultureInfo("en-US").NumberFormat);
@@ -310,10 +310,11 @@ namespace TestRun.fonbet
             base.Run();
 
             LogStage("Сброс настроек по умолчанию и установка самоограничения в 1 минуту");
-            ClickWebElement(".//*[@class='header__login-head']/div[1]", "Кнопка Аккаунт", "кнопки Аккаунт");
-            ClickWebElement(".//*[@id='popup']/li[1]", "Кнопка Личный кабинет", "кнопки Личный кабинет");
+            ClickWebElement(".//*[@href='/#!/account/deposit']", "Кнопка Личный кабинет", "кнопки Личный кабинет");
             ClickWebElement("//*[@href='#!/account/responsible']", "Вкладка Самоогрничения", "вкладки Самоогрничения");
-            ClickWebElement("//*[@class='ui__checkbox-label']/input", "Чекбокс Включить ограничения сессии", "чекбокса Включить ограничения сессии");
+            if (!driver.FindElement(By.XPath("//*[@class='ui__checkbox-label']/..")).GetAttribute("class").Contains("state_checked")){
+                ClickWebElement("//*[@class='ui__checkbox-label']/input", "Чекбокс Включить ограничения сессии", "чекбокса Включить ограничения сессии");
+            }
             SendKeysToWebElement("//*[@class='ui__field-inner']/input", "1", "Поле Самоограничения", "поля Самоограничения");
             ClickWebElement("//*[@class='change-password__form-row']//button", "Кнопка Сохранить", "кнопки Сохранить");
 
