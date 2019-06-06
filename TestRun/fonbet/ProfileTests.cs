@@ -25,7 +25,7 @@ namespace TestRun.fonbet
             Dictionary<string, string> menu = new Dictionary<string, string>()
             {
                 {"profile", "Мой профиль"},
-                {"deposit", "Пополнение счета"},
+                {"deposit", "Пополнение"},
                 {"withdrawal", "Получение выигрыша"},
                 {"history", "История"},
             };
@@ -34,7 +34,8 @@ namespace TestRun.fonbet
                 LogStage(String.Format("Проверка меню \"{0}\"", item.Value));
                 ClickWebElement(".//*[@href='#!/account/" + item.Key + "']", "Меню \"" + item.Value + "\"",
                     "меню \"" + item.Value + "\"");
-                if (driver.Title != item.Value)
+                //Thread.Sleep(1000);
+                if (!driver.Title.Contains(item.Value))
                     throw new Exception(String.Format("Страница не содержит title \"{0}\" ", item.Value));
             }
 

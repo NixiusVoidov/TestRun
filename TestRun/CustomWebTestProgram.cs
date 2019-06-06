@@ -151,7 +151,7 @@ namespace TestRun
                     Thread.Sleep(2000);
                     driver.Quit();
                 }
-                else  driver.Quit();
+                //else  driver.Quit();
                 LogActionSuccess();
             }
             base.AfterRun();

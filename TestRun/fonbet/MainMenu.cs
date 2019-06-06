@@ -349,7 +349,7 @@ class NewsAndWinnerClub : FonbetWebProgram
                 throw new Exception("Кол-во фильтров не равно 3ем");
             }
 
-            SendKeysToWebElement("//*[@id='search-component']/input", "ут", "Поле поиска", "поля поиска");
+            SendKeysToWebElement("//*[@id='search-component']/input", "Фут", "Поле поиска", "поля поиска");
             Thread.Sleep(3000);
             if (driver.FindElements(
                     By.XPath("//*[@id='search-filter']//div[contains(@class,'search-filter__item-header')]")).Count !=
@@ -439,7 +439,7 @@ class NewsAndWinnerClub : FonbetWebProgram
             }
 
             LogStage("Проверка на дублирование фильтров");
-            SendKeysToWebElement("//*[@id='search-component']/input", "артак", "Поле поиска", "поля поиска");
+            SendKeysToWebElement("//*[@id='search-component']/input", "спартак", "Поле поиска", "поля поиска");
             Thread.Sleep(1000);
             var allevents = driver.FindElements(By.XPath("//*[@id='search-filter__item']"));
             List<string> myArr = new List<string>();
@@ -458,7 +458,7 @@ class NewsAndWinnerClub : FonbetWebProgram
 
             LogStage("Проверка поиска по номеру события и отображение лайв события");
             ClickWebElement("//*[@id='settings-popup']","Кнопка настроек сайта", "кнопки Настроек сайта");
-            ClickWebElement("//*[@class='settings__rows']/div[1]//input", "Чекбокс отображать номера событий", "чекбокса отображать номера событий");
+            ClickWebElement("//*[@class='settings__rows']/div[3]//input", "Чекбокс отображать номера событий", "чекбокса отображать номера событий");
             ClickWebElement("//*[@class='settings__head']/a", "Крестик закрыть меню настроек", "крестика закрыть меню настроек");
             SwitchPageToLive();
 
@@ -471,7 +471,7 @@ class NewsAndWinnerClub : FonbetWebProgram
             SendKeysToWebElement("//*[@id='search-component']/input", eventNumber, "Поле поиска", "поля поиска");
             if (eventFlag != "")
             {
-                if (driver.FindElement(By.XPath("//*[@class='search-result__item--lp1SU']/div[1]//span")).GetAttribute("style") != eventFlag)
+                if (driver.FindElement(By.XPath("//*[@class='search-result__item--lp1SU']/div[1]/div/span")).GetAttribute("style") != eventFlag)
                     throw new Exception("Неправильный флаг в выдаче");
             }
            

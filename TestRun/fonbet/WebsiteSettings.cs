@@ -353,8 +353,8 @@ namespace TestRun.fonbet
             LogStage("Установка настроек вида и отображение меню слева");
             ClickWebElement(".//*[@id='settings-popup']", "Меню настроек", "меню настройки");
             ClickWebElement(".//*[@class='settings__rows']/div[1]//input", "Чекбокс отображать номера событий", "чекбокса отображать номера событий");
-            ClickWebElement(".//*[@class='settings__rows']/div[2]//input", "Чекбокс компактный режим отображения подвала", "чекбокса компактный режим отображения подвала");
-            ClickWebElement(".//*[@class='settings__rows']/div[3]//input", "Чекбокс автоматическое сворачивание элементов", "чекбокса автоматическое сворачивание элементов");
+            ClickWebElement(".//*[@class='settings__rows']/div[3]//input", "Чекбокс компактный режим отображения подвала", "чекбокса компактный режим отображения подвала");
+            ClickWebElement(".//*[@class='settings__rows']/div[4]//input", "Чекбокс автоматическое сворачивание элементов", "чекбокса автоматическое сворачивание элементов");
             ClickWebElement(".//*[@class='settings__section']//span[text()='Слева']/../input", "Радиобатон отображения меню слева", "радиобатона отображения меню слева");
             ClickWebElement(".//*[@class='settings__head']/a", "Кнопка закрытия меню  настроек", "кнопки закрытия меню  настроек");
 
@@ -370,9 +370,9 @@ namespace TestRun.fonbet
                 throw new Exception("Не работает компактный режим отображения подвала сайта");
 
             LogStage("Проверка автосворачивания элементов в меню событий");
-            ClickWebElement(".//*[@class='list-view-new__table-body']/tr[4]//a", "Строка ФУТБОЛ в меню спорта слева", "строки ФУТБОЛ в меню спорта слева");
-            IWebElement footballArrow = GetWebElement("//*[@href='#!/bets/football']/../div", "Нет стрекли разворота вида спорта");
+            ClickWebElement(".//*[@class='list-view-new__table-body']//*[@title='Футбол']", "Строка ФУТБОЛ в меню спорта слева", "строки ФУТБОЛ в меню спорта слева");
             ClickWebElement(".//*[@href='#!/bets/hockey']", "Строка Хоккей в меню спорта слева", "строки Хоккей в меню спорта слева");
+            IWebElement footballArrow = GetWebElement("//*[@href='#!/bets/football']/../div/div/div", "Нет стрекли разворота вида спорта");
             var footballArrowClass = footballArrow.GetAttribute("class");
             if (footballArrowClass.Contains("state_opened"))
                 throw new Exception("Не работает автосворачивание элементов в меню событий");
