@@ -70,9 +70,10 @@ namespace TestRun.fonbet
             ExecuteJavaScript("window.location.reload()", "Дж скрипт тупит");
             Thread.Sleep(4000);
             IJavaScriptExecutor jse = (IJavaScriptExecutor) driver;
-            jse.ExecuteScript("document.getElementsByClassName('home-slider__switch-wrap')[0].style.opacity = 1");
             if (!WebElementExist(".//*[@class='home-slider__switch-wrap']/div[1]"))
                 throw new Exception("На главной странице нет слайдера");
+            jse.ExecuteScript("document.getElementsByClassName('home-slider__switch-wrap')[0].style.opacity = 1");
+            
 
             LogStage("Проверка переключения слайдера по кнопкам");
             IWebElement slider = driver.FindElement(By.XPath(".//*[@class='home-slider']"));
